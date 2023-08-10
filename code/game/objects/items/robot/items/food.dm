@@ -225,6 +225,7 @@
 		rip_time = 10,
 	)
 	damage = 10
+	shrapnel_type = /obj/item/food/lollipop/cyborg
 	embed_falloff_tile = 0
 
 /obj/projectile/bullet/reusable/lollipop/Initialize(mapload)
@@ -233,7 +234,9 @@
 	var/mutable_appearance/head = mutable_appearance('icons/obj/weapons/guns/projectiles.dmi', "lollipop_2")
 	head.color = color2
 	add_overlay(head)
-	return ..()
+	if(!embedding)
+		AddElement(/datum/element/projectile_drop, /obj/item/food/lollipop/cyborg)
+	RegisterSignals(src, list(COMSIG_PROJECTILE_ON_SPAWN_DROP, COMSIG_PROJECTILE_ON_SPAWN_EMBEDDED), PROC_REF(handle_drop))
 
 /obj/projectile/bullet/reusable/lollipop/handle_drop()
 	if(!dropped)

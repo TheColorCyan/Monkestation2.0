@@ -135,8 +135,10 @@
 /**
  * checkEmbedProjectile() is what we get when a projectile with a defined shrapnel_type impacts a target.
  *
- * If we hit a valid target, we create the shrapnel_type object and immediately call tryEmbed() on it, targeting what we impacted. That will lead
- * it to call tryForceEmbed() on its own embed element (it's out of our hands here, our projectile is done), where it will run through all the checks it needs to.
+ * If we hit a valid target, we create the shrapnel_type object and then forcefully try to embed it on its
+ * behalf. DO NOT EVER add an embed element to the payload and let it do the rest.
+ * That's awful, and it'll limit us to drop-deletable shrapnels in the worry of stuff like
+ * arrows and harpoons being embeddable even when not let loose by their weapons.
  */
 /datum/element/embed/proc/check_embed_projectile(obj/projectile/source, atom/movable/firer, atom/hit, angle, hit_zone, blocked, pierce_hit)
 	SIGNAL_HANDLER

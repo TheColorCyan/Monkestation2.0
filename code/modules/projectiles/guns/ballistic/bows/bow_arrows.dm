@@ -18,7 +18,7 @@
 /obj/item/ammo_casing/arrow/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/envenomable_casing)
-	AddElement(/datum/element/caseless, reusable)
+	AddElement(/datum/element/caseless)
 
 /obj/item/ammo_casing/arrow/update_icon_state()
 	. = ..()
@@ -67,6 +67,7 @@
 		jostle_chance = 0,
 		ignore_throwspeed_threshold = TRUE,
 		pain_stam_pct = 0.5,
+		pain_mult = 3,
 		rip_time = 1 SECONDS
 	)
 
@@ -81,7 +82,6 @@
 	name = "blazing star arrow"
 	desc = "A holy diver seeking its target, blessed with fire. Will ignite on hit, destroying the arrow. But if you hit an already ignited target...?"
 	projectile_type = /obj/projectile/bullet/arrow/blazing
-	reusable = FALSE
 
 /obj/projectile/bullet/arrow/blazing
 	name = "blazing arrow"
