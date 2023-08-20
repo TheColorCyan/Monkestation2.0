@@ -812,13 +812,10 @@
 	if (firer)
 		RegisterSignal(firer, COMSIG_QDELETING, PROC_REF(firer_deleted))
 		SEND_SIGNAL(firer, COMSIG_PROJECTILE_FIRER_BEFORE_FIRE, src, fired_from, original)
-	//If no angle needs to resolve it from xo/yo!
-	if(shrapnel_type && LAZYLEN(embedding))
-		AddElement(/datum/element/embed, projectile_payload = shrapnel_type)
 	if (original)
 		if (firer != original)
 			RegisterSignal(original, COMSIG_QDELETING, PROC_REF(original_deleted))
-	if (!log_override && firer && original && !do_not_log)
+	if(!log_override && firer && original)
 		log_combat(firer, original, "fired at", src, "from [get_area_name(src, TRUE)]")
 			//note: mecha projectile logging is handled in /obj/item/mecha_parts/mecha_equipment/weapon/action(). try to keep these messages roughly the sameish just for consistency's sake.
 	if (direct_target && (get_dist(direct_target, get_turf(src)) <= 1)) // point blank shots
@@ -1224,7 +1221,7 @@
 
 	QDEL_IN(tracer_effect, PROJECTILE_TRACER_DURATION)
 
-	if (!hitscan_light_range || !hitscan_light_intensity)
+	if (!hitscan_light_outer_range || !hitscan_light_intensity)
 		return
 
 	var/list/turf/light_line = get_line(start_point.return_turf(), end_point.return_turf())
@@ -1232,7 +1229,7 @@
 		if (passed_turfs[light_turf])
 			continue
 		passed_turfs[light_turf] = TRUE
-		QDEL_IN(new /obj/effect/abstract/projectile_lighting(light_turf, hitscan_light_color_override || color, hitscan_light_range, hitscan_light_intensity), PROJECTILE_TRACER_DURATION)
+		QDEL_IN(new /obj/effect/abstract/projectile_lighting(light_turf, hitscan_light_color_override || color, hitscan_light_outer_range, hitscan_light_intensity), PROJECTILE_TRACER_DURATION)
 
 /**
  * Aims the projectile at a target.
