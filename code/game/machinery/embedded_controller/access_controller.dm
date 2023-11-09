@@ -108,6 +108,7 @@
 	name = "access console"
 	desc = "A small console that can cycle opening between two airlocks."
 	mouse_over_pointer = MOUSE_HAND_POINTER
+	interaction_flags_machine = INTERACT_MACHINE_WIRES_IF_OPEN|INTERACT_MACHINE_ALLOW_SILICON|INTERACT_MACHINE_OPEN_SILICON|INTERACT_MACHINE_SET_MACHINE
 	var/obj/machinery/door/airlock/interiorAirlock
 	var/obj/machinery/door/airlock/exteriorAirlock
 	var/idInterior

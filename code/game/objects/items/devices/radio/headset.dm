@@ -396,7 +396,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	command = TRUE
 
 /obj/item/radio/headset/screwdriver_act(mob/living/user, obj/item/tool)
-	user.set_machine(src)
 	if(keyslot || keyslot2)
 		for(var/ch_name in channels)
 			SSradio.remove_object(src, GLOB.radiochannels[ch_name])
@@ -418,8 +417,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	return TRUE
 
 /obj/item/radio/headset/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
-	user.set_machine(src)
-
 	if(istype(attacking_item, /obj/item/encryptionkey))
 		if(keyslot && keyslot2)
 			to_chat(user, span_warning("The headset can't hold another key!"))

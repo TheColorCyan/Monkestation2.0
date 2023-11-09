@@ -406,7 +406,6 @@
 	. = TRUE
 
 	add_fingerprint(usr)
-	usr.set_machine(src)
 
 	switch(action)
 		// Connect this DNA Console to a nearby DNA Scanner

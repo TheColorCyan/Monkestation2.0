@@ -396,9 +396,6 @@
 
 	. = TRUE
 
-	add_fingerprint(usr)
-	usr.set_machine(src)
-
 	switch(action)
 		if("build")
 			var/designs = params["designs"]

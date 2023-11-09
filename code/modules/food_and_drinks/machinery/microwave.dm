@@ -378,7 +378,6 @@
 	if(isAI(user) && (machine_stat & NOPOWER))
 		return
 
-	usr.set_machine(src)
 	switch(choice)
 		if("eject")
 			// monkestation edit start: microwave "enhancements"

@@ -33,7 +33,6 @@
 		if(!pai.encrypt_mod)
 			to_chat(user, span_alert("Encryption Key ports not configured."))
 			return
-		user.set_machine(src)
 		pai.radio.attackby(used, user, params)
 		to_chat(user, span_notice("You insert [used] into the [src]."))
 		return
@@ -42,7 +41,6 @@
 /obj/item/pai_card/attack_self(mob/user)
 	if(!in_range(src, user))
 		return
-	user.set_machine(src)
 	ui_interact(user)
 
 /obj/item/pai_card/Destroy()
