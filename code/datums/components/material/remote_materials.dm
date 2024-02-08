@@ -118,6 +118,12 @@ handles linking back and forth.
 	else
 		silo.holds -= src
 
+/**
+ * Sets the storage size for local materials when not linked with silo
+ * Arguments
+ *
+ * * size - the new size for local storage. measured in SHEET_MATERIAL_SIZE units
+ */
 /datum/component/remote_materials/proc/set_local_size(size)
 	local_size = size
 	if (!silo && mat_container)
@@ -231,7 +237,7 @@ handles linking back and forth.
  * * check_hold - should we check if the silo is on hold
  * * user_data - in the form rendered by ID_DATA(user); used as a reference for silo bans and access checks
  */
-/datum/component/remote_materials/proc/can_use_resource(check_hold = TRUE, alist/user_data)
+/datum/component/remote_materials/proc/can_use_resource(check_hold = TRUE)
 	var/atom/movable/movable_parent = parent
 	if (!istype(movable_parent))
 		return FALSE
@@ -240,8 +246,6 @@ handles linking back and forth.
 		return FALSE
 	if(check_hold && on_hold()) //silo on hold
 		movable_parent.say("Mineral access is on hold, please contact the quartermaster.")
-		return FALSE
-	if(SEND_SIGNAL(movable_parent, COMSIG_ORE_SILO_PERMISSION_CHECKED, user_data, movable_parent) & COMPONENT_ORE_SILO_DENY)
 		return FALSE
 	return TRUE
 
@@ -257,8 +261,8 @@ handles linking back and forth.
  * name- For logging only. the design you are trying to build e.g. matter bin, etc.
  * user_data - in the form rendered by ID_DATA(user), for material logging and (if this component is connected to a silo), permission checking
  */
-/datum/component/remote_materials/proc/use_materials(list/mats, coefficient = 1, multiplier = 1, action = "build", name = "design", alist/user_data)
-	if(!can_use_resource(user_data = user_data))
+/datum/component/remote_materials/proc/use_materials(list/mats, coefficient = 1, multiplier = 1, action = "build", name = "design")
+	if(!can_use_resource())
 		return 0
 
 	var/amount_consumed = mat_container.use_materials(mats, coefficient, multiplier)
@@ -280,15 +284,15 @@ handles linking back and forth.
  * [drop_target][atom]- optional where to drop the sheets. null means it is dropped at this components parent location
  * user_data - in the form rendered by ID_DATA(user), for material logging and (if this component is connected to a silo), permission checking
  */
-/datum/component/remote_materials/proc/eject_sheets(datum/material/material_ref, eject_amount, atom/drop_target = null, alist/user_data)
-	if(!can_use_resource(user_data = user_data))
+/datum/component/remote_materials/proc/eject_sheets(datum/material/material_ref, eject_amount, atom/drop_target = null)
+	if(!can_use_resource())
 		return 0
 
 	var/atom/movable/movable_parent = parent
 	if(isnull(drop_target))
 		drop_target = movable_parent.drop_location()
 
-	return mat_container.retrieve_sheets(eject_amount, material_ref, target = drop_target, context = parent, user_data = user_data)
+	return mat_container.retrieve_sheets(eject_amount, material_ref, target = drop_target, context = parent)
 
 /**
  * Insert an item into the mat container, helper proc to insert items with the correct context
@@ -298,12 +302,8 @@ handles linking back and forth.
  * * multiplier - the multiplier applied on the materials consumed
  * * user_data - an alist in the form rendered by ID_DATA(user), for logging who/where/when the item was inserted
  */
-/datum/component/remote_materials/proc/insert_item(obj/item/weapon, multiplier = 1, alist/user_data)
-	// Inserting materials automatically shouldn't be permission-restricted
-	if(!islist(user_data))
-		user_data = ID_DATA(null)
-	user_data[SILICON_OVERRIDE] = SILICON_OVERRIDE
-	if(!can_use_resource(FALSE, user_data))
+/datum/component/remote_materials/proc/insert_item(obj/item/weapon, multiplier = 1)
+	if(!can_use_resource(FALSE))
 		return MATERIAL_INSERT_ITEM_FAILURE
 
-	return mat_container.insert_item(weapon, multiplier, parent, user_data = user_data)
+	return mat_container.insert_item(weapon, multiplier, parent)

@@ -8,8 +8,13 @@ import { MaterialCostSequence } from './Fabrication/MaterialCostSequence';
 import { Tooltip } from '../components';
 import { BooleanLike, classes } from 'common/react';
 
+type ExosuitDesign = Design & {
+  constructionTime: number;
+};
+
 type ExosuitFabricatorData = FabricatorData & {
   processing: BooleanLike;
+  designs: Record<string, ExosuitDesign>;
 };
 
 export const ExosuitFabricator = (props) => {
