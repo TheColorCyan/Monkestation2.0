@@ -312,7 +312,7 @@
 /obj/projectile/magic/flying/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
 	if(isliving(target))
-		var/atom/throw_target = get_edge_target_turf(target, angle2dir(Angle))
+		var/atom/throw_target = get_edge_target_turf(target, angle2dir(angle))
 		target.throw_at(throw_target, 200, 4)
 
 /obj/projectile/magic/bounty
@@ -574,7 +574,7 @@
 	visible_message(span_warning("[src] bounces off the aura around [target]!"))
 	return PROJECTILE_PIERCE_PHASE
 
-/obj/projectile/magic/fire_ball/Impact(atom/A)
+/obj/projectile/magic/fire_ball/impact(atom/A)
 	. = ..()
 	if(.)
 		playsound(src, 'sound/items/dodgeball.ogg', 200, channel = CHANNEL_SOUND_EFFECTS) //this is a very quiet sound

@@ -229,6 +229,7 @@
 	casting = TRUE
 	var/obj/projectile/fishing_cast/cast_projectile = new(get_turf(src))
 	cast_projectile.range = cast_range
+	cast_projectile.decayedRange = cast_range
 	cast_projectile.owner = src
 	cast_projectile.original = target
 	cast_projectile.fired_from = src
@@ -566,7 +567,7 @@
 	var/obj/item/fishing_rod/owner
 	var/datum/beam/our_line
 
-/obj/projectile/fishing_cast/Impact(atom/hit_atom)
+/obj/projectile/fishing_cast/impact(atom/hit_atom)
 	. = ..()
 	owner.hook_hit(hit_atom)
 	qdel(src)

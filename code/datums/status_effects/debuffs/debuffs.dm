@@ -432,9 +432,9 @@
 
 /datum/status_effect/stacking/saw_bleed/threshold_cross_effect()
 	owner.adjustBruteLoss(bleed_damage)
-	new /obj/effect/temp_visual/bleed/explode(owner.loc)
-	for(var/d in GLOB.alldirs)
-		owner.do_splatter_effect(d)
+	new /obj/effect/temp_visual/bleed/explode(get_turf(owner))
+	for(var/splatter_dir in GLOB.alldirs)
+		owner.do_splatter_effect(splatter_dir)
 	playsound(owner, SFX_DESECRATION, 100, TRUE, -1)
 
 /datum/status_effect/stacking/saw_bleed/bloodletting

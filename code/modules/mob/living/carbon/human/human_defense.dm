@@ -77,7 +77,7 @@
 				P.firer = src
 				P.yo = new_y - curloc.y
 				P.xo = new_x - curloc.x
-				var/new_angle_s = P.Angle + rand(120,240)
+				var/new_angle_s = P.angle + rand(120,240)
 				while(new_angle_s > 180) // Translate to regular projectile degrees
 					new_angle_s -= 360
 				P.set_angle(new_angle_s)
@@ -115,9 +115,8 @@
 			if(worn_thing in held_items)
 				continue
 		// Things that are supposed to be held, being worn = cannot block
-		else
-			if(!(worn_thing in held_items))
-				continue
+		else if(!(worn_thing in held_items))
+			continue
 
 		var/final_block_chance = worn_thing.block_chance - (clamp((armour_penetration - worn_thing.armour_penetration) / 2, 0, 100)) + block_chance_modifier
 		if(worn_thing.hit_reaction(src, hit_by, attack_text, final_block_chance, damage, attack_type, damage_type))
