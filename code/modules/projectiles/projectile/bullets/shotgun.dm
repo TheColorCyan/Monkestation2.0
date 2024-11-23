@@ -26,7 +26,6 @@
 	ricochet_chance = 50
 	ricochet_auto_aim_range = 0
 	ricochet_incidence_leeway = 50
-	embedding = null
 	demolition_mod = 2 //High-velocity tungsten > steel doors
 	projectile_piercing = PASSMOB
 
@@ -49,7 +48,6 @@
 	stamina = 55
 	wound_bonus = 20
 	sharpness = NONE
-	embedding = null
 
 /obj/projectile/bullet/incendiary/shotgun
 	name = "incendiary slug"
@@ -65,8 +63,6 @@
 
 /obj/projectile/bullet/pellet
 	icon_state = "pellet"
-	tile_dropoff = 0.45
-	tile_dropoff_s = 0.25
 	sharpness = SHARP_POINTY
 
 /obj/projectile/bullet/pellet/shotgun_buckshot ///6 pellets
@@ -81,9 +77,9 @@
 	damage = 2 //monkestation edit 3 to 2
 	stamina = 10
 	sharpness = NONE
-	embedding = null
-	tile_dropoff_s = 0 //monkestation edit
-	speed = 1.2
+	embed_type = null
+	speed = 0.8
+	stamina_falloff_tile = -0.25
 	ricochets_max = 4
 	ricochet_chance = 120
 	ricochet_decay_chance = 0.9
@@ -94,7 +90,7 @@
 	/// Subtracted from the ricochet chance for each tile traveled
 	var/tile_dropoff_ricochet = 4
 
-/obj/projectile/bullet/pellet/shotgun_rubbershot/Range()
+/obj/projectile/bullet/pellet/shotgun_rubbershot/reduce_range()
 	if(ricochet_chance > 0)
 		ricochet_chance -= tile_dropoff_ricochet
 	. = ..()
@@ -136,7 +132,6 @@
 
 
 /obj/projectile/bullet/pellet/shotgun_improvised ///8 pellets
-	tile_dropoff = 0.35 //Come on it does 6 damage don't be like that.
 	damage = 6
 	wound_bonus = 0
 	bare_wound_bonus = 5
@@ -164,7 +159,6 @@
 	range = 7
 	icon_state = "spark"
 	color = "#FFFF00"
-	embedding = null
 
 /obj/projectile/bullet/shotgun_frag12
 	name ="frag12 slug"
@@ -187,7 +181,6 @@
 /obj/projectile/bullet/pellet/trickshot
 	name = "trickshot pellet"
 	damage = 6
-	tile_dropoff = 0
 	ricochets_max = 5
 	ricochet_chance = 100
 	ricochet_decay_chance = 0
@@ -198,8 +191,6 @@
 	name = "incapacitating pellet"
 	damage = 1
 	stamina = 6
-	tile_dropoff_s = 3 //monkestation edit spitting distance
-	embedding = null
 
 /obj/projectile/bullet/pellet/shotgun_buckshot/beehive ///4 pellets
 	name = "hornet flechette"
@@ -232,7 +223,6 @@
 	eyeblur = 1 SECONDS
 	sharpness = NONE
 	range = 7
-	embedding = list(embed_chance=75, pain_chance=50, fall_chance=15, jostle_chance=80, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.9, pain_mult=2, rip_time=10)
 
 /obj/projectile/bullet/pellet/shotgun_buckshot/antitide/on_range()
 	do_sparks(1, TRUE, src)
@@ -318,26 +308,14 @@
 /obj/projectile/bullet/pellet/beeshot
 	name ="beeshot"
 	damage = 6
-	ricochets_max = 0
-	ricochet_chance = 0
-	var/spawner_type = /mob/living/basic/bee/toxin
-	var/deliveryamt = 1
-
-/obj/projectile/bullet/pellet/beeshot/on_hit(atom/target, blocked = 0, pierce_hit)			// Prime now just handles the two loops that query for people in lockers and people who can see it.
-	. = ..()
-	if(!.)
-		return
-	if(spawner_type && deliveryamt)
-		var/turf/T = get_turf(src)
-		playsound(T, 'sound/effects/phasein.ogg', 100, 1)
-		var/list/spawned = spawn_and_random_walk(spawner_type, T, deliveryamt, admin_spawn=((flags_1 & ADMIN_SPAWNED_1) ? TRUE : FALSE))
-		afterspawn(spawned)
-
-	qdel(src)
-
-/obj/projectile/bullet/pellet/beeshot/proc/afterspawn(list/mob/spawned)
-	return
-
+	wound_bonus = -25
+	bare_wound_bonus = 50
+	wound_falloff_tile = -10
+	speed = 1.2
+	ricochet_decay_chance = 0.6
+	ricochet_decay_damage = 0.3
+	demolition_mod = 10
+	weak_against_armour = TRUE
 
 // Mech Scattershot
 
@@ -380,7 +358,6 @@
 	icon_state = "bullet"
 	damage = 7
 	armour_penetration = -15
-	fauna_mod = 2
 
 /obj/projectile/bullet/hydrakinetic/on_hit(atom/target, Firer, blocked = 0, pierce_hit) //its not meant to tear through walls like a plasma cutter, but will still at least bust down a wall if it hits one.
 	if(ismineralturf(target))

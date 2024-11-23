@@ -344,7 +344,7 @@
 
 	// Why is this in InterceptClickOn() and not Activate()?
 	// Well, we need to use the params of the click intercept
-	// for passing into preparePixelProjectile, so we'll handle it here instead.
+	// for passing into aim_projectile, so we'll handle it here instead.
 	// We just need to make sure Pre-activate and Activate return TRUE so we make it this far
 	user.visible_message(
 		span_nicegreen("[user] launches a mending globule!"),
@@ -356,9 +356,9 @@
 		oozy.adjust_ooze_nutrition(-5)
 
 	var/modifiers = params2list(params)
-	var/obj/projectile/globule/globule = new(user.loc)
-	globule.preparePixelProjectile(target, user, modifiers)
-	globule.def_zone = user.zone_selected
+	var/obj/projectile/globule/globule = new(caller.loc)
+	globule.aim_projectile(target, caller, modifiers)
+	globule.def_zone = caller.zone_selected
 	globule.fire()
 
 	StartCooldown()

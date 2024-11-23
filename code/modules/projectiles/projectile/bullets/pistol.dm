@@ -47,12 +47,15 @@
 
 ///.35 sol short, weak crew pistol/smg round
 
-/obj/projectile/bullet/c35sol ///Yes yes, fits in both pistols and revolvers. I'm putting it here
-	name = ".35 Sol Short bullet"
-	damage = 15
-	wound_bonus = -5 // Normal bullets are 20
-	bare_wound_bonus = 5
-	embed_falloff_tile = -4
+/obj/projectile/bullet/c160smart
+	name = ".160 smart bullet"
+	icon_state = "smartgun"
+	damage = 10
+	embed_type = /datum/embed_data/bullet_c160smart
+	speed = 0.5
+	homing_turn_speed = 5
+	homing_inaccuracy_min = 4
+	homing_inaccuracy_max = 10
 
 /obj/projectile/bullet/c35sol/incapacitator // .35 Sol's equivalent to a rubber bullet
 	name = ".35 Sol Short incapacitator bullet"

@@ -101,8 +101,8 @@
 	. = ..()
 	if(!.)
 		return
-	var/obj/projectile/tether = new /obj/projectile/tether(mod.wearer.loc)
-	tether.preparePixelProjectile(target, mod.wearer)
+	var/obj/projectile/tether = new /obj/projectile/tether(mod.wearer.loc, src)
+	tether.aim_projectile(target, mod.wearer)
 	tether.firer = mod.wearer
 	playsound(src, 'sound/weapons/batonextend.ogg', 25, TRUE)
 	INVOKE_ASYNC(tether, TYPE_PROC_REF(/obj/projectile, fire))
@@ -128,8 +128,36 @@
 
 /obj/projectile/tether/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
-	if(firer)
-		firer.throw_at(target, 10, 1, firer, FALSE, FALSE, null, MOVE_FORCE_NORMAL, TRUE)
+	if (!firer)
+		return
+
+	// Funni is handled separately
+	if (ismob(target))
+		return
+
+	if (istype(target, /obj/item/tether_anchor) || isstructure(target) || ismachinery(target))
+		firer.AddComponent(/datum/component/tether, target, 7, "MODtether", parent_module = parent_module)
+		return
+
+	var/hitx = impact_x
+	var/hity = impact_y
+
+	if (!isnull(last_turf) && last_turf != target && last_turf != target.loc)
+		var/turf_dir = get_dir(last_turf, get_turf(target))
+		if (turf_dir & NORTH)
+			hity += 32
+		if (turf_dir & SOUTH)
+			hity -= 32
+		if (turf_dir & EAST)
+			hitx += 32
+		if (turf_dir & WEST)
+			hitx -= 32
+
+	var/obj/item/tether_anchor/anchor = new(last_turf || get_turf(target))
+	anchor.pixel_x = hitx
+	anchor.pixel_y = hity
+	anchor.anchored = TRUE
+	firer.AddComponent(/datum/component/tether, anchor, 7, "MODtether", parent_module = parent_module)
 
 /obj/projectile/tether/Destroy()
 	QDEL_NULL(line)

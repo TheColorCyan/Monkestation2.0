@@ -40,7 +40,7 @@
 	if(!isnum(speed_multiplier))
 		speed_multiplier = projectile_speed_multiplier
 	our_projectile.speed *= speed_multiplier
-	our_projectile.preparePixelProjectile(endloc, startloc, null, projectile_spread)
+	our_projectile.aim_projectile(endloc, startloc, null, projectile_spread)
 	our_projectile.firer = firer
 	if(target)
 		our_projectile.original = target
@@ -190,6 +190,13 @@
 	playsound(firer, projectile_sound, 200, TRUE, 2)
 	for(var/spread in chosen_angles)
 		shoot_projectile(firer, target, null, firer, spread, null)
+
+
+/datum/action/cooldown/mob_cooldown/projectile_attack/shotgun_blast/wendigo
+	cooldown_time = 10 SECONDS
+	projectile_type = /obj/projectile/colossus/wendigo_shockwave
+	shot_angles = list(-20, -10, 0, 10, 20)
+	projectile_speed_multiplier = 0.25
 
 
 /datum/action/cooldown/mob_cooldown/projectile_attack/shotgun_blast/colossus

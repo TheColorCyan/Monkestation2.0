@@ -55,7 +55,7 @@
 			initialized = TRUE
 	else
 		payload_type = projectile_payload
-		RegisterSignal(target, COMSIG_PROJECTILE_SELF_ON_HIT, PROC_REF(checkEmbedProjectile))
+		RegisterSignal(target, COMSIG_PROJECTILE_SELF_ON_HIT, PROC_REF(check_embed_projectile))
 
 
 /datum/element/embed/Detach(obj/target)
@@ -138,17 +138,21 @@
  * If we hit a valid target, we create the shrapnel_type object and immediately call tryEmbed() on it, targeting what we impacted. That will lead
  * it to call tryForceEmbed() on its own embed element (it's out of our hands here, our projectile is done), where it will run through all the checks it needs to.
  */
-/datum/element/embed/proc/checkEmbedProjectile(obj/projectile/P, atom/movable/firer, atom/hit, angle, hit_zone)
+/datum/element/embed/proc/check_embed_projectile(obj/projectile/source, atom/movable/firer, atom/hit, angle, hit_zone, blocked, pierce_hit)
 	SIGNAL_HANDLER
 
-	if(!iscarbon(hit) || HAS_TRAIT(hit, TRAIT_PIERCEIMMUNE))
-		Detach(P)
+	if (pierce_hit)
+		return
+
+	if(!source.can_embed_into(hit) || blocked)
+		Detach(source)
 		return // we don't care
 
+	var/payload_type = source.shrapnel_type
 	var/obj/item/payload = new payload_type(get_turf(hit))
 	if(istype(payload, /obj/item/shrapnel/bullet))
-		payload.name = P.name
-	payload.embedding = P.embedding
+		payload.name = source.name
+	payload.embedding = source.embedding
 	payload.updateEmbedding()
 	var/mob/living/carbon/C = hit
 	var/obj/item/bodypart/limb = C.get_bodypart(hit_zone)
@@ -156,7 +160,7 @@
 		limb = C.get_bodypart()
 
 	payload.tryEmbed(limb) // at this point we've created our shrapnel baby and set them up to embed in the target, we can now die in peace as they handle their embed try on their own
-	Detach(P)
+	Detach(source)
 
 /**
  * tryForceEmbed() is called here when we fire COMSIG_EMBED_TRY_FORCE from [/obj/item/proc/tryEmbed]. Mostly, this means we're a piece of shrapnel from a projectile that just impacted something, and we're trying to embed in it.

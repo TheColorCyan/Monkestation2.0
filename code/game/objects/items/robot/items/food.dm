@@ -182,7 +182,8 @@
 	icon_state = "gumball"
 	ammo_type = /obj/item/food/gumball
 	damage = 0
-	speed = 0.5
+	speed = 2
+	embed_type = null
 
 /obj/projectile/bullet/reusable/gumball/harmful
 	damage = 10
@@ -209,8 +210,9 @@
 	icon_state = "lollipop_1"
 	ammo_type = /obj/item/food/lollipop/cyborg
 	damage = 0
-	speed = 0.5
-	var/color2 = rgb(0, 0, 0)
+	speed = 2
+	embed_type = null
+	var/head_color
 
 /obj/projectile/bullet/reusable/lollipop/harmful
 	embedding = list(

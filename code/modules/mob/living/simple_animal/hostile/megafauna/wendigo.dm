@@ -188,7 +188,7 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 				break
 			var/obj/projectile/colossus/wendigo_shockwave/shockwave = new /obj/projectile/colossus/wendigo_shockwave(loc)
 			shockwave.speed = 8
-			shockwave.preparePixelProjectile(endloc, startloc, null, spread)
+			shockwave.aim_projectile(endloc, startloc, null, spread)
 			shockwave.firer = src
 			if(target)
 				shockwave.original = target
@@ -287,18 +287,26 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 
 /obj/projectile/colossus/wendigo_shockwave
 	name = "wendigo shockwave"
-	/// If wave movement is enabled
-	var/wave_movement = FALSE
+	speed = 0.5
 	/// Amount the angle changes every pixel move
-	var/wave_speed = 15
+	var/wave_speed = 0.5
 	/// Amount of movements this projectile has made
 	var/pixel_moves = 0
 
-/obj/projectile/colossus/wendigo_shockwave/pixel_move(trajectory_multiplier, hitscanning = FALSE)
-	. = ..()
-	if(wave_movement)
-		pixel_moves++
-		set_angle(original_angle + pixel_moves * wave_speed)
+/obj/projectile/colossus/wendigo_shockwave/spiral
+	damage = 15
+
+/obj/projectile/colossus/wendigo_shockwave/wave
+	speed = 0.125
+	homing = TRUE
+	wave_speed = 0.3
+
+/obj/projectile/colossus/wendigo_shockwave/wave/alternate
+	wave_speed = -0.3
+
+/obj/projectile/colossus/wendigo_shockwave/process_homing()
+	pixel_moves++
+	set_angle(original_angle + pixel_moves * wave_speed)
 
 /obj/item/wendigo_blood
 	name = "bottle of wendigo blood"
