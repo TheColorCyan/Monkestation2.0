@@ -3,9 +3,9 @@
 /obj/projectile/bullet/c9mm
 	name = "9mm bullet"
 	damage = 30
-	embed_type = /datum/embed_data/c9mm
+	embed_type = /datum/embedding/bullet_c9mm
 
-/datum/embed_data/c9mm
+/datum/embedding/bullet_c9mm
 	embed_chance = 15
 	fall_chance = 3
 	jostle_chance = 4
@@ -91,10 +91,10 @@
 	sharpness = SHARP_EDGED
 	wound_bonus = 20
 	bare_wound_bonus = 20
-	embed_type = /datum/embed_data/c35sol
+	embed_type = /datum/embedding/c35sol
 	embed_falloff_tile = -15
 
-/datum/embed_data/c35sol
+/datum/embedding/c35sol
 	embed_chance = 75
 	fall_chance = 3
 	jostle_chance = 4

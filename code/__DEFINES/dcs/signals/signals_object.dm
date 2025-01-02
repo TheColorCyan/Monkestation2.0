@@ -191,9 +191,9 @@
 ///sent to the projectile after an item is spawned by the projectile_drop element: (new_casing)
 #define COMSIG_PROJECTILE_ON_SPAWN_DROP "projectile_on_spawn_drop"
 
-///sent to the projectile when spawning the item (shrapnel) that may be embedded: (new_item)
+///sent to the projectile when spawning the item (shrapnel) that may be embedded: (new_item, victim)
 #define COMSIG_PROJECTILE_ON_SPAWN_EMBEDDED "projectile_on_spawn_embedded"
-///sent to the projectile when successfully embedding into something
+///sent to the projectile when successfully embedding into something: (new_item, victim)
 #define COMSIG_PROJECTILE_ON_EMBEDDED "projectile_on_embedded"
 
 // /obj/vehicle/sealed/car/vim signals
@@ -225,9 +225,6 @@
 #define COMSIG_MECHA_EQUIPMENT_CLICK "mecha_action_equipment_click"
 	/// Prevents click from happening.
 	#define COMPONENT_CANCEL_EQUIPMENT_CLICK (1<<0)
-
-/// from /obj/structure/sign/poster/trap_succeeded() : (mob/user)
-#define COMSIG_POSTER_TRAP_SUCCEED "poster_trap_succeed"
 
 /// from /obj/machinery/mineral/ore_redemption/pickup_item when it successfully picks something up
 #define COMSIG_ORM_COLLECTED_ORE "orm_collected_ore"

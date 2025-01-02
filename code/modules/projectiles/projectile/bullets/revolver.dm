@@ -39,10 +39,10 @@
 	ricochet_auto_aim_range = 3
 	wound_bonus = -20
 	bare_wound_bonus = 10
-	embed_type = /datum/embed_data/c38
+	embed_type = /datum/embedding/bullet_c38
 	embed_falloff_tile = -4
 
-/datum/embed_data/c38
+/datum/embedding/bullet_c38
 	embed_chance = 25
 	fall_chance = 2
 	jostle_chance = 2
@@ -84,11 +84,11 @@
 	sharpness = SHARP_EDGED
 	wound_bonus = 20
 	bare_wound_bonus = 20
-	embed_type = /datum/embed_data/n762
+	embed_type = /datum/embedding/bullet_c38_dumdum
 	wound_falloff_tile = -5
 	embed_falloff_tile = -15
 
-/datum/embed_data/n762
+/datum/embedding/bullet_c38_dumdum
 	embed_chance = 75
 	fall_chance = 3
 	jostle_chance = 4

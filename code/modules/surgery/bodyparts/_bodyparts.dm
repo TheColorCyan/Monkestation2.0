@@ -358,9 +358,14 @@
 		if(wound_desc)
 			check_list += "\t\t[wound_desc]"
 
-	for(var/obj/item/embedded_thing in embedded_objects)
-		var/stuck_word = embedded_thing.is_embed_harmless() ? "stuck" : "embedded"
-		check_list += "\t <a href='byond://?src=[REF(examiner)];embedded_object=[REF(embedded_thing)];embedded_limb=[REF(src)]' class='warning'>There is \a [embedded_thing] [stuck_word] in your [name]!</a>"
+	for(var/obj/item/embedded_thing as anything in embedded_objects)
+		var/harmless = embedded_thing.get_embed().is_harmless()
+		var/stuck_wordage = harmless ? "stuck to" : "embedded in"
+		var/embed_text = "\t <a href='byond://?src=[REF(examiner)];embedded_object=[REF(embedded_thing)];embedded_limb=[REF(src)]'> There is [icon2html(embedded_thing, examiner)] \a [embedded_thing] [stuck_wordage] your [plaintext_zone]!</a>"
+		if (harmless)
+			check_list += span_italics(span_notice(embed_text))
+		else
+			check_list += span_boldwarning(embed_text)
 
 	if(current_gauze)
 		check_list += span_notice("\t There is some <a href='byond://?src=[REF(examiner)];gauze_limb=[REF(src)]'>[current_gauze.name]</a> wrapped around your [name].")
@@ -1242,8 +1247,8 @@
 	if(generic_bleedstacks > 0)
 		cached_bleed_rate += 0.5
 
-	for(var/obj/item/embeddies in embedded_objects)
-		if(!embeddies.is_embed_harmless())
+	for(var/obj/item/embeddies as anything in embedded_objects)
+		if(!embeddies.get_embed().is_harmless())
 			cached_bleed_rate += 0.25
 
 	for(var/datum/wound/iter_wound as anything in wounds)

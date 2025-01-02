@@ -32,10 +32,10 @@
 	damage = 50
 	speed = 1
 	range = 25
-	embed_type = /datum/embed_data/arrow
+	embed_type = /datum/embedding/arrow
 	shrapnel_type = /obj/item/ammo_casing/arrow
 
-/datum/embed_data/arrow
+/datum/embedding/arrow
 	embed_chance = 90
 	fall_chance = 2
 	jostle_chance = 2
@@ -61,9 +61,9 @@
 	icon_state = "holy_arrow_projectile"
 	damage = 20 //still a lot but this is roundstart gear so far less
 	shrapnel_type =/obj/item/ammo_casing/arrow/holy
-	embed_type = /datum/embed_data/arrow/holy
+	embed_type = /datum/embedding/arrow/holy
 
-/datum/embed_data/arrow/holy
+/datum/embedding/arrow/holy
 	embed_chance = 50
 	fall_chance = 2
 	jostle_chance = 0
