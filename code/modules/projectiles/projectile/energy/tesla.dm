@@ -27,7 +27,7 @@
 
 /obj/projectile/energy/tesla_cannon
 	name = "tesla orb"
-	icon_state = "ice_1"
+	icon_state = "null"
 	damage = 0
 	speed = 0.66
 	var/shock_damage = 5
