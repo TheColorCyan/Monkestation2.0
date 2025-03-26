@@ -105,6 +105,10 @@
 	spawning.forceMove(washer_pod)
 	new /obj/effect/pod_landingzone(granter_turf, washer_pod)
 
+	var/obj/machinery/announcement_system/announcement_system = pick(GLOB.announcement_systems)
+	if (isnull(announcement_system))
+		return
+	announcement_system.announce_prisoner(spawning, crime)
 
 /// Iterates over all turfs in the target area and returns the first non-dense one
 /datum/job/prisoner/proc/get_random_open_turf_in_area()

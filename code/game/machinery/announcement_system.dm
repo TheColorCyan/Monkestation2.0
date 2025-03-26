@@ -97,6 +97,14 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 
 	broadcast("Officer [officer.real_name] has been assigned to [department].", list(RADIO_CHANNEL_SECURITY))
 
+///Announces a latejoin prisoner over security radio
+/obj/machinery/announcement_system/proc/announce_prisoner(mob/prisoner, crime)
+	if (!is_operational)
+		return
+
+	broadcast("Prisoner [prisoner.real_name] has been assigned to [crime].", list(RADIO_CHANNEL_SECURITY))
+
+
 /// Sends a message to the appropriate channels.
 /obj/machinery/announcement_system/proc/broadcast(message, list/channels)
 	use_power(active_power_usage)
