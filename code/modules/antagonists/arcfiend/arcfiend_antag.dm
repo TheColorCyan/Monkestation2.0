@@ -15,7 +15,7 @@
 	/// How much power the arcfiend has stored
 	var/stored_power = 300
 	/// How much power can we store at maximum
-	var/max_stored_power = 600
+	var/max_stored_power = 3000
 
 	///Arcfiend traits
 	var/static/list/arcfiend_traits = list(
@@ -28,4 +28,14 @@
 
 /datum/antagonist/arcfiend/on_gain()
 	owner.current.add_traits(arcfiend_traits)
+	var/datum/action/cooldown/arcfiend/targeted/drain_power/drain_power = new /datum/action/cooldown/arcfiend/targeted/drain_power
+	drain_power.Grant(owner.current)
 	return ..()
+
+/// Adds power to stored power and prevents overflow
+/datum/antagonist/arcfiend/proc/gain_power(var/amount)
+	if (stored_power == max_stored_power)
+		return
+	if ((amount + stored_power) > max_stored_power)
+		amount = (max_stored_power - stored_power)
+	stored_power += amount
