@@ -241,6 +241,8 @@ GLOBAL_LIST_INIT(ai_employers, list(
 /// Checks if the given mob is a malf ai.
 #define IS_MALF_AI(mob) (mob?.mind?.has_antag_datum(/datum/antagonist/malf_ai))
 
+#define IS_ARCFIEND(mob) (mob?.mind?.has_antag_datum(/datum/antagonist/arcfiend))
+
 /// List of human antagonist types which don't spawn directly on the space station
 GLOBAL_LIST_INIT(human_invader_antagonists, list(
 	/datum/antagonist/abductor,

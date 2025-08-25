@@ -3,23 +3,58 @@
 	var/datum/antagonist/arcfiend/arcfiend
 	/// How much power it takes to cast an ability
 	var/power_cost = 0
+	/// Is the ability active
+	var/active = FALSE
+
+// Find arcfiend datum
+/datum/action/cooldown/arcfiend/proc/find_arcfiend_datum()
+	arcfiend ||= IS_ARCFIEND(owner)
+
+/datum/action/cooldown/arcfiend/Grant(mob/user)
+	. = ..()
+	find_arcfiend_datum()
+
+/datum/action/cooldown/arcfiend/proc/ActivatePower(trigger_flags)
+	active = TRUE
+	START_PROCESSING(SSprocessing, src)
+	build_all_button_icons()
+
+/datum/action/cooldown/arcfiend/proc/DeactivatePower()
+	if(!active)
+		return
+	STOP_PROCESSING(SSprocessing, src)
+	active = FALSE
+	StartCooldown()
+	build_all_button_icons()
 
 /datum/action/cooldown/arcfiend/targeted
 	///If set, how far the target has to be for the power to work.
 	var/target_range
-	///Is this power LOCKED due to being used?
-	var/power_in_use = FALSE
 
 /// Modify description to add notice that this is aimed.
 /datum/action/cooldown/arcfiend/targeted/New(Target)
 	desc += "<br>\[<i>Targeted Power</i>\]"
 	return ..()
 
+/datum/action/cooldown/arcfiend/targeted/Remove(mob/living/remove_from)
+	. = ..()
+	if(remove_from.click_intercept == src)
+		unset_click_ability(remove_from)
+
 /datum/action/cooldown/arcfiend/targeted/Trigger(trigger_flags, atom/target)
+	if(active)
+		DeactivatePower()
+		return FALSE
+	ActivatePower(trigger_flags)
 	if(!QDELETED(target))
 		return InterceptClickOn(owner, null, target)
-
 	return set_click_ability(owner)
+
+/datum/action/cooldown/arcfiend/targeted/DeactivatePower()
+	STOP_PROCESSING(SSprocessing, src)
+	active = FALSE
+	build_all_button_icons()
+	unset_click_ability(owner)
 
 /// Check if target is VALID (wall, turf, or character?)
 /datum/action/cooldown/arcfiend/targeted/proc/CheckValidTarget(atom/target_atom)
@@ -46,7 +81,7 @@
 	if(!CheckCanTarget(target_atom))
 		return TRUE
 	FireTargetedPower(target_atom) // We use this instead of ActivatePower(trigger_flags), which has no input
-	// Skip this part so we can return TRUE right away.
+	power_activated_sucessfully()
 	return TRUE
 
 /// Like ActivatePower, but specific to Targeted (and takes an atom input). We don't use ActivatePower for targeted.
@@ -55,7 +90,9 @@
 
 /// The power went off! We now pay the cost of the power.
 /datum/action/cooldown/arcfiend/targeted/proc/power_activated_sucessfully()
+	unset_click_ability(owner)
 	StartCooldown()
+	DeactivatePower()
 
 /datum/action/cooldown/arcfiend/targeted/InterceptClickOn(mob/living/user, params, atom/target)
 	click_with_power(target)
@@ -67,21 +104,53 @@
 	overlay_icon_state = "bg_heretic_border"
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "moon_smile"
-	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
+	//ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
 	cooldown_time = 1 SECOND
+	target_range = 1
 
 	/// How much power we drain
-	var/drain = 50
+	var/drain = 300
 	// How much power we drain from a living being
-	var/living_drain = 100
+	var/living_drain = 500
 
+/// Proc used to drain power and transfer it to the arcfiend
+/datum/action/cooldown/arcfiend/targeted/drain_power/proc/drain(var/amount, atom/target)
+	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
+	spark_system.set_up(5, FALSE, get_turf(target))
+
+	// Powercells
+	if (istype(target, /obj/item/stock_parts/cell))
+		var/obj/item/stock_parts/cell/cell = target
+		spark_system.start()
+		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+		cell.use(amount)
+		arcfiend.gain_power(amount)
+		return TRUE
+
+	// Machinery
+	if (istype(target, /obj/machinery))
+		var/obj/machinery/machinery = target
+		spark_system.start()
+		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+		machinery.directly_use_power(amount)
+		arcfiend.gain_power(amount)
+		return TRUE
+
+	if (istype(target, /mob/living))
+		var/mob/living/living_thing = target
+		spark_system.start()
+		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+		living_thing.apply_damage(25, BURN, spread_damage = TRUE)
+		living_thing.Disorient(5 SECONDS, 70, knockdown = 0.5 SECONDS)
+		arcfiend.gain_power(amount)
+		return TRUE
+
+	else
+		return FALSE
 
 /datum/action/cooldown/arcfiend/targeted/drain_power/FireTargetedPower(atom/target)
 	. = ..()
-	// Sparks!
-	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
-	spark_system.set_up(5, FALSE, get_turf(target))
 	if (istype(target, /obj/machinery))
 		if (istype(target, /obj/machinery/power/apc))
 			// Special interactions with apcs
@@ -91,15 +160,24 @@
 					// When APC reaches 0 charge, destroy it and stop the drain
 					if(apc.cell.charge < drain)
 						arcfiend.gain_power(apc.cell.charge)
-						apc.Destroy()
+						apc.take_damage(300)
 						break
 					if (do_after(owner, 1 SECONDS, target))
-						spark_system.start()
-						playsound(apc.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-						apc.cell.use(drain)
-						arcfiend.gain_power(drain)
-					// Same thing here
+						drain(drain, apc.cell)
 					else
-						apc.Destroy()
 						break
 
+		// Interaction with machinery
+		var/obj/machinery/machinery = target
+		while(machinery.use_power)
+			// Less power when draining from machines
+			if (do_after(owner, 1 SECONDS, target))
+				drain(drain - 200, machinery)
+			else
+				break
+	else if (isliving(target))
+		while (!isdead(target))
+			if (do_after(owner, 1 SECONDS, target))
+				drain(living_drain, target)
+			else
+				break
