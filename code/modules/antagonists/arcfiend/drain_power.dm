@@ -80,8 +80,8 @@
 	// Valid? (return true means DON'T cancel power!)
 	if(!CheckCanTarget(target_atom))
 		return TRUE
-	FireTargetedPower(target_atom) // We use this instead of ActivatePower(trigger_flags), which has no input
 	power_activated_sucessfully()
+	FireTargetedPower(target_atom) // We use this instead of ActivatePower(trigger_flags), which has no input
 	return TRUE
 
 /// Like ActivatePower, but specific to Targeted (and takes an atom input). We don't use ActivatePower for targeted.
@@ -104,7 +104,7 @@
 	overlay_icon_state = "bg_heretic_border"
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "moon_smile"
-	//ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
+	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
 	cooldown_time = 1 SECOND
 	target_range = 1
@@ -113,9 +113,12 @@
 	var/drain = 300
 	// How much power we drain from a living being
 	var/living_drain = 500
+	/// Are we draining something?
+	var/currently_draining = FALSE
 
 /// Proc used to drain power and transfer it to the arcfiend
 /datum/action/cooldown/arcfiend/targeted/drain_power/proc/drain(var/amount, atom/target)
+	// Sparks
 	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
 	spark_system.set_up(5, FALSE, get_turf(target))
 
@@ -137,6 +140,7 @@
 		arcfiend.gain_power(amount)
 		return TRUE
 
+	// Living
 	if (istype(target, /mob/living))
 		var/mob/living/living_thing = target
 		spark_system.start()
@@ -151,6 +155,10 @@
 
 /datum/action/cooldown/arcfiend/targeted/drain_power/FireTargetedPower(atom/target)
 	. = ..()
+	if (currently_draining)
+		return
+	currently_draining = TRUE
+	// Check if our target is a machine
 	if (istype(target, /obj/machinery))
 		if (istype(target, /obj/machinery/power/apc))
 			// Special interactions with apcs
@@ -165,6 +173,7 @@
 					if (do_after(owner, 1 SECONDS, target))
 						drain(drain, apc.cell)
 					else
+						currently_draining = FALSE
 						break
 
 		// Interaction with machinery
@@ -174,10 +183,17 @@
 			if (do_after(owner, 1 SECONDS, target))
 				drain(drain - 200, machinery)
 			else
+				currently_draining = FALSE
 				break
+
+	// Check if our target is a living being
 	else if (isliving(target))
-		while (!isdead(target))
-			if (do_after(owner, 1 SECONDS, target))
-				drain(living_drain, target)
+		var/mob/living/living_target = target
+		while (living_target.stat != DEAD)
+			if (do_after(owner, 1 SECONDS, living_target))
+				drain(living_drain, living_target)
 			else
+				currently_draining = FALSE
 				break
+
+	currently_draining = FALSE
