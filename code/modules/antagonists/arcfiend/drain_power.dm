@@ -74,10 +74,8 @@
 
 /// Click Target
 /datum/action/cooldown/arcfiend/targeted/proc/click_with_power(atom/target_atom)
-	// CANCEL RANGED TARGET check
 	if(!CheckValidTarget(target_atom))
 		return FALSE
-	// Valid? (return true means DON'T cancel power!)
 	if(!CheckCanTarget(target_atom))
 		return TRUE
 	power_activated_sucessfully()
@@ -125,37 +123,30 @@
 	// Powercells
 	if (istype(target, /obj/item/stock_parts/cell))
 		var/obj/item/stock_parts/cell/cell = target
-		spark_system.start()
-		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		cell.use(amount)
 		arcfiend.gain_power(amount)
-		return TRUE
 
 	// Machinery
 	if (istype(target, /obj/machinery))
 		var/obj/machinery/machinery = target
-		spark_system.start()
-		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		machinery.directly_use_power(amount)
 		arcfiend.gain_power(amount)
-		return TRUE
 
 	// Living
 	if (istype(target, /mob/living))
 		var/mob/living/living_thing = target
-		spark_system.start()
-		playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		living_thing.apply_damage(25, BURN, spread_damage = TRUE)
 		living_thing.Disorient(5 SECONDS, 70, knockdown = 0.5 SECONDS)
 		arcfiend.gain_power(amount)
-		return TRUE
 
-	else
-		return FALSE
+	spark_system.start()
+	playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
 /datum/action/cooldown/arcfiend/targeted/drain_power/FireTargetedPower(atom/target)
 	. = ..()
 	if (currently_draining)
+		return
+	if (!owner.Adjacent(target))
 		return
 	currently_draining = TRUE
 	// Check if our target is a machine
@@ -175,16 +166,25 @@
 					else
 						currently_draining = FALSE
 						break
+			currently_draining = FALSE
+			return
 
 		// Interaction with machinery
+		// We drain directly from the APC machine is connected to, but slower
 		var/obj/machinery/machinery = target
-		while(machinery.use_power)
-			// Less power when draining from machines
-			if (do_after(owner, 1 SECONDS, target))
-				drain(drain - 200, machinery)
-			else
-				currently_draining = FALSE
-				break
+		var/area/machine_area = get_area(machinery)
+		var/obj/machinery/power/apc/local_apc
+		if(!machine_area)
+			return FALSE
+		local_apc = machine_area.apc
+		if(local_apc?.cell?.charge)
+			while(local_apc.cell.charge > drain)
+				if (do_after(owner, 1 SECONDS, target))
+					// Less power
+					drain(drain - 200, machinery)
+				else
+					currently_draining = FALSE
+					break
 
 	// Check if our target is a living being
 	else if (isliving(target))
