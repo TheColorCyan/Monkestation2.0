@@ -27,6 +27,13 @@
 	StartCooldown()
 	build_all_button_icons()
 
+/datum/action/cooldown/arcfiend/Trigger(trigger_flags, atom/target)
+	if(active)
+		DeactivatePower()
+		return FALSE
+	ActivatePower(trigger_flags)
+	return TRUE
+
 /datum/action/cooldown/arcfiend/targeted
 	///If set, how far the target has to be for the power to work.
 	var/target_range

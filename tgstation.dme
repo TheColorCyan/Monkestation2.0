@@ -2945,6 +2945,7 @@
 #include "code\modules\antagonists\abductor\machinery\pad.dm"
 #include "code\modules\antagonists\arcfiend\arcfiend_antag.dm"
 #include "code\modules\antagonists\arcfiend\drain_power.dm"
+#include "code\modules\antagonists\arcfiend\wire_ride.dm"
 #include "code\modules\antagonists\ashwalker\ashwalker.dm"
 #include "code\modules\antagonists\battlecruiser\battlecruiser.dm"
 #include "code\modules\antagonists\blob\blob_antag.dm"

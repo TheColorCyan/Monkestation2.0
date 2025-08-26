@@ -136,6 +136,12 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(/obj/structure/gri
 					C.linked_dirs &= ~inverse
 					C.update_appearance()
 
+// Used in relaymovement()
+/obj/structure/cable/proc/find_connecting(direction)
+	for(var/obj/structure/cable/target in get_step(loc, direction))
+		if(cable_layer & target.cable_layer)
+			return target
+
 /obj/structure/cable/Destroy() // called when a cable is deleted
 	Disconnect_cable()
 
@@ -229,6 +235,48 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(/obj/structure/gri
 	..()
 	if(current_size >= STAGE_FIVE)
 		deconstruct()
+
+////////////////////////////////////////
+// Movement
+///////////////////////////////////////
+
+// Used for arcfiend's movement in wires
+
+/obj/structure/cable/relaymove(mob/living/user, direction)
+	if(!direction) //cant go this way.
+		return
+	if(user in buckled_mobs)
+		return
+
+	var/obj/structure/cable/target_move
+	for(var/canon_direction in GLOB.cardinals)
+		if(!(direction & canon_direction))
+			continue
+		var/obj/structure/cable/temp_target = find_connecting(canon_direction)
+		if(!temp_target)
+			continue
+		target_move = temp_target
+		break
+
+	if(!target_move)
+		return
+
+	user.forceMove(target_move)
+
+	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
+	spark_system.set_up(5, FALSE, get_turf(user))
+	spark_system.start()
+
+	var/client/our_client = user.client
+	if(!our_client)
+		return
+	our_client.set_eye(target_move)
+	// Let's smooth out that movement with an animate yeah?
+	// If the new x is greater (move is left to right) we get a negative offset. vis versa
+	our_client.pixel_x = (x - target_move.x) * world.icon_size
+	our_client.pixel_y = (y - target_move.y) * world.icon_size
+	animate(our_client, pixel_x = 0, pixel_y = 0, time = 0.05 SECONDS)
+	our_client.move_delay = world.time + 0.05 SECONDS
 
 ////////////////////////////////////////////
 // Power related

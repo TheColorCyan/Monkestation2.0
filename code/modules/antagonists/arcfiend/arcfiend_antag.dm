@@ -29,7 +29,9 @@
 /datum/antagonist/arcfiend/on_gain()
 	owner.current.add_traits(arcfiend_traits)
 	var/datum/action/cooldown/arcfiend/targeted/drain_power/drain_power = new /datum/action/cooldown/arcfiend/targeted/drain_power
+	var/datum/action/cooldown/arcfiend/wire_travel/wire_travel = new /datum/action/cooldown/arcfiend/wire_travel
 	drain_power.Grant(owner.current)
+	wire_travel.Grant(owner.current)
 	return ..()
 
 /// Adds power to stored power and prevents overflow
