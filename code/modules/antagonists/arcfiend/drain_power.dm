@@ -98,10 +98,8 @@
 /datum/action/cooldown/arcfiend/targeted/drain_power
 	name = "Drain power"
 	desc = "Allows you to drain power out of machinery or people"
-	background_icon_state = "bg_heretic"
-	overlay_icon_state = "bg_heretic_border"
-	button_icon = 'icons/mob/actions/actions_ecult.dmi'
-	button_icon_state = "moon_smile"
+	button_icon = 'icons/mob/actions/arcfiend_actions.dmi'
+	button_icon_state = "drain_power"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
 	cooldown_time = 1 SECOND
@@ -128,15 +126,22 @@
 
 	// Machinery
 	if (istype(target, /obj/machinery))
-		var/obj/machinery/machinery = target
-		machinery.directly_use_power(amount)
-		arcfiend.gain_power(amount)
+		// Special for SMES units
+		if (istype(target, /obj/machinery/power/smes))
+			var/obj/machinery/power/smes/smes = target
+			smes.charge -= drain
+			arcfiend.gain_power(drain)
+		else
+			var/obj/machinery/machinery = target
+			machinery.directly_use_power(amount)
+			arcfiend.gain_power(amount)
 
 	// Living
 	if (istype(target, /mob/living))
 		var/mob/living/living_thing = target
 		living_thing.apply_damage(25, BURN, spread_damage = TRUE)
-		living_thing.Disorient(5 SECONDS, 70, knockdown = 0.5 SECONDS)
+		living_thing.Disorient(5 SECONDS, 70)
+		living_thing.Knockdown(0.5)
 		arcfiend.gain_power(amount)
 
 	spark_system.start()
@@ -168,7 +173,18 @@
 						break
 			currently_draining = FALSE
 			return
-
+		else if (istype(target, /obj/machinery/power/smes))
+			var/obj/machinery/power/smes/smes = target
+			while(smes.charge > 0)
+				if(smes.charge < drain)
+					arcfiend.gain_power(smes.charge)
+					break
+				if (do_after(owner, 1 SECONDS, target))
+					drain(drain, smes)
+				else
+					break
+			currently_draining = FALSE
+			return
 		// Interaction with machinery
 		// We drain directly from the APC machine is connected to, but slower
 		var/obj/machinery/machinery = target
@@ -180,14 +196,18 @@
 		if(local_apc?.cell?.charge)
 			while(local_apc.cell.charge > drain)
 				if (do_after(owner, 1 SECONDS, target))
-					// Less power
-					drain(drain - 200, machinery)
+					// We drain the amount the machine uses when idle
+					// If the machine doesn't use any power when idle, we don't get power either
+					drain(machinery.idle_power_usage, machinery)
 				else
 					currently_draining = FALSE
 					break
 
 	// Check if our target is a living being
 	else if (isliving(target))
+		//if (issilico(target))
+		//	var/mob/living/silicon/robot_target
+		//	while (robot_target.cell?.charge )
 		var/mob/living/living_target = target
 		while (living_target.stat != DEAD)
 			if (do_after(owner, 1 SECONDS, living_target))
