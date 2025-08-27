@@ -24,18 +24,18 @@
 	return TRUE
 
 /datum/action/cooldown/arcfiend/wire_travel/ActivatePower(trigger_flags)
-	. = ..()
 	var/obj/structure/cable/cable = locate() in get_turf(owner)
 	if (!cable)
-		DeactivatePower()
 		return
 	if (!check_can_travel(cable))
-		DeactivatePower()
 		return
 	if (!do_after(owner, 1 SECOND, cable))
-		DeactivatePower()
+		return
 	owner.forceMove(cable)
 	is_travelling = TRUE
+	active = TRUE
+	START_PROCESSING(SSprocessing, src)
+	build_all_button_icons()
 
 /datum/action/cooldown/arcfiend/wire_travel/process()
 	. = ..()
