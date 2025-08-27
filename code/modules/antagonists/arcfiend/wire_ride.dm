@@ -7,9 +7,10 @@
 	cooldown_time = 20 SECOND
 	var/is_travelling = FALSE
 
+	power_cost = 4000
+	active_power_cost = 1000
+
 /datum/action/cooldown/arcfiend/wire_travel/proc/check_can_travel(/obj/structure/cable/target)
-	if(!owner.Adjacent(target))
-		return FALSE
 	if(owner.stat)
 		to_chat(owner, span_warning("You must be conscious to do this!"))
 		return FALSE
@@ -24,12 +25,17 @@
 
 /datum/action/cooldown/arcfiend/wire_travel/ActivatePower(trigger_flags)
 	. = ..()
-	for(var/obj/structure/cable/cable in range(1, owner))
-		if (do_after(owner, 1 SECOND, cable))
-			owner.forceMove(cable)
-			is_travelling = TRUE
+	var/obj/structure/cable/cable = locate() in get_turf(owner)
+	if (!cable)
+		return
+	if (!check_can_travel(cable))
+		return
+	if (do_after(owner, 1 SECOND, cable))
+		owner.forceMove(cable)
+		is_travelling = TRUE
 
 /datum/action/cooldown/arcfiend/wire_travel/process()
+	. = ..()
 	if (!is_travelling)
 		return
 	var/current_location = owner.loc

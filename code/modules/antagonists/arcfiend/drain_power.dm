@@ -1,39 +1,3 @@
-/datum/action/cooldown/arcfiend
-	/// Our antagonist datum
-	var/datum/antagonist/arcfiend/arcfiend
-	/// How much power it takes to cast an ability
-	var/power_cost = 0
-	/// Is the ability active
-	var/active = FALSE
-
-// Find arcfiend datum
-/datum/action/cooldown/arcfiend/proc/find_arcfiend_datum()
-	arcfiend ||= IS_ARCFIEND(owner)
-
-/datum/action/cooldown/arcfiend/Grant(mob/user)
-	. = ..()
-	find_arcfiend_datum()
-
-/datum/action/cooldown/arcfiend/proc/ActivatePower(trigger_flags)
-	active = TRUE
-	START_PROCESSING(SSprocessing, src)
-	build_all_button_icons()
-
-/datum/action/cooldown/arcfiend/proc/DeactivatePower()
-	if(!active)
-		return
-	STOP_PROCESSING(SSprocessing, src)
-	active = FALSE
-	StartCooldown()
-	build_all_button_icons()
-
-/datum/action/cooldown/arcfiend/Trigger(trigger_flags, atom/target)
-	if(active)
-		DeactivatePower()
-		return FALSE
-	ActivatePower(trigger_flags)
-	return TRUE
-
 /datum/action/cooldown/arcfiend/targeted
 	///If set, how far the target has to be for the power to work.
 	var/target_range

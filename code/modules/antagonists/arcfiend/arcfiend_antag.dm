@@ -15,7 +15,7 @@
 	/// How much power the arcfiend has stored
 	var/stored_power = 300
 	/// How much power can we store at maximum
-	var/max_stored_power = 3000
+	var/max_stored_power = 12000
 
 	///Arcfiend traits
 	var/static/list/arcfiend_traits = list(
