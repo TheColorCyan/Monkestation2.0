@@ -7,8 +7,8 @@
 	cooldown_time = 20 SECOND
 	var/is_travelling = FALSE
 
-	power_cost = 4000
-	active_power_cost = 1000
+	power_cost = 2000
+	active_power_cost = 35
 
 /datum/action/cooldown/arcfiend/wire_travel/proc/check_can_travel(/obj/structure/cable/target)
 	if(owner.stat)
@@ -47,5 +47,6 @@
 
 /datum/action/cooldown/arcfiend/wire_travel/DeactivatePower(trigger_flags)
 	. = ..()
+	// Move the person out
 	owner.forceMove(get_turf(owner))
 	is_travelling = FALSE
