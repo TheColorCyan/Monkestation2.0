@@ -65,6 +65,8 @@
 
 /datum/action/cooldown/arcfiend/targeted/InterceptClickOn(mob/living/user, params, atom/target)
 	click_with_power(target)
+	/// No afterattack to stop pulling cells out of APCs
+	return COMPONENT_NO_AFTERATTACK
 
 /datum/action/cooldown/arcfiend/targeted/drain_power
 	name = "Drain power"

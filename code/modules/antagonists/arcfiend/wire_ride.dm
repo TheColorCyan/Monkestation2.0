@@ -27,12 +27,15 @@
 	. = ..()
 	var/obj/structure/cable/cable = locate() in get_turf(owner)
 	if (!cable)
+		DeactivatePower()
 		return
 	if (!check_can_travel(cable))
+		DeactivatePower()
 		return
-	if (do_after(owner, 1 SECOND, cable))
-		owner.forceMove(cable)
-		is_travelling = TRUE
+	if (!do_after(owner, 1 SECOND, cable))
+		DeactivatePower()
+	owner.forceMove(cable)
+	is_travelling = TRUE
 
 /datum/action/cooldown/arcfiend/wire_travel/process()
 	. = ..()
