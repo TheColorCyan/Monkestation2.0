@@ -10,6 +10,8 @@
 	power_cost = 2000
 	active_power_cost = 35
 
+	var/list/wires_shown
+
 /datum/action/cooldown/arcfiend/wire_travel/proc/check_can_travel(/obj/structure/cable/target)
 	if(owner.stat)
 		to_chat(owner, span_warning("You must be conscious to do this!"))
@@ -44,9 +46,6 @@
 	var/current_location = owner.loc
 	if (!istype(current_location, /obj/structure/cable))
 		DeactivatePower()
-	var/obj/structure/cable/cable = current_location
-	if (QDELETED(cable))
-		owner.forceMove(get_turf(owner))
 
 /datum/action/cooldown/arcfiend/wire_travel/DeactivatePower(trigger_flags)
 	. = ..()
