@@ -28,6 +28,8 @@
 	var/list/client_contents
 	///every atmos machine inside this cell
 	var/list/atmos_contents
+	///every cable structure inside this cell
+	var/list/cable_contents
 
 /datum/spatial_grid_cell/New(cell_x, cell_y, cell_z)
 	. = ..()
@@ -43,6 +45,7 @@
 	hearing_contents = dummy_list
 	client_contents = dummy_list
 	atmos_contents = dummy_list
+	cable_contents = dummy_list
 
 /datum/spatial_grid_cell/Destroy(force)
 	if(force)//the response to someone trying to qdel this is a right proper fuck you
@@ -85,7 +88,7 @@ SUBSYSTEM_DEF(spatial_grid)
 	///list of the spatial_grid_cell datums per z level, arranged in the order of y index then x index
 	var/list/grids_by_z_level = list()
 	///everything that spawns before us is added to this list until we initialize
-	var/list/waiting_to_add_by_type = list(SPATIAL_GRID_CONTENTS_TYPE_HEARING = list(), SPATIAL_GRID_CONTENTS_TYPE_CLIENTS = list(), SPATIAL_GRID_CONTENTS_TYPE_ATMOS = list())
+	var/list/waiting_to_add_by_type = list(SPATIAL_GRID_CONTENTS_TYPE_HEARING = list(), SPATIAL_GRID_CONTENTS_TYPE_CLIENTS = list(), SPATIAL_GRID_CONTENTS_TYPE_ATMOS = list(), SPATIAL_GRID_CONTENTS_TYPE_CABLE = list())
 	///associative list of the form: movable.spatial_grid_key (string) -> inner list of spatial grid types for that key.
 	///inner lists contain contents channel types such as SPATIAL_GRID_CONTENTS_TYPE_HEARING etc.
 	///we use this to make adding to a cell static cost, and to save on memory
@@ -254,6 +257,11 @@ SUBSYSTEM_DEF(spatial_grid)
 				for(var/x_index in BOUNDING_BOX_MIN(center_x) to BOUNDING_BOX_MAX(center_x, cells_on_x_axis))
 					. += grid_level[row][x_index].atmos_contents
 
+		if(SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+			for(var/row in BOUNDING_BOX_MIN(center_y) to BOUNDING_BOX_MAX(center_y, cells_on_y_axis))
+				for(var/x_index in BOUNDING_BOX_MIN(center_x) to BOUNDING_BOX_MAX(center_x, cells_on_x_axis))
+					. += grid_level[row][x_index].cable_contents
+
 	return .
 
 ///get the grid cell encomapassing targets coordinates
@@ -379,6 +387,10 @@ SUBSYSTEM_DEF(spatial_grid)
 				GRID_CELL_SET(intersecting_cell.atmos_contents, new_target)
 				SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_ENTERED(SPATIAL_GRID_CONTENTS_TYPE_ATMOS), new_target)
 
+			if(SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+				GRID_CELL_SET(intersecting_cell.cable_contents, new_target)
+				SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_ENTERED(SPATIAL_GRID_CONTENTS_TYPE_CABLE), new_target)
+
 ///acts like enter_cell() but only adds the target to a specified type of grid cell contents list
 /datum/controller/subsystem/spatial_grid/proc/add_single_type(atom/movable/new_target, turf/target_turf, exclusive_type)
 	if(!initialized)
@@ -408,6 +420,10 @@ SUBSYSTEM_DEF(spatial_grid)
 		if(SPATIAL_GRID_CONTENTS_TYPE_ATMOS)
 			GRID_CELL_SET(intersecting_cell.atmos_contents, new_target)
 			SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_ENTERED(SPATIAL_GRID_CONTENTS_TYPE_ATMOS), new_target)
+
+		if(SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+			GRID_CELL_SET(intersecting_cell.cable_contents, new_target)
+			SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_ENTERED(SPATIAL_GRID_CONTENTS_TYPE_CABLE), new_target)
 
 	return intersecting_cell
 
@@ -448,6 +464,10 @@ SUBSYSTEM_DEF(spatial_grid)
 				GRID_CELL_REMOVE(intersecting_cell.atmos_contents, old_target)
 				SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_EXITED(type), old_target)
 
+			if(SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+				GRID_CELL_REMOVE(intersecting_cell.cable_contents, old_target)
+				SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_EXITED(SPATIAL_GRID_CONTENTS_TYPE_CABLE), old_target)
+
 	return TRUE
 
 ///acts like exit_cell() but only removes the target from the specified type of grid cell contents list
@@ -478,6 +498,10 @@ SUBSYSTEM_DEF(spatial_grid)
 
 		if(SPATIAL_GRID_CONTENTS_TYPE_ATMOS)
 			GRID_CELL_REMOVE(intersecting_cell.atmos_contents, old_target)
+			SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_EXITED(exclusive_type), old_target)
+
+		if(SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+			GRID_CELL_REMOVE(intersecting_cell.cable_contents, old_target)
 			SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_EXITED(exclusive_type), old_target)
 
 	return TRUE
@@ -601,7 +625,7 @@ SUBSYSTEM_DEF(spatial_grid)
 	for(var/list/z_level_grid as anything in grids_by_z_level)
 		for(var/list/cell_row as anything in z_level_grid)
 			for(var/datum/spatial_grid_cell/cell as anything in cell_row)
-				if(to_remove in (cell.hearing_contents | cell.client_contents | cell.atmos_contents))
+				if(to_remove in (cell.hearing_contents | cell.client_contents | cell.atmos_contents | cell.cable_contents))
 					containing_cells += cell
 					if(remove_from_cells)
 						force_remove_from_cell(to_remove, cell)
@@ -674,14 +698,17 @@ SUBSYSTEM_DEF(spatial_grid)
 	var/raw_clients = 0
 	var/raw_hearables = 0
 	var/raw_atmos = 0
+	var/raw_cables = 0
 
 	var/cells_with_clients = 0
 	var/cells_with_hearables = 0
 	var/cells_with_atmos = 0
+	var/cells_with_cables = 0
 
 	var/list/client_list = list()
 	var/list/hearable_list = list()
 	var/list/atmos_list = list()
+	var/list/cable_list = list()
 
 	var/x_cell_count = world.maxx / SPATIAL_GRID_CELLSIZE
 	var/y_cell_count = world.maxy / SPATIAL_GRID_CELLSIZE
@@ -691,6 +718,7 @@ SUBSYSTEM_DEF(spatial_grid)
 	var/average_clients_per_cell = 0
 	var/average_hearables_per_cell = 0
 	var/average_atmos_mech_per_call = 0
+	var/average_cable_mech_per_call = 0
 
 	var/hearable_min_x = x_cell_count
 	var/hearable_max_x = 1
@@ -709,6 +737,12 @@ SUBSYSTEM_DEF(spatial_grid)
 
 	var/atmos_min_y = y_cell_count
 	var/atmos_max_y = 1
+
+	var/cable_min_x = x_cell_count
+	var/cable_max_x = 1
+
+	var/cable_min_y = y_cell_count
+	var/cable_max_y = 1
 
 	var/list/inserted_clients = list()
 
@@ -734,10 +768,12 @@ SUBSYSTEM_DEF(spatial_grid)
 		var/client_length = length(cell.client_contents)
 		var/hearable_length = length(cell.hearing_contents)
 		var/atmos_length = length(cell.atmos_contents)
+		var/cable_length = length(cell.cable_contents)
 
 		raw_clients += client_length
 		raw_hearables += hearable_length
 		raw_atmos += atmos_length
+		raw_cables += cable_length
 
 		if(client_length)
 			cells_with_clients++
@@ -790,13 +826,32 @@ SUBSYSTEM_DEF(spatial_grid)
 			if(cell.cell_y > atmos_max_y)
 				atmos_max_y = cell.cell_y
 
+		if(raw_cables)
+			cells_with_cables++
+
+			cable_list += cell.cable_contents
+
+			if(cell.cell_x < cable_min_x)
+				cable_min_x = cell.cell_x
+
+			if(cell.cell_x > cable_max_x)
+				cable_max_x = cell.cell_x
+
+			if(cell.cell_y < cable_min_y)
+				cable_min_y = cell.cell_y
+
+			if(cell.cell_y > cable_max_y)
+				cable_max_y = cell.cell_y
+
 	var/total_client_distance = 0
 	var/total_hearable_distance = 0
 	var/total_atmos_distance = 0
+	var/total_cable_distance = 0
 
 	var/average_client_distance = 0
 	var/average_hearable_distance = 0
 	var/average_atmos_distance = 0
+	var/average_cable_distance = 0
 
 	for(var/hearable in hearable_list)//n^2 btw
 		for(var/other_hearable in hearable_list)
@@ -816,16 +871,25 @@ SUBSYSTEM_DEF(spatial_grid)
 				continue
 			total_atmos_distance += get_dist(atmos, other_atmos)
 
+	for(var/cable in atmos_list)//n^2 btw
+		for(var/other_cable in cable_list)
+			if(cable == other_cable)
+				continue
+			total_cable_distance += get_dist(cable, other_cable)
+
 	if(length(hearable_list))
 		average_hearable_distance = total_hearable_distance / length(hearable_list)
 	if(length(client_list))
 		average_client_distance = total_client_distance / length(client_list)
 	if(length(atmos_list))
 		average_atmos_distance = total_atmos_distance / length(atmos_list)
+	if(length(cable_list))
+		average_cable_distance = total_cable_distance / length(cable_list)
 
 	average_clients_per_cell = raw_clients / total_cells
 	average_hearables_per_cell = raw_hearables / total_cells
 	average_atmos_mech_per_call = raw_atmos / total_cells
+	average_cable_mech_per_call = raw_cables / total_cells
 
 	for(var/mob/inserted_client as anything in inserted_clients)
 		qdel(inserted_client)

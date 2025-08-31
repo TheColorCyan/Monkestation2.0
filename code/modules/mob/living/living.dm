@@ -1873,6 +1873,7 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 	update_sight()
 	update_fullscreen()
 	update_pipe_vision()
+	update_cable_vision()
 
 /// Proc used to handle the fullscreen overlay updates, realistically meant for the reset_perspective() proc.
 /mob/living/proc/update_fullscreen()

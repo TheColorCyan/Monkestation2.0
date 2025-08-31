@@ -29,6 +29,7 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(/obj/structure/gri
 	var/is_fully_initialized = FALSE
 	///used to seperate industrial and normal cables
 	var/cable_tag = "normal"
+	var/image/cable_vision_img = null
 
 /obj/structure/cable/layer1
 	color = CABLE_HEX_COLOR_RED
@@ -51,10 +52,13 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(/obj/structure/gri
 	Connect_cable()
 	AddElement(/datum/element/undertile, TRAIT_T_RAY_VISIBLE)
 	RegisterSignal(src, COMSIG_RAT_INTERACT, PROC_REF(on_rat_eat))
+	var/turf/turf_loc = null
 	if(isturf(loc))
-		var/turf/turf_loc = loc
+		turf_loc = loc
 		turf_loc.add_blueprints_preround(src)
 
+	SSspatial_grid.add_grid_awareness(src, SPATIAL_GRID_CONTENTS_TYPE_CABLE)
+	SSspatial_grid.add_grid_membership(src, turf_loc, SPATIAL_GRID_CONTENTS_TYPE_CABLE)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/structure/cable/LateInitialize()

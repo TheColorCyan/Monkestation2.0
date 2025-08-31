@@ -343,6 +343,19 @@
 	add_filter("pipe_dropshadow", 1, drop_shadow_filter(x = -1, y= -1, size = 1, color = "#0000007A"))
 	mirror_parent_hidden()
 
+/atom/movable/screen/plane_master/cable_movement
+	name = "Cable travel"
+	documentation = "Holds cable images generated during wire travel.\
+		<br>Has a few effects and a funky color matrix designed to make things a bit more visually readable."
+	plane = CABLE_MOVE_IMAGES_PLANE
+	start_hidden = TRUE
+
+/atom/movable/screen/plane_master/cable_movement/Initialize(mapload, datum/hud/hud_owner)
+	. = ..()
+	color = list(1.2,0,0,0, 0,1.2,0,0, 0,0,1.2,0, 0,0,0,1, 0,0,0,0)
+	add_filter("cable_dropshadow", 1, drop_shadow_filter(x = -1, y= -1, size = 1, color = "#0000007A"))
+	mirror_parent_hidden()
+
 /atom/movable/screen/plane_master/camera_static
 	name = "Camera static"
 	documentation = "Holds camera static images. Usually only visible to people who can well, see static.\
