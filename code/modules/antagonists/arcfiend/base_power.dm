@@ -14,6 +14,15 @@
 	/// Is the ability active
 	var/active = FALSE
 
+// Add power cost to the ability icon
+/datum/action/cooldown/arcfiend/New(Target)
+	. = ..()
+	build_all_button_icons(UPDATE_BUTTON_STATUS)
+
+/datum/action/cooldown/arcfiend/update_button_status(atom/movable/screen/movable/action_button/button, force = FALSE)
+	. = ..()
+	if (power_cost)
+		button.maptext = MAPTEXT_TINY_UNICODE("<span style='text-align:center'>[power_cost]</span>")
 // Find arcfiend datum
 /datum/action/cooldown/arcfiend/proc/find_arcfiend_datum()
 	arcfiend ||= IS_ARCFIEND(owner)

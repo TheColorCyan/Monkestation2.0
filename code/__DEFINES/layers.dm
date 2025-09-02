@@ -97,6 +97,7 @@
 
 ///---------------- MISC -----------------------
 
+///Cable movement images
 #define CABLE_MOVE_IMAGES_PLANE 19
 
 ///Pipecrawling images

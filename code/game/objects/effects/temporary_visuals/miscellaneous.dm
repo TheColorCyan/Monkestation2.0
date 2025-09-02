@@ -665,3 +665,12 @@
 	layer = BELOW_MOB_LAYER
 	plane = GAME_PLANE
 	duration = 0.4 SECONDS
+
+/obj/effect/temp_visual/wire_travel
+	icon = 'icons/mob/simple/mob.dmi'
+	icon_state = "wire_travel_start"
+	duration = 0.7 SECONDS
+
+/obj/effect/temp_visual/wire_travel/end
+	icon_state = "wire_travel_end"
+	duration = 0.8 SECONDS

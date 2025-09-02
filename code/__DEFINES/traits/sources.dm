@@ -142,6 +142,7 @@
 #define TIMESTOP_TRAIT "timestop"
 #define LIFECANDLE_TRAIT "lifecandle"
 #define VENTCRAWLING_TRAIT "ventcrawling"
+#define CABLE_MOVEMENT_TRAIT "cable_movement"
 #define SPECIES_FLIGHT_TRAIT "species-flight"
 #define FROSTMINER_ENRAGE_TRAIT "frostminer-enrage"
 #define NO_GRAVITY_TRAIT "no-gravity"
