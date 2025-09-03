@@ -52,7 +52,7 @@ export const Autolathe = (props) => {
 
   return (
     <Window title="Autolathe" width={670} height={600}>
-      <Window.Content>
+      <Window.Content scrollable>
         <Stack vertical fill>
           <Stack.Item>
             <Section title="Total Materials">
@@ -135,18 +135,20 @@ type PrintButtonProps = {
   quantity: number;
   availableMaterials: MaterialMap;
   SHEET_MATERIAL_AMOUNT: number;
+  maxmult: number;
 };
 
 const PrintButton = (props: PrintButtonProps) => {
   const { act } = useBackend<AutolatheData>();
-  const { design, quantity, availableMaterials, SHEET_MATERIAL_AMOUNT } = props;
+  const {
+    design,
+    quantity,
+    availableMaterials,
+    SHEET_MATERIAL_AMOUNT,
+    maxmult,
+  } = props;
 
-  const canPrint = !Object.entries(design.cost).some(
-    ([material, amount]) =>
-      !availableMaterials[material] ||
-      amount * quantity > (availableMaterials[material] ?? 0),
-  );
-
+  const canPrint = maxmult >= quantity;
   return (
     <Tooltip
       content={
@@ -164,7 +166,9 @@ const PrintButton = (props: PrintButtonProps) => {
           !canPrint && 'FabricatorRecipe__Button--disabled',
         ])}
         color={'transparent'}
-        onClick={() => act('make', { id: design.id, multiplier: quantity })}
+        onClick={() =>
+          canPrint && act('make', { id: design.id, multiplier: quantity })
+        }
       >
         &times;{quantity}
       </div>
@@ -244,7 +248,9 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
             'FabricatorRecipe__Title',
             !canPrint && 'FabricatorRecipe__Title--disabled',
           ])}
-          onClick={() => act('make', { id: design.id, multiplier: 1 })}
+          onClick={() =>
+            canPrint && act('make', { id: design.id, multiplier: 1 })
+          }
         >
           <div className="FabricatorRecipe__Icon">
             <Box
@@ -262,6 +268,7 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
         quantity={5}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
         availableMaterials={availableMaterials}
+        maxmult={maxmult}
       />
 
       <PrintButton
@@ -269,6 +276,7 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
         quantity={10}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
         availableMaterials={availableMaterials}
+        maxmult={maxmult}
       />
 
       <div
