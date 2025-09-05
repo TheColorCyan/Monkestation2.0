@@ -12,7 +12,7 @@
 
 	var/grind_time = 5 SECONDS
 	///this is the face you see when you start grinding the poor slime up
-	var/mob/living/basic/slime/poster_boy
+	var/mob/living/poster_boy
 	///list of all the slimes we have
 	var/list/mobs_inside = list()
 	///are we grinding some slimes
@@ -28,22 +28,22 @@
 	if (active)
 		return
 	for(hit_by as anything in mob_whitelist)
+		var/mob/living/victim = hit_by
 		if(!poster_boy)
-			poster_boy = hit_by
+			poster_boy = victim
 			poster_boy.layer = layer
 			poster_boy.plane = plane
 		hit_by.update_appearance()
 		mobs_inside |= hit_by
 		hit_by.forceMove(src)
 		update_appearance()
-		return // Stops slime from actually hitting the machine
 	return ..() // If it is anything else handle being hit normally.
 
 /obj/machinery/slime_compressor/update_overlays()
 	. = ..()
 	if(poster_boy)
-		var/mutable_appearance/slime = poster_boy.appearance
-		. += slime
+		var/mutable_appearance/mob_inside = poster_boy.appearance
+		. += mob_inside
 	. += mutable_appearance(icon, "slime_grinder_overlay", layer + 0.1, src)
 
 /obj/machinery/slime_compressor/proc/do_compress()
