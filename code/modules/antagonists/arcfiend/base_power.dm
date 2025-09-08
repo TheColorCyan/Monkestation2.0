@@ -2,10 +2,9 @@
 	/// Our antagonist datum
 	var/datum/antagonist/arcfiend/arcfiend
 
-	///Background icon when the Power is active.
-	active_background_icon_state = "vamp_power_on"
-	///Background icon when the Power is NOT active.
-	base_background_icon_state = "vamp_power_off"
+	background_icon = 'icons/mob/actions/arcfiend_actions.dmi'
+
+	background_icon_state = "arcfiend_base"
 
 	/// How much power it takes to cast an ability
 	var/power_cost = 0
@@ -13,11 +12,6 @@
 	var/active_power_cost = 0
 	/// Is the ability active
 	var/active = FALSE
-
-// Add power cost to the ability icon
-/datum/action/cooldown/arcfiend/New(Target)
-	. = ..()
-	build_all_button_icons(UPDATE_BUTTON_STATUS)
 
 // Find arcfiend datum
 /datum/action/cooldown/arcfiend/proc/find_arcfiend_datum()
@@ -52,6 +46,7 @@
 	ActivatePower(trigger_flags)
 	if(!active)
 		StartCooldown()
+	build_all_button_icons()
 	return TRUE
 
 // When power is processing we check if we can actually still use it

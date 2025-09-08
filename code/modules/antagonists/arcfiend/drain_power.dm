@@ -16,7 +16,6 @@
 	if(active)
 		DeactivatePower()
 		return FALSE
-	ActivatePower(trigger_flags)
 	if(!QDELETED(target))
 		return InterceptClickOn(owner, null, target)
 	return set_click_ability(owner)
@@ -57,7 +56,6 @@
 /datum/action/cooldown/arcfiend/targeted/proc/power_activated_sucessfully()
 	unset_click_ability(owner)
 	StartCooldown()
-	DeactivatePower()
 
 /datum/action/cooldown/arcfiend/targeted/InterceptClickOn(mob/living/user, params, atom/target)
 	click_with_power(target)
@@ -90,6 +88,7 @@
 		return TRUE
 	else
 		return FALSE
+
 /**
  * Proc to take power from the target and transfer it to our arcfiend
  * Checks to actually see if we can drain are done in use_targeted_power()
@@ -126,18 +125,19 @@
 
 /datum/action/cooldown/arcfiend/targeted/drain_power/use_targeted_power(atom/target)
 	. = ..()
-	if (currently_draining)
+	if (active)
 		return
 	if (!owner.Adjacent(target))
 		return
-	currently_draining = TRUE
+	active = TRUE
+	build_all_button_icons()
 	// Check if our target is a machine
 	if (ismachinery(target))
 		if (istype(target, /obj/machinery/power/apc))
 			// Special interactions with apcs
 			var/obj/machinery/power/apc/apc = target
 			if(apc.cell?.charge)
-				while(apc.cell.charge > 0 )
+				while((apc.cell.charge > 0) && active)
 					// When APC reaches 0 charge, destroy it and stop the drain
 					if(apc.cell.charge < drain)
 						arcfiend.gain_power(apc.cell.charge)
@@ -147,6 +147,7 @@
 						drain(drain, apc.cell)
 					else
 						break
+			DeactivatePower()
 
 		// Interaction with machinery
 		// We drain directly from the APC machine is connected to
@@ -155,11 +156,11 @@
 		var/area/machine_area = get_area(machinery)
 		var/obj/machinery/power/apc/local_apc
 		if(!machine_area)
-			currently_draining = FALSE
+			DeactivatePower()
 			return
 		local_apc = machine_area.apc
 		if(local_apc?.cell?.charge)
-			while(local_apc.cell.charge > drain)
+			while((local_apc.cell.charge > drain) && active)
 				if (do_after(owner, 1 SECONDS, target))
 					// We drain the amount the machine uses when idle
 					// If the machine doesn't use any power when idle, we don't get power either
@@ -172,7 +173,7 @@
 	// Ipcs and sillicons - their charge
 	else if (isliving(target))
 		var/mob/living/living_target = target
-		while (living_target.stat != DEAD)
+		while ((living_target.stat != DEAD) && active)
 			if (do_after(owner, 1 SECONDS, living_target))
 				if(isethereal(living_target))
 					living_target.blood_volume -= 40
@@ -180,4 +181,4 @@
 			else
 				break
 
-	currently_draining = FALSE
+	DeactivatePower()
