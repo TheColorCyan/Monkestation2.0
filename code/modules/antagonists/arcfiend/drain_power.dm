@@ -27,34 +27,30 @@
 	build_all_button_icons()
 	unset_click_ability(owner)
 
-/// Check if target is VALID (wall, turf, or character?)
-/datum/action/cooldown/arcfiend/targeted/proc/CheckValidTarget(atom/target_atom)
+/datum/action/cooldown/arcfiend/targeted/proc/is_valid_target(atom/target_atom)
 	if(target_atom == owner)
 		return FALSE
 	return TRUE
 
-/// Check if valid target meets conditions
-/datum/action/cooldown/arcfiend/targeted/proc/CheckCanTarget(atom/target_atom)
+/datum/action/cooldown/arcfiend/targeted/proc/can_use_targeted(atom/target)
 	if(target_range)
 		// Out of Range
-		if(!(target_atom in view(target_range, owner)))
-			if(target_range > 1) // Only warn for range if it's greater than 1. Brawn doesn't need to announce itself.
-				owner.balloon_alert(owner, "out of range.")
+		if(!(target in view(target_range, owner)))
+			owner.balloon_alert(owner, "out of range.")
 			return FALSE
-	return istype(target_atom)
+	return TRUE
 
 /// Click Target
 /datum/action/cooldown/arcfiend/targeted/proc/click_with_power(atom/target_atom)
-	if(!CheckValidTarget(target_atom))
+	if (!is_valid_target(target_atom))
 		return FALSE
-	if(!CheckCanTarget(target_atom))
-		return TRUE
+	if(!can_use_targeted(target_atom))
+		return FALSE
 	power_activated_sucessfully()
-	FireTargetedPower(target_atom) // We use this instead of ActivatePower(trigger_flags), which has no input
+	use_targeted_power(target_atom)
 	return TRUE
 
-/// Like ActivatePower, but specific to Targeted (and takes an atom input). We don't use ActivatePower for targeted.
-/datum/action/cooldown/arcfiend/targeted/proc/FireTargetedPower(atom/target_atom)
+/datum/action/cooldown/arcfiend/targeted/proc/use_targeted_power(atom/target_atom)
 	log_combat(owner, target_atom, "used [name] on")
 
 /// The power went off! We now pay the cost of the power.
@@ -75,7 +71,7 @@
 	button_icon_state = "drain_power"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
-	cooldown_time = 1 SECOND
+	cooldown_time = 0 SECONDS
 	target_range = 1
 
 	/// How much power we drain
@@ -85,8 +81,22 @@
 	/// Are we draining something?
 	var/currently_draining = FALSE
 
-/// Proc used to drain power and transfer it to the arcfiend
-/datum/action/cooldown/arcfiend/targeted/drain_power/proc/drain(var/amount, atom/target)
+
+/datum/action/cooldown/arcfiend/targeted/drain_power/is_valid_target(atom/target_atom)
+	. = ..()
+	if (ismachinery(target_atom))
+		return TRUE
+	else if (isliving(target_atom))
+		return TRUE
+	else
+		return FALSE
+/**
+ * Proc to take power from the target and transfer it to our arcfiend
+ * Checks to actually see if we can drain are done in use_targeted_power()
+ * amount - amount of power we are draining and transfering
+ * target - what are we draining
+ */
+/datum/action/cooldown/arcfiend/targeted/drain_power/proc/drain(amount, atom/target)
 	// Sparks
 	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
 	spark_system.set_up(5, FALSE, get_turf(target))
@@ -98,19 +108,13 @@
 		arcfiend.gain_power(amount)
 
 	// Machinery
-	if (istype(target, /obj/machinery))
-		// Special for SMES units
-		if (istype(target, /obj/machinery/power/smes))
-			var/obj/machinery/power/smes/smes = target
-			smes.charge -= drain
-			arcfiend.gain_power(drain)
-		else
-			var/obj/machinery/machinery = target
-			machinery.directly_use_power(amount)
-			arcfiend.gain_power(amount)
+	if (ismachinery(target))
+		var/obj/machinery/machinery = target
+		machinery.directly_use_power(amount)
+		arcfiend.gain_power(amount)
 
 	// Living
-	if (istype(target, /mob/living))
+	if (isliving(target))
 		var/mob/living/living_thing = target
 		living_thing.apply_damage(25, BURN, spread_damage = TRUE)
 		living_thing.Disorient(5 SECONDS, 70)
@@ -120,7 +124,7 @@
 	spark_system.start()
 	playsound(owner.loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
-/datum/action/cooldown/arcfiend/targeted/drain_power/FireTargetedPower(atom/target)
+/datum/action/cooldown/arcfiend/targeted/drain_power/use_targeted_power(atom/target)
 	. = ..()
 	if (currently_draining)
 		return
@@ -128,12 +132,12 @@
 		return
 	currently_draining = TRUE
 	// Check if our target is a machine
-	if (istype(target, /obj/machinery))
+	if (ismachinery(target))
 		if (istype(target, /obj/machinery/power/apc))
 			// Special interactions with apcs
 			var/obj/machinery/power/apc/apc = target
 			if(apc.cell?.charge)
-				while(apc.cell.charge > 0)
+				while(apc.cell.charge > 0 )
 					// When APC reaches 0 charge, destroy it and stop the drain
 					if(apc.cell.charge < drain)
 						arcfiend.gain_power(apc.cell.charge)
@@ -142,29 +146,17 @@
 					if (do_after(owner, 1 SECONDS, target))
 						drain(drain, apc.cell)
 					else
-						currently_draining = FALSE
 						break
-			currently_draining = FALSE
-			return
-		else if (istype(target, /obj/machinery/power/smes))
-			var/obj/machinery/power/smes/smes = target
-			while(smes.charge > 0)
-				if(smes.charge < drain)
-					arcfiend.gain_power(smes.charge)
-					break
-				if (do_after(owner, 1 SECONDS, target))
-					drain(drain, smes)
-				else
-					break
-			currently_draining = FALSE
-			return
+
 		// Interaction with machinery
-		// We drain directly from the APC machine is connected to, but slower
+		// We drain directly from the APC machine is connected to
+		// As a downside, it only drains it's idle power usage
 		var/obj/machinery/machinery = target
 		var/area/machine_area = get_area(machinery)
 		var/obj/machinery/power/apc/local_apc
 		if(!machine_area)
-			return FALSE
+			currently_draining = FALSE
+			return
 		local_apc = machine_area.apc
 		if(local_apc?.cell?.charge)
 			while(local_apc.cell.charge > drain)
@@ -173,20 +165,19 @@
 					// If the machine doesn't use any power when idle, we don't get power either
 					drain(machinery.idle_power_usage, machinery)
 				else
-					currently_draining = FALSE
 					break
 
 	// Check if our target is a living being
+	// Ethereals get their blood drained as well
+	// Ipcs and sillicons - their charge
 	else if (isliving(target))
-		//if (issilico(target))
-		//	var/mob/living/silicon/robot_target
-		//	while (robot_target.cell?.charge )
 		var/mob/living/living_target = target
 		while (living_target.stat != DEAD)
 			if (do_after(owner, 1 SECONDS, living_target))
+				if(isethereal(living_target))
+					living_target.blood_volume -= 40
 				drain(living_drain, living_target)
 			else
-				currently_draining = FALSE
 				break
 
 	currently_draining = FALSE

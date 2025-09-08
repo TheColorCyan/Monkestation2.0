@@ -19,10 +19,6 @@
 	. = ..()
 	build_all_button_icons(UPDATE_BUTTON_STATUS)
 
-/datum/action/cooldown/arcfiend/update_button_status(atom/movable/screen/movable/action_button/button, force = FALSE)
-	. = ..()
-	if (power_cost)
-		button.maptext = MAPTEXT_TINY_UNICODE("<span style='text-align:center'>[power_cost]</span>")
 // Find arcfiend datum
 /datum/action/cooldown/arcfiend/proc/find_arcfiend_datum()
 	arcfiend ||= IS_ARCFIEND(owner)
@@ -45,7 +41,6 @@
 	build_all_button_icons()
 
 /datum/action/cooldown/arcfiend/Trigger(trigger_flags, atom/target)
-	find_arcfiend_datum()
 	if(active)
 		DeactivatePower()
 		return FALSE

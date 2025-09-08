@@ -17,7 +17,7 @@
 	/// Effect for exiting the cable
 	var/obj/effect/exit_effect = /obj/effect/temp_visual/wire_travel/end
 
-/datum/action/cooldown/arcfiend/wire_travel/proc/check_can_travel(/obj/structure/cable/target)
+/datum/action/cooldown/arcfiend/wire_travel/proc/check_can_travel()
 	if(owner.stat)
 		to_chat(owner, span_warning("You must be conscious to do this!"))
 		return FALSE
@@ -33,18 +33,19 @@
 /datum/action/cooldown/arcfiend/wire_travel/ActivatePower(trigger_flags)
 	// Check if our owner is living for the sake of updating cable vision
 	if (!isliving(owner))
-		return
+		return FALSE
 	var/mob/living/living_owner = owner
+
+	if (!check_can_travel())
+		return FALSE
 
 	var/obj/structure/cable/cable = locate() in get_turf(living_owner)
 	if (!cable)
-		return
-	if (!check_can_travel(cable))
-		return
+		return FALSE
 	// We do a do_after
 	// Failing the do_after doesn't put our ability on cooldown
 	if (!do_after(living_owner, 1 SECOND, cable))
-		return
+		return FALSE
 	living_owner.forceMove(cable)
 	active = TRUE
 	START_PROCESSING(SSprocessing, src)
@@ -52,11 +53,18 @@
 	start_wire_travel()
 	build_all_button_icons()
 
-/datum/action/cooldown/arcfiend/wire_travel/process()
-	. = ..()
-	var/current_location = owner.loc
-	if (!istype(current_location, /obj/structure/cable || !HAS_TRAIT(owner, TRAIT_MOVE_CABLE)))
+/datum/action/cooldown/arcfiend/wire_travel/Trigger(trigger_flags, atom/target)
+	if(active)
 		DeactivatePower()
+		return FALSE
+	if(!can_pay_power_cost() || !can_use(owner, trigger_flags))
+		return FALSE
+	if (!ActivatePower(trigger_flags))
+		return FALSE
+	pay_power_cost()
+	if(!active)
+		StartCooldown()
+	return TRUE
 
 /datum/action/cooldown/arcfiend/wire_travel/proc/start_wire_travel()
 	// Handle effects
