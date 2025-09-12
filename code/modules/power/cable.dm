@@ -147,6 +147,9 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(/obj/structure/gri
 			return target
 
 /obj/structure/cable/Destroy() // called when a cable is deleted
+	for(var/mob/mob_inside in contents) // If we have contents, get them out before deleting them
+		mob_inside.forceMove(get_turf(src))
+
 	Disconnect_cable()
 
 	if(powernet)

@@ -47,42 +47,81 @@
 	if (!do_after(living_owner, 1 SECOND, cable))
 		return FALSE
 	living_owner.forceMove(cable)
-	active = TRUE
-	START_PROCESSING(SSprocessing, src)
 	living_owner.update_cable_vision()
-	start_wire_travel()
-	build_all_button_icons()
+	handle_enter()
+	return ..()
 
+// If ActivatePower() returns FALSE, we do not start the cooldown
 /datum/action/cooldown/arcfiend/wire_travel/Trigger(trigger_flags, atom/target)
 	if(active)
 		DeactivatePower()
 		return FALSE
 	if(!can_pay_power_cost() || !can_use(owner, trigger_flags))
 		return FALSE
-	if (!ActivatePower(trigger_flags))
-		return FALSE
 	pay_power_cost()
 	if(!active)
+		if (!ActivatePower(trigger_flags))
+			return FALSE
 		StartCooldown()
 	return TRUE
 
-/datum/action/cooldown/arcfiend/wire_travel/proc/start_wire_travel()
+/**
+ * Handles entering the travel
+ * Creates effect and adds movement trait
+ */
+/datum/action/cooldown/arcfiend/wire_travel/proc/handle_enter()
 	// Handle effects
 	var/turf/enter_turf = get_turf(owner)
 	new enter_effect(enter_turf)
+
 	ADD_TRAIT(owner, TRAIT_MOVE_CABLE, CABLE_MOVEMENT_TRAIT)
 
-/datum/action/cooldown/arcfiend/wire_travel/proc/end_wire_travel()
+/**
+ * Called by DeactivatePower()
+ * Immobolizes owner for the duration of the travel exit
+ * On timer, calls handle_exit()
+ * forced - if we were forced out of the cable
+ */
+/datum/action/cooldown/arcfiend/wire_travel/proc/end_wire_travel(forced)
+	if (forced)
+		handle_exit(TRUE)
+		return
 	// Handle effects
+	// We only do them if the exit isn't forced
 	var/turf/exit_turf = get_turf(owner)
 	new exit_effect(exit_turf, owner.dir)
+	ADD_TRAIT(owner, TRAIT_IMMOBILIZED, REF(src))
+	addtimer(CALLBACK(src, PROC_REF(handle_exit), forced), 1 SECOND)
+
 	REMOVE_TRAIT(owner, TRAIT_MOVE_CABLE, CABLE_MOVEMENT_TRAIT)
 
-/datum/action/cooldown/arcfiend/wire_travel/DeactivatePower(trigger_flags)
+/**
+ * Called by end_wire_travel()
+ * Moves owner out of the cable
+ * forced - if we were forced out of the cable
+ */
+/datum/action/cooldown/arcfiend/wire_travel/proc/handle_exit(forced)
+	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, REF(src))
+	if (!isliving(owner))
+		owner.forceMove(get_turf(owner))
+		return
+	var/mob/living/living_owner = owner
+	if (forced)
+		living_owner.Knockdown(5 SECONDS)
+		living_owner.adjust_confusion(15 SECONDS)
+		return
+	living_owner.forceMove(get_turf(owner))
+
+/datum/action/cooldown/arcfiend/wire_travel/DeactivatePower(trigger_flags, forced = FALSE)
 	. = ..()
-	// Move the person out after a do_after, so they have time to react
-	end_wire_travel()
-	owner.forceMove(get_turf(owner))
+	end_wire_travel(forced)
+
+/datum/action/cooldown/arcfiend/wire_travel/process()
+	. = ..()
+	var/current_location = owner.loc
+	if (!istype(current_location, /obj/structure/cable) || owner.stat == SOFT_CRIT)
+		DeactivatePower(forced = TRUE)
+		return
 
 /**
  * Proc related to cable vision while moving inside of cable
