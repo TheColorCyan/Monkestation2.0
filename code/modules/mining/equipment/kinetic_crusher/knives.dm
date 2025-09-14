@@ -22,6 +22,7 @@
 	attack_verb_simple = list("slash", "stab", )
 	icon_state = "crusherknife"
 	inhand_icon_state = "switchblade_on"
+	worn_icon_state = "knife"
 	lefthand_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/swords_righthand.dmi'
 	slot_flags = ITEM_SLOT_BELT
