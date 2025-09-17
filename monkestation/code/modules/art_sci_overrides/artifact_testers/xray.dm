@@ -29,9 +29,12 @@
 
 /obj/machinery/artifact_xray/Initialize(mapload)
 	. = ..()
-	if(!CONFIG_GET(flag/no_default_techweb_link) && !stored_research)
-		connect_techweb(SSresearch.science_tech)
 	RefreshParts()
+
+/obj/machinery/artifact_xray/LateInitialize()
+	. = ..()
+	if(!CONFIG_GET(flag/no_default_techweb_link) && !stored_research)
+		CONNECT_TO_RND_SERVER_ROUNDSTART(stored_research, src)
 
 /obj/machinery/artifact_xray/Destroy()
 	if(stored_research)

@@ -24,7 +24,7 @@
 
 /obj/machinery/nanite_program_hub/Initialize()
 	. = ..()
-	linked_techweb = SSresearch.science_tech
+	linked_techweb = locate(/datum/techweb/science) in SSresearch.techwebs
 
 /obj/machinery/nanite_program_hub/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
 	if(istype(attacking_item, /obj/item/disk/nanite_program))

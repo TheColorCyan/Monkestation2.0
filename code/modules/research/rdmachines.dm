@@ -27,8 +27,9 @@
 /obj/machinery/rnd/LateInitialize()
 	. = ..()
 	if(!CONFIG_GET(flag/no_default_techweb_link) && !stored_research)
-		connect_techweb(SSresearch.science_tech)
-	set_wires(new /datum/wires/rnd(src))
+		CONNECT_TO_RND_SERVER_ROUNDSTART(stored_research, src)
+	if(stored_research)
+		on_connected_techweb()
 
 /obj/machinery/rnd/Destroy()
 	if(stored_research)
@@ -81,11 +82,12 @@
 /obj/machinery/rnd/proc/connect_techweb(datum/techweb/new_techweb)
 	if(stored_research)
 		log_research("[src] disconnected from techweb [stored_research] when connected to [new_techweb].")
-	stored_research = new_techweb
+	if(!isnull(stored_research))
+		on_connected_techweb()
 
-///Reset the state of this machine
-/obj/machinery/rnd/proc/reset_busy()
-	busy = FALSE
+///Called post-connection to a new techweb.
+/obj/machinery/rnd/proc/on_connected_techweb()
+	SHOULD_CALL_PARENT(FALSE)
 
 /obj/machinery/rnd/crowbar_act(mob/living/user, obj/item/tool)
 	return default_deconstruction_crowbar(tool)

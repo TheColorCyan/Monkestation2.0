@@ -17,7 +17,8 @@
 /obj/item/organ/internal/cyberimp/brain/linked_surgery/Initialize()
 	. = ..()
 	if(isnull(linked_techweb))
-		linked_techweb = SSresearch.science_tech
+		var/datum/techweb/science_web = locate(/datum/techweb/science) in SSresearch.techwebs
+		linked_techweb = science_web
 
 /obj/item/organ/internal/cyberimp/brain/linked_surgery/proc/on_step_completion(mob/living/user, datum/surgery_step/current_step, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	SIGNAL_HANDLER

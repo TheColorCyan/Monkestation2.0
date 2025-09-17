@@ -47,9 +47,6 @@
 		TRUE, \
 	)
 
-	if(stored_research)
-		update_designs()
-	RefreshParts()
 	update_icon(UPDATE_OVERLAYS)
 
 /obj/machinery/rnd/production/Destroy()
@@ -96,14 +93,16 @@
 /obj/machinery/rnd/production/connect_techweb(datum/techweb/new_techweb)
 	if(stored_research)
 		UnregisterSignal(stored_research, list(COMSIG_TECHWEB_ADD_DESIGN, COMSIG_TECHWEB_REMOVE_DESIGN))
+	return ..()
 
+/obj/machinery/rnd/production/on_connected_techweb()
 	. = ..()
-
 	RegisterSignals(
 		stored_research,
 		list(COMSIG_TECHWEB_ADD_DESIGN, COMSIG_TECHWEB_REMOVE_DESIGN),
 		TYPE_PROC_REF(/obj/machinery/rnd/production, on_techweb_update)
 	)
+	update_designs()
 
 /// Updates the list of designs this fabricator can print.
 /obj/machinery/rnd/production/proc/update_designs()
@@ -242,6 +241,7 @@
 	var/coefficient
 	for(var/datum/design/design in cached_designs)
 		var/cost = list()
+
 		coefficient = build_efficiency(design.build_path)
 		for(var/datum/material/mat in design.materials)
 			cost[mat.name] = OPTIMAL_COST(design.materials[mat] * coefficient)

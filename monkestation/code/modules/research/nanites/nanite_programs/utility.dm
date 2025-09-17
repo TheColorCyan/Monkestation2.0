@@ -111,7 +111,8 @@
 	host_mob.add_homeostasis_level(NANITE_RESEARCH_CHANGE, host_mob.standard_body_temperature + research_speed * 15, 0.25 KELVIN)
 	use_rate = (initial(use_rate) * research_speed) / 50
 	current_research_bonus = use_rate
-	SSresearch.science_tech.nanite_bonus += current_research_bonus
+	var/datum/techweb/science_web = locate(/datum/techweb/science) in SSresearch.techwebs
+	science_web.nanite_bonus += current_research_bonus
 
 	if (COOLDOWN_FINISHED(src, next_warning_time))
 		to_chat(host_mob, message)
@@ -119,7 +120,8 @@
 
 /datum/nanite_program/research/disable_passive_effect()
 	. = ..()
-	SSresearch.science_tech.nanite_bonus -= current_research_bonus
+	var/datum/techweb/science_web = locate(/datum/techweb/science) in SSresearch.techwebs
+	science_web.nanite_bonus -= current_research_bonus
 	host_mob.remove_homeostasis_level(NANITE_RESEARCH_CHANGE)
 
 /datum/nanite_program/research/set_extra_setting(setting, value)

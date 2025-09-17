@@ -18,6 +18,8 @@
 	var/start_time = 0 ///Timestamp to when the nanites were first inserted in the host
 	var/stealth = FALSE //if TRUE, does not appear on HUDs and health scans
 	var/diagnostics = FALSE //if TRUE, displays program list when scanned by nanite scanners
+	/// Our techweb
+	var/datum/techweb/linked_web
 
 /datum/component/nanites/Initialize(amount = 100, cloud = 0)
 	if(!isliving(parent) && !istype(parent, /datum/nanite_cloud_backup))
@@ -40,6 +42,7 @@
 
 		if(cloud_id && cloud_active)
 			cloud_sync()
+		linked_web = locate(/datum/techweb/science) in SSresearch.techwebs
 
 /datum/component/nanites/RegisterWithParent()
 	RegisterSignal(parent, COMSIG_HAS_NANITES, PROC_REF(confirm_nanites))
@@ -112,7 +115,7 @@
 
 /datum/component/nanites/process(seconds_per_tick)
 	if(!HAS_TRAIT(host_mob, TRAIT_STASIS))
-		adjust_nanites(null, (regen_rate + (SSresearch.science_tech.researched_nodes["nanite_harmonic"] ? HARMONIC_REGEN_BOOST : 0)) * seconds_per_tick)
+		adjust_nanites(null, (regen_rate + (linked_web.researched_nodes["nanite_harmonic"] ? HARMONIC_REGEN_BOOST : 0)) * seconds_per_tick)
 		add_research()
 		for(var/X in programs)
 			var/datum/nanite_program/NP = X
@@ -398,7 +401,7 @@
 		research_value *= 0.5
 	if(host_mob.stat == DEAD)
 		research_value *= 0.75
-	SSresearch.science_tech.add_point_list(list(TECHWEB_POINT_TYPE_NANITES = research_value))
+	linked_web.add_point_list(list(TECHWEB_POINT_TYPE_NANITES = research_value))
 
 /datum/component/nanites/proc/nanite_scan(datum/source, mob/user, full_scan)
 	SIGNAL_HANDLER
@@ -430,7 +433,7 @@
 
 	data["has_nanites"] = TRUE
 	data["nanite_volume"] = nanite_volume
-	data["regen_rate"] = regen_rate + (SSresearch.science_tech.researched_nodes["nanite_harmonic"] ? HARMONIC_REGEN_BOOST : 0)
+	data["regen_rate"] = regen_rate + (linked_web.researched_nodes["nanite_harmonic"] ? HARMONIC_REGEN_BOOST : 0)
 	data["safety_threshold"] = safety_threshold
 	data["cloud_id"] = cloud_id
 	data["cloud_active"] = cloud_active

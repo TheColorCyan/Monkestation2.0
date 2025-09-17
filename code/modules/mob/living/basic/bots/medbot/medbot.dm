@@ -152,7 +152,7 @@
 /mob/living/basic/bot/medbot/LateInitialize()
 	. = ..()
 	if(!CONFIG_GET(flag/no_default_techweb_link) && !linked_techweb)
-		link_techweb(SSresearch.science_tech) // monkestation edit: techweb linking refactor
+		CONNECT_TO_RND_SERVER_ROUNDSTART(linked_techweb, src)
 
 /mob/living/basic/bot/medbot/update_icon_state()
 	. = ..()

@@ -80,7 +80,8 @@
 				has_important_message = TRUE,
 				color_override = "pink",
 			)
-		SSresearch.science_tech.add_point_list(list(TECHWEB_POINT_TYPE_GENERIC = 10000))
+		var/datum/techweb/science_web = locate(/datum/techweb/science) in SSresearch.techwebs
+		science_web.add_point_list(list(TECHWEB_POINT_TYPE_GENERIC = 10000))
 		grant_given = TRUE
 
 /obj/machinery/nuclearbomb/commando/proc/update_damage()

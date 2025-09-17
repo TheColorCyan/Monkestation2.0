@@ -111,7 +111,8 @@
 /datum/techweb_node/proc/price_display(datum/techweb/TN)
 	return techweb_point_display_generic(get_price(TN))
 
-/datum/techweb_node/proc/on_research(atom/research_source) //new proc, not currently in file
+///Proc called when the Station (Science techweb specific) researches a node.
+/datum/techweb_node/proc/on_station_research(atom/research_source)
 	SHOULD_CALL_PARENT(TRUE)
 	var/channels_to_use = announce_channels
 	if(istype(research_source, /obj/machinery/computer/rdconsole))

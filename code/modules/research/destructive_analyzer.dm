@@ -134,7 +134,7 @@
 ///So the machine can be used.
 /obj/machinery/rnd/destructive_analyzer/proc/finish_loading()
 	update_appearance(UPDATE_ICON)
-	reset_busy()
+	on_connected_techweb()
 
 /**
  * Destroys an item by going through all its contents (including itself) and calling destroy_item_individual
@@ -146,7 +146,7 @@
 		return FALSE
 	flick("[base_icon_state]_process", src)
 	busy = TRUE
-	addtimer(CALLBACK(src, PROC_REF(reset_busy)), 2.4 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(on_connected_techweb)), 2.4 SECONDS)
 	use_power(DESTRUCTIVE_ANALYZER_POWER_USAGE)
 	var/list/all_contents = loaded_item.get_all_contents()
 	for(var/innerthing in all_contents)
