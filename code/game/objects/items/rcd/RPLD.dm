@@ -234,6 +234,9 @@
 				return FALSE
 
 /obj/item/construction/plumbing/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	. = ..()
+	if(. & ITEM_INTERACT_ANY_BLOCKER)
+		return .
 	for(var/category_name in plumbing_design_types)
 		var/list/designs = plumbing_design_types[category_name]
 
@@ -277,7 +280,7 @@
 		if(machine_target.anchored)
 			balloon_alert(user, "anchor first!")
 			return
-		if(do_after(user, 20, target = target))
+		if(do_after(user, 2 SECONDS, target = target))
 			machine_target.deconstruct() //Let's not substract matter
 			playsound(get_turf(src), 'sound/machines/click.ogg', 50, TRUE) //this is just such a great sound effect
 	else

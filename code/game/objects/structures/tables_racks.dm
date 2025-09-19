@@ -58,6 +58,13 @@
 	AddElement(/datum/element/give_turf_traits, give_turf_traits)
 	register_context()
 
+	ADD_TRAIT(src, TRAIT_COMBAT_MODE_SKIP_INTERACTION, INNATE_TRAIT)
+
+///Adds the element used to make the object climbable, and also the one that shift the mob buckled to it up.
+/obj/structure/table/proc/make_climbable()
+	AddElement(/datum/element/climbable)
+	AddElement(/datum/element/elevation, pixel_shift = 12)
+
 /obj/structure/table/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
 	. = ..()
 
@@ -263,13 +270,12 @@
 	if(.)
 		return .
 
-	//if(is_flipped) // Monke does not have table flipping somehow?
-	//	return .
-
 	if(istype(tool, /obj/item/toy/cards/deck))
 		. = deck_act(user, tool, modifiers, !!LAZYACCESS(modifiers, RIGHT_CLICK))
 	if(istype(tool, /obj/item/storage/bag/tray))
 		. = tray_act(user, tool)
+	//else if(istype(tool, /obj/item/riding_offhand))
+	//	. = riding_offhand_act(user, tool) TALBESMASH COMPONENT
 
 	// Continue to placing if we don't do anything else
 	if(.)
@@ -657,23 +663,27 @@
 	else
 		return span_notice("The top cover is firmly <b>welded</b> on.")
 
-/obj/structure/table/reinforced/attackby_secondary(obj/item/weapon, mob/user, params)
-	if(weapon.tool_behaviour == TOOL_WELDER)
-		if(weapon.tool_start_check(user, amount = 0))
-			if(deconstruction_ready)
-				to_chat(user, span_notice("You start strengthening the reinforced table..."))
-				if (weapon.use_tool(src, user, 50, volume = 50))
-					to_chat(user, span_notice("You strengthen the table."))
-					deconstruction_ready = FALSE
-			else
-				to_chat(user, span_notice("You start weakening the reinforced table..."))
-				if (weapon.use_tool(src, user, 50, volume = 50))
-					to_chat(user, span_notice("You weaken the table."))
-					deconstruction_ready = TRUE
-		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+/obj/structure/table/reinforced/welder_act_secondary(mob/living/user, obj/item/tool)
+	if(tool.tool_start_check(user, amount = 0))
+		if(deconstruction_ready)
+			to_chat(user, span_notice("You start strengthening the reinforced table..."))
+			if (tool.use_tool(src, user, 50, volume = 50))
+				to_chat(user, span_notice("You strengthen the table."))
+				deconstruction_ready = FALSE
+				return ITEM_INTERACT_SUCCESS
+		else
+			to_chat(user, span_notice("You start weakening the reinforced table..."))
+			if (tool.use_tool(src, user, 50, volume = 50))
+				to_chat(user, span_notice("You weaken the table."))
+				deconstruction_ready = TRUE
+				return ITEM_INTERACT_SUCCESS
+	return ITEM_INTERACT_BLOCKING
 
-	else
-		. = ..()
+/obj/structure/table/reinforced/item_interaction_secondary(mob/living/user, obj/item/tool, list/modifiers)
+	if(tool.tool_behaviour == TOOL_WELDER)
+		return NONE
+
+	return ..()
 
 /obj/structure/table/bronze
 	name = "bronze table"
@@ -1088,6 +1098,29 @@
 	anchored = TRUE
 	pass_flags_self = LETPASSTHROW //You can throw objects over this, despite it's density.
 	max_integrity = 20
+/*
+/obj/structure/rack/skeletal
+	name = "skeletal minibar"
+	desc = "Rattle me boozes!"
+	icon = 'icons/obj/fluff/general.dmi'
+	icon_state = "minibar"
+*/
+/obj/structure/rack/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/climbable)
+	AddElement(/datum/element/elevation, pixel_shift = 12)
+	register_context()
+	ADD_TRAIT(src, TRAIT_COMBAT_MODE_SKIP_INTERACTION, INNATE_TRAIT)
+
+/obj/structure/rack/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
+	if(isnull(held_item))
+		return NONE
+
+	if(held_item.tool_behaviour == TOOL_WRENCH)
+		context[SCREENTIP_CONTEXT_RMB] = "Deconstruct"
+		return CONTEXTUAL_SCREENTIP_SET
+
+	return NONE
 
 /obj/structure/rack/examine(mob/user)
 	. = ..()
@@ -1100,24 +1133,20 @@
 	if(istype(mover) && (mover.pass_flags & PASSTABLE))
 		return TRUE
 
-/obj/structure/rack/MouseDrop_T(obj/O, mob/user)
-	. = ..()
-	if ((!( isitem(O) ) || user.get_active_held_item() != O))
-		return
-	if(!user.dropItemToGround(O))
-		return
-	if(O.loc != src.loc)
-		step(O, get_dir(O, src))
+/obj/structure/rack/wrench_act_secondary(mob/living/user, obj/item/tool)
+	tool.play_tool_sound(src)
+	deconstruct(TRUE)
+	return ITEM_INTERACT_SUCCESS
 
-/obj/structure/rack/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
-	if (attacking_item.tool_behaviour == TOOL_WRENCH && !(flags_1&NODECONSTRUCT_1) && (user.istate & ISTATE_SECONDARY))
-		attacking_item.play_tool_sound(src)
-		deconstruct(TRUE)
-		return
-	if((user.istate & ISTATE_HARM))
-		return ..()
-	if(user.transferItemToLoc(attacking_item, drop_location()))
-		return 1
+/obj/structure/rack/base_item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	. = ..()
+	if(.)
+		return .
+	if((tool.item_flags & ABSTRACT) || ((user.istate & ISTATE_HARM) && !(tool.item_flags & NOBLUDGEON)))
+		return NONE
+	if(user.transferItemToLoc(tool, drop_location(), silent = FALSE))
+		return ITEM_INTERACT_SUCCESS
+	return ITEM_INTERACT_BLOCKING
 
 /obj/structure/rack/attack_paw(mob/living/user, list/modifiers)
 	attack_hand(user, modifiers)
@@ -1181,7 +1210,7 @@
 		return
 	building = TRUE
 	to_chat(user, span_notice("You start constructing a rack..."))
-	if(do_after(user, 50, target = user, progress=TRUE))
+	if(do_after(user, 5 SECONDS, target = user, progress=TRUE))
 		if(!user.temporarilyRemoveItemFromInventory(src))
 			return
 		var/obj/structure/rack/R = new /obj/structure/rack(get_turf(src))

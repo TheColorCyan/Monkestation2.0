@@ -183,6 +183,11 @@
 	///All items with sharpness of SHARP_EDGED or higher will automatically get the butchering component.
 	var/sharpness = NONE
 
+	/// A list of statistics used when a weapon hits someone, swing speed = multiplier for melee attack cd, encumbrance = slowdown, encumbrance_time = slowdown length, reach = reach, embed chance = chance for applicable weapons to embed on hit, damage_low/high = range of damage the weapon takes on hitting a mob
+	//var/list/weapon_stats = list(SWING_SPEED = 1, ENCUMBRANCE = 0, ENCUMBRANCE_TIME = 0, REACH = 1, DAMAGE_LOW = 0, DAMAGE_HIGH = 0)
+	///just swingpseed for now
+	var/swing_speed = 1
+
 	///How a tool acts when you use it on something, such as wirecutters cutting wires while multitools measure power
 	var/tool_behaviour = null
 
@@ -1120,7 +1125,10 @@
 
 /// Generic use proc. Depending on the item, it uses up fuel, charges, sheets, etc. Returns TRUE on success, FALSE on failure.
 /obj/item/proc/use(used)
-	return !used
+	SHOULD_CALL_PARENT(TRUE)
+	if(SEND_SIGNAL(src, COMSIG_ITEM_USED, args) & BLOCK_ITEM_USE)
+		return FALSE
+	return TRUE
 
 /// Plays item's usesound, if any.
 /obj/item/proc/play_tool_sound(atom/target, volume=50)

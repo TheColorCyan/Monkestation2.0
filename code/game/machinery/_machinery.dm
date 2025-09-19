@@ -136,6 +136,13 @@
 	var/market_verb = "Customer"
 	var/payment_department = ACCOUNT_ENG
 
+	/// sound volume played on succesful click
+	var/clickvol = 40
+	/// value to compare with world.time for whether to play clicksound according to CLICKSOUND_INTERVAL
+	var/next_clicksound = 0
+	/// sound played on succesful interface use by a carbon lifeform
+	var/clicksound
+
 	/// For storing and overriding ui id
 	var/tgui_id // ID of TGUI interface
 	///Is this machine currently in the atmos machinery queue?
@@ -288,6 +295,11 @@
 	var/datum/controller/subsystem/processing/subsystem = locate(subsystem_type) in Master.subsystems
 	START_PROCESSING(subsystem, src)
 
+/obj/machinery/proc/play_click_sound(custom_clicksound)
+	if((custom_clicksound ||= clicksound) && world.time > next_clicksound)
+		next_clicksound = world.time + CLICKSOUND_INTERVAL
+		playsound(src, custom_clicksound, clickvol)
+
 /// Helper proc for telling a machine to stop processing with the subsystem type that is located in its `subsystem_type` var.
 /obj/machinery/proc/end_processing()
 	var/datum/controller/subsystem/processing/subsystem = locate(subsystem_type) in Master.subsystems
@@ -329,8 +341,7 @@
 		new /obj/effect/temp_visual/emp(loc)
 
 		if(prob(70/severity))
-			var/datum/language_holder/machine_languages = get_language_holder()
-			machine_languages.selected_language = machine_languages.get_random_spoken_language()
+			set_active_language(get_random_spoken_language())
 
 /**
  * Opens the machine.
@@ -399,7 +410,7 @@
  * * user (mob/living) The user to recive the object
  */
 /obj/machinery/proc/try_put_in_hand(obj/object, mob/living/user)
-	if(!issilicon(user) && in_range(src, user))
+	if(in_range(src, user))
 		user.put_in_hands(object)
 	else
 		object.forceMove(drop_location())
@@ -682,6 +693,8 @@
 /obj/machinery/ui_act(action, list/params)
 	add_fingerprint(usr)
 	update_last_used(usr)
+	if(isliving(usr) && in_range(src, usr))
+		play_click_sound()
 	return ..()
 
 /obj/machinery/Topic(href, href_list)
@@ -978,7 +991,7 @@
 	var/list/part_list = replacer_tool.get_sorted_parts(ignore_stacks = TRUE)
 	if(!part_list.len)
 		return FALSE
-	for(var/primary_part_base as anything in component_parts)
+	for(var/primary_part_base in component_parts)
 		//we exchanged all we could time to bail
 		if(!part_list.len)
 			break
@@ -1078,7 +1091,7 @@
 		// we infer the required stack stuff inside the machine from the circuitboards requested components
 		if(istype(component_ref, /obj/item/circuitboard/machine))
 			var/obj/item/circuitboard/machine/board = component_ref
-			for(var/component as anything in board.req_components)
+			for(var/component in board.req_components)
 				if(!ispath(component, /obj/item/stack))
 					continue
 				part_count[component] = board.req_components[component]

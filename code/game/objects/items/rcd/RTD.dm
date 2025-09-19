@@ -178,7 +178,7 @@
 	selected_design.fill_ui_data(data)
 
 	data["categories"] = list()
-	for(var/sub_category as anything in floor_designs[root_category])
+	for(var/sub_category in floor_designs[root_category])
 		var/list/target_category =  floor_designs[root_category][sub_category]
 
 		var/list/designs = list() //initialize all designs under this category
@@ -232,6 +232,9 @@
 
 
 /obj/item/construction/rtd/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	. = ..()
+	if(. & ITEM_INTERACT_ANY_BLOCKER)
+		return .
 	var/turf/open/floor/floor = interacting_with
 	if(!istype(floor))
 		return NONE

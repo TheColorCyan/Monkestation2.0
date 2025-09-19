@@ -35,6 +35,7 @@
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/storage/pill_bottle,
 		/obj/item/stack/medical,
+		/obj/item/stack/heal_pack,
 		/obj/item/flashlight/pen,
 		/obj/item/extinguisher/mini,
 		/obj/item/reagent_containers/hypospray,
@@ -128,8 +129,8 @@
 /obj/item/storage/medkit/surgery/Initialize(mapload)
 	. = ..()
 	atom_storage.max_specific_storage = WEIGHT_CLASS_NORMAL //holds the same equipment as a medibelt
-	atom_storage.max_slots = 12
-	atom_storage.max_total_storage = 24
+	atom_storage.max_slots = 13
+	atom_storage.max_total_storage = 26
 	atom_storage.set_holdable(list(
 		/obj/item/healthanalyzer,
 		/obj/item/dnainjector,
@@ -145,6 +146,7 @@
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/storage/pill_bottle,
 		/obj/item/stack/medical,
+		/obj/item/stack/heal_pack,
 		/obj/item/flashlight/pen,
 		/obj/item/extinguisher/mini,
 		/obj/item/reagent_containers/hypospray,
@@ -157,6 +159,7 @@
 		/obj/item/clothing/mask/breath,
 		/obj/item/clothing/mask/breath/medical,
 		/obj/item/surgical_drapes, //for true paramedics
+		/obj/item/surgical_processor,
 		/obj/item/scalpel,
 		/obj/item/circular_saw,
 		/obj/item/bonesetter,
@@ -313,6 +316,11 @@
 	custom_premium_price = PAYCHECK_COMMAND * 6
 	damagetype_healed = HEAL_ALL_DAMAGE
 
+/obj/item/storage/medkit/advanced/Initialize(mapload)
+	. = ..()
+	atom_storage.max_slots = 8
+	atom_storage.max_total_storage = 16
+
 /obj/item/storage/medkit/advanced/PopulateContents()
 	if(empty)
 		return
@@ -369,8 +377,8 @@
 	if(empty)
 		return
 	var/static/list/items_inside = list(
-		/obj/item/stack/medical/suture/medicated = 2,
-		/obj/item/stack/medical/mesh/advanced = 2,
+		/obj/item/stack/heal_pack/brute_pack = 2,
+		/obj/item/stack/heal_pack/burn_pack = 2,
 		/obj/item/reagent_containers/pill/patch/libital = 3,
 		/obj/item/reagent_containers/pill/patch/aiuri = 3,
 		/obj/item/healthanalyzer/advanced = 1,
@@ -450,9 +458,9 @@
 	generate_items_inside(items_inside,src)
 
 //medibot assembly
-/obj/item/storage/medkit/storage_insert_on_interacted_with(datum/storage, obj/item/inserted, mob/living/user)
-	if(!istype(inserted, /obj/item/bodypart/arm/left/robot) && !istype(inserted, /obj/item/bodypart/arm/right/robot))
-		return TRUE
+/obj/item/storage/medkit/tool_act(mob/living/user, obj/item/tool, list/modifiers)
+	if(!istype(tool, /obj/item/bodypart/arm/left/robot) && !istype(tool, /obj/item/bodypart/arm/right/robot))
+		return ..()
 	//Making a medibot!
 	if(contents.len >= 1)
 		balloon_alert(user, "items inside!")
@@ -471,9 +479,9 @@
 		medbot_assembly.set_skin("advanced")
 	user.put_in_hands(medbot_assembly)
 	medbot_assembly.balloon_alert(user, "arm added")
-	medbot_assembly.robot_arm = inserted.type
+	medbot_assembly.robot_arm = tool.type
 	medbot_assembly.medkit_type = type
-	qdel(inserted)
+	qdel(tool)
 	qdel(src)
 	return FALSE
 
@@ -803,14 +811,7 @@
 	icon_state = "[base_icon_state][cooling ? "-working" : null]"
 	return ..()
 
-/obj/item/storage/organbox/storage_insert_on_interacted_with(datum/storage, obj/item/inserted, mob/living/user)
-	if(is_reagent_container(inserted) && inserted.is_open_container())
-		return FALSE
-	if(istype(inserted, /obj/item/plunger))
-		return FALSE
-	return TRUE
-
-/obj/item/storage/organbox/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+/obj/item/storage/organbox/tool_act(mob/living/user, obj/item/tool, list/modifiers)
 	if(is_reagent_container(tool) && tool.is_open_container())
 		var/obj/item/reagent_containers/RC = tool
 		var/units = RC.reagents.trans_to(src, RC.amount_per_transfer_from_this, transfered_by = user)
@@ -820,11 +821,11 @@
 		return ITEM_INTERACT_BLOCKING
 	if(istype(tool, /obj/item/plunger))
 		balloon_alert(user, "plunging...")
-		if(do_after(user, 10, target = src))
+		if(do_after(user, 1 SECONDS, target = src))
 			balloon_alert(user, "plunged")
 			reagents.clear_reagents()
 		return ITEM_INTERACT_SUCCESS
-	return NONE
+	return ..()
 
 /obj/item/storage/organbox/suicide_act(mob/living/carbon/user)
 	if(HAS_TRAIT(user, TRAIT_RESISTCOLD)) //if they're immune to cold, just do the box suicide

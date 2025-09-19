@@ -32,7 +32,9 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	var/gps_active = TRUE
 
 	var/datum/dna/stored_dna
-	var/datum/mind/original_mind
+	/// The mind of the oozeling that became this core.
+	/// This MUST be named `mind`, in order to allow IS_[antag] macros to work on cores.
+	var/datum/mind/mind
 
 ///////
 /// Core storage
@@ -45,7 +47,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	var/static/list/allowed_implants = typecacheof(list(
 		//obj/item/implant
 	))
-	//Extraneous organs not of oozling origin. Usually cyber implants.
+	//Extraneous organs not of oozeling origin. Usually cyber implants.
 	var/static/list/allowed_organ_types = typecacheof(list(
 		/obj/item/organ/internal/cyberimp,
 		/obj/item/organ/external/wings,
@@ -85,6 +87,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 		/datum/quirk/drg_callout, // skillchips are in the brain anyways
 		/datum/quirk/prosthetic_limb,
 		/datum/quirk/quadruple_amputee,
+		/datum/quirk/stowaway,
 	))
 
 	var/rebuilt = TRUE
@@ -104,7 +107,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	QDEL_NULL(stored_dna)
 	QDEL_LIST(stored_quirks)
 
-	original_mind = null
+	mind = null
 
 	if(stored_items)
 		var/drop_loc = drop_location()
@@ -119,7 +122,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	if(gps_active)
 		. += span_notice("A dim light lowly pulsates from the center of the core, indicating an outgoing signal from a tracking microchip.")
 		. += span_red("You could probably snuff that out.")
-	if((brainmob && (brainmob.client || brainmob.get_ghost())) || (original_mind?.current && (original_mind.current.client || original_mind.current.get_ghost())) || decoy_override)
+	if((brainmob && (brainmob.client || brainmob.get_ghost())) || (mind?.current && (mind.current.client || mind.current.get_ghost())) || decoy_override)
 		if(isnull(stored_dna))
 			. += span_hypnophrase("Something looks wrong with this core, you don't think plasma will fix this one, maybe there's another way?")
 		else
@@ -177,7 +180,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	if(new_stat != DEAD)
 		return
 
-	original_mind = victim.mind || victim.last_mind
+	mind = victim.mind || victim.last_mind
 	copy_mind_and_dna(victim)
 	addtimer(CALLBACK(src, PROC_REF(core_ejection), victim), 0) // explode them after the current proc chain ends, to avoid weirdness
 
@@ -188,8 +191,8 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 		addtimer(CALLBACK(src, PROC_REF(core_ejection), owner), 0)
 
 /obj/item/organ/internal/brain/slime/proc/copy_mind_and_dna(mob/living/carbon/human/slime)
-	if(QDELETED(original_mind))
-		original_mind = brainmob?.mind || slime.mind || slime.last_mind
+	if(QDELETED(mind))
+		mind = brainmob?.mind || slime.mind || slime.last_mind
 
 	if(isnull(slime.dna))
 		QDEL_NULL(stored_dna)
@@ -235,12 +238,13 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	playsound(victim, 'sound/effects/blobattack.ogg', 80, TRUE)
 
 	if(gps_active) // adding the gps signal if they have activated the ability
-		AddComponent(/datum/component/gps/no_bsa, "[victim]'s Core")
+		AddComponent(/datum/component/gps/no_bsa, "[victim.real_name]'s Core")
 
 	if(brainmob)
 		membrane_mur.Grant(brainmob)
 		var/datum/antagonist/changeling/target_ling = brainmob.mind?.has_antag_datum(/datum/antagonist/changeling)
 
+		// TODO: convert these to use a signal or some shit ~Lucy
 		if(target_ling)
 			if(target_ling.oozeling_revives > 0)
 				target_ling.oozeling_revives--
@@ -251,7 +255,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 			var/datum/antagonist/bloodsucker/target_bloodsucker = brainmob.mind.has_antag_datum(/datum/antagonist/bloodsucker)
 			if(target_bloodsucker.bloodsucker_blood_volume >= OOZELING_MIN_REVIVE_BLOOD_THRESHOLD)
 				to_chat(brainmob, span_notice("You begin recollecting yourself. You will rise again in 3 minutes."))
-				addtimer(CALLBACK(src, PROC_REF(rebuild_body), null, FALSE), 180 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_DELETE_ME)
+				addtimer(CALLBACK(target_bloodsucker, TYPE_PROC_REF(/datum/antagonist/bloodsucker, oozeling_revive), src), 180 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_DELETE_ME)
 				target_bloodsucker.bloodsucker_blood_volume -= (OOZELING_MIN_REVIVE_BLOOD_THRESHOLD * 0.5)
 
 	if(stored_dna)
@@ -271,7 +275,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 /// Makes it so that when a slime's core has plasma poured on it, it builds a new body and moves the brain into it.
 
 /obj/item/organ/internal/brain/slime/check_for_repair(obj/item/item, mob/user)
-	if(damage && item.is_drainable() && item.reagents.has_reagent(/datum/reagent/toxin/plasma)) //attempt to heal the brain
+	if(item.is_drainable() && item.reagents.has_reagent(/datum/reagent/toxin/plasma)) //attempt to heal the brain
 		if (item.reagents.get_reagent_amount(/datum/reagent/toxin/plasma) < 100)
 			user.balloon_alert(user, "too little plasma!")
 			return FALSE
@@ -379,13 +383,21 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 	GLOB.dead_oozeling_cores -= src
 	set_organ_damage(0) // heals the brain fully
 
+	if(istype(loc, /obj/effect/abstract/chasm_storage))
+		// oh fuck we're reviving in a chasm somehow, uhhhh, quick, find us the nearest non-chasm turf
+		for(var/turf/turf as anything in spiral_range_turfs(5, get_turf(src), TRUE))
+			if(!isopenturf(turf) || isgroundlessturf(turf) || turf.is_blocked_turf(exclude_mobs = TRUE))
+				continue
+			forceMove(turf)
+			break
+
 	if(gps_active) // making sure the gps signal is removed if it's active on revival
 		gps_active = FALSE
 		qdel(GetComponent(/datum/component/gps))
 
 	//we have the plasma. we can rebuild them.
 	brainmob?.mind?.grab_ghost()
-	if(isnull(original_mind))
+	if(isnull(mind))
 		if(isnull(brainmob))
 			user?.balloon_alert(user, "This brain is not a viable candidate for repair!")
 			return null
@@ -399,7 +411,7 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 
 	rebuilt = TRUE
 
-	var/client/original_client = brainmob?.client || original_mind?.current?.client
+	var/client/original_client = brainmob?.client || mind?.current?.client
 	original_client?.prefs?.safe_transfer_prefs_to(new_body)
 	new_body.underwear = "Nude"
 	new_body.undershirt = "Nude"
@@ -434,10 +446,10 @@ GLOBAL_LIST_EMPTY_TYPED(dead_oozeling_cores, /obj/item/organ/internal/brain/slim
 					var/obj/item/organ/internal/eyes/eyes = new_body.get_organ_slot(ORGAN_SLOT_EYES)
 					eyes.Remove(new_body)
 					qdel(eyes)
-			bodypart.drop_limb() // Drop limb should delete the limb for oozlings unless someone changes it.
+			bodypart.drop_limb() // Drop limb should delete the limb for oozelings unless someone changes it.
 		new_body.visible_message(span_warning("[new_body]'s torso \"forms\" from [new_body.p_their()] core, yet to form the rest."))
 		to_chat(owner, span_purple("Your torso fully forms out of your core, yet to form the rest."))
-		//Make oozlings revive similar to other species.
+		//Make oozelings revive similar to other species.
 		new_body.set_jitter_if_lower(200 SECONDS)
 		new_body.emote("scream")
 	else
