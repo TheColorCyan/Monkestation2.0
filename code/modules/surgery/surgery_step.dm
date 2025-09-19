@@ -90,7 +90,7 @@
 	if(tool)
 		speed_mod = tool.toolspeed
 
-	if(HAS_TRAIT(target, TRAIT_DISSECTED))
+	if(HAS_TRAIT(target, TRAIT_SURGICALLY_ANALYZED))
 		speed_mod /= SURGERY_DISSECTION_MODIFIER
 
 	var/implement_speed_mod = 1
