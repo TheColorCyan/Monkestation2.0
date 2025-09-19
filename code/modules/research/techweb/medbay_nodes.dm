@@ -42,6 +42,7 @@
 	description = "Advanced Biotechnology"
 	prereq_ids = list("biotech")
 	design_ids = list(
+		"autopsyscanner",
 		"crewpinpointer",
 		"vitals_monitor_advanced",
 		"defibrillator_compact",
