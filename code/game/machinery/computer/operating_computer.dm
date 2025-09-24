@@ -26,7 +26,7 @@
 /obj/machinery/computer/operating/LateInitialize()
 	. = ..()
 	var/static/list/dissection_signals = list(
-		COMSIG_OPERATING_COMPUTER_DISSECTION_COMPLETE = TYPE_PROC_REF(/datum/component/experiment_handler, try_run_autopsy_experiment)
+		COMSIG_OPERATING_COMPUTER_AUTOPSY_COMPLETE = TYPE_PROC_REF(/datum/component/experiment_handler, try_run_autopsy_experiment)
 	)
 	experiment_handler = AddComponent(
 		/datum/component/experiment_handler, \
