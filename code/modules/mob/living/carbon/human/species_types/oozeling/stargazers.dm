@@ -4,7 +4,7 @@
 	name = "\improper Stargazer"
 	plural_form = "Stargazers"
 	id = SPECIES_STARGAZER
-	extra_actions = list(/datum/action/innate/project_thought)
+	extra_actions = list(/datum/action/innate/project_thought, /datum/action/cooldown/slime_hydrophobia)
 
 /datum/species/oozeling/stargazer/on_species_gain(mob/living/carbon/slime, datum/species/old_species)
 	. = ..()

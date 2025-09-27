@@ -19,6 +19,7 @@
 		/datum/action/innate/integrate_extract,
 		/datum/action/innate/use_extract,
 		/datum/action/innate/use_extract/major,
+		/datum/action/cooldown/slime_hydrophobia,
 	)
 	/// How strong is our glow
 	var/glow_intensity = LUMINESCENT_DEFAULT_GLOW

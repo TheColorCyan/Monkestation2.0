@@ -34,6 +34,7 @@ GLOBAL_DATUM_INIT(slimeperson_managers, /alist, alist())
 	extra_actions = list(
 		/datum/action/innate/swap_body,
 		/datum/action/innate/split_body,
+		/datum/action/cooldown/slime_hydrophobia,
 	)
 
 	/// The manager instance used to link all of someone's slimeperson bodies.
