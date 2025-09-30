@@ -7,13 +7,13 @@
 // Magic Mirrors!
 
 #define CHANGE_RACE "Change Race"
-#define CHANGE_SEX  "Change Sex"
+#define CHANGE_GENDER "Change Gender"
 #define CHANGE_NAME "Change Name"
 #define CHANGE_EYES "Change Eyes"
 
 #define INERT_MIRROR_OPTIONS list(CHANGE_HAIR, CHANGE_BEARD)
-#define PRIDE_MIRROR_OPTIONS list(CHANGE_HAIR, CHANGE_BEARD, CHANGE_RACE, CHANGE_SEX, CHANGE_EYES)
-#define MAGIC_MIRROR_OPTIONS list(CHANGE_HAIR, CHANGE_BEARD, CHANGE_RACE, CHANGE_SEX, CHANGE_EYES, CHANGE_NAME)
+#define PRIDE_MIRROR_OPTIONS list(CHANGE_HAIR, CHANGE_BEARD, CHANGE_RACE, CHANGE_GENDER, CHANGE_EYES)
+#define MAGIC_MIRROR_OPTIONS list(CHANGE_HAIR, CHANGE_BEARD, CHANGE_RACE, CHANGE_GENDER, CHANGE_EYES, CHANGE_NAME)
 
 /obj/structure/mirror
 	name = "mirror"
@@ -95,8 +95,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 			change_beard(user)
 		if(CHANGE_RACE)
 			change_race(user)
-		if(CHANGE_SEX) // sex: yes
-			change_sex(user)
+		if(CHANGE_GENDER)
+			change_gender(user)
 		if(CHANGE_NAME)
 			change_name(user)
 		if(CHANGE_EYES)
@@ -176,33 +176,33 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 // possible Genders: MALE, FEMALE, PLURAL, NEUTER
 // possible Physique: MALE, FEMALE
 // saved you a click (many)
-/obj/structure/mirror/proc/change_sex(mob/living/carbon/human/sexy)
+/obj/structure/mirror/proc/change_gender(mob/living/carbon/human/user)
 
-	var/chosen_sex = tgui_input_list(sexy, "Become a..", "Confirmation", list("Warlock", "Witch", "Wizard", "Itzard")) // YOU try coming up with the 'it' version of wizard
+	var/chosen_gender = tgui_input_list(user, "Become a..", "Confirmation", list("Warlock", "Witch", "Wizard", "Itzard")) // YOU try coming up with the 'it' version of wizard
 
-	switch(chosen_sex)
+	switch(chosen_gender)
 		if("Warlock")
-			sexy.gender = MALE
-			to_chat(sexy, span_notice("Man, you feel like a man!"))
+			user.gender = MALE
+			to_chat(user, span_notice("Man, you feel like a man!"))
 		if("Witch")
-			sexy.gender = FEMALE
-			to_chat(sexy, span_notice("Man, you feel like a woman!"))
+			user.gender = FEMALE
+			to_chat(user, span_notice("Man, you feel like a woman!"))
 		if("Wizard")
-			sexy.gender = PLURAL
-			to_chat(sexy, span_notice("Woah dude, you feel like a dude!"))
+			user.gender = PLURAL
+			to_chat(user, span_notice("Woah dude, you feel like a dude!"))
 		if("Itzard")
-			sexy.gender = NEUTER
-			to_chat(sexy, span_notice("Woah dude, you feel like something else!"))
+			user.gender = NEUTER
+			to_chat(user, span_notice("Woah dude, you feel like something else!"))
 
-	var/chosen_physique = tgui_input_list(sexy, "Alter your physique as well?", "Confirmation", list("Warlock Physique", "Witch Physique", "Wizards Don't Need Gender"))
+	var/chosen_physique = tgui_input_list(user, "Alter your physique as well?", "Confirmation", list("Warlock Physique", "Witch Physique", "Wizards Don't Need Gender"))
 
 	if(chosen_physique && chosen_physique != "Wizards Don't Need Gender")
-		sexy.physique = (chosen_physique == "Warlock Physique") ? MALE : FEMALE
+		user.physique = (chosen_physique == "Warlock Physique") ? MALE : FEMALE
 
-	sexy.dna.update_ui_block(DNA_GENDER_BLOCK)
-	sexy.update_body(is_creating = TRUE) // or else physique won't change properly
-	sexy.update_mutations_overlay() //(hulk male/female)
-	sexy.update_clothing(ITEM_SLOT_ICLOTHING) // update gender shaped clothing
+	user.dna.update_ui_block(DNA_GENDER_BLOCK)
+	user.update_body(is_creating = TRUE) // or else physique won't change properly
+	user.update_mutations_overlay() //(hulk male/female)
+	user.update_clothing(ITEM_SLOT_ICLOTHING) // update gender shaped clothing
 
 /obj/structure/mirror/proc/change_eyes(mob/living/carbon/human/user)
 	var/new_eye_color = input(user, "Choose your eye color", "Eye Color", user.eye_color_left) as color|null
@@ -361,8 +361,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 			change_beard(user)
 		if(CHANGE_RACE)
 			change_race(user)
-		if(CHANGE_SEX) // sex: yes
-			change_sex(user)
+		if(CHANGE_GENDER)
+			change_gender(user)
 		if(CHANGE_NAME)
 			change_name(user)
 		if(CHANGE_EYES)
@@ -395,7 +395,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 #undef CHANGE_BEARD
 
 #undef CHANGE_RACE
-#undef CHANGE_SEX
+#undef CHANGE_GENDER
 #undef CHANGE_NAME
 #undef CHANGE_EYES
 
