@@ -1,6 +1,9 @@
 /obj/machinery/rnd/production
 	name = "technology fabricator"
 	desc = "Makes researched and prototype items with materials and energy."
+	/// Energy cost per full stack of materials spent. Material insertion is 40% of this.
+	active_power_usage = 0.05 * STANDARD_CELL_RATE
+	interaction_flags_atom = parent_type::interaction_flags_atom | INTERACT_ATOM_MOUSEDROP_IGNORE_CHECKS
 
 	/// The efficiency coefficient. Material costs and print times are multiplied by this number;
 	var/efficiency_coeff = 1
@@ -18,10 +21,8 @@
 	var/stripe_color = null
 	///direction we output onto (if 0, on top of us)
 	var/drop_direction = 0
-
 	/// Made so we dont call addtimer() 40,000 times in on_techweb_update(). only allows addtimer() to be called on the first update.
 	var/techweb_updating = FALSE
-
 	/// Whether or not the fabricator links to the ore silo on init. Special derelict or maintanance variants should set this to FALSE.
 	var/link_on_init = TRUE
 
@@ -74,7 +75,6 @@
 	stripe.color = stripe_color
 	. += stripe
 
-
 /obj/machinery/rnd/production/examine(mob/user)
 	. = ..()
 	if(!in_range(user, src) && !isobserver(user))
@@ -99,7 +99,6 @@
 		UnregisterSignal(stored_research, list(COMSIG_TECHWEB_ADD_DESIGN, COMSIG_TECHWEB_REMOVE_DESIGN))
 
 	. = ..()
-
 	RegisterSignals(
 		stored_research,
 		list(COMSIG_TECHWEB_ADD_DESIGN, COMSIG_TECHWEB_REMOVE_DESIGN),
@@ -153,7 +152,7 @@
 	PRIVATE_PROC(TRUE)
 
 	//we use initial(active_power_usage) because higher tier parts will have higher active usage but we have no benifit from it
-	if(directly_use_energy(ROUND_UP((amount_inserted / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * 0.02 * initial(active_power_usage))))
+	if(directly_use_energy(ROUND_UP((amount_inserted / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * 0.4 * initial(active_power_usage))))
 		var/datum/material/highest_mat_ref
 
 		var/highest_mat = 0
@@ -230,10 +229,7 @@
 	)
 
 /obj/machinery/rnd/production/ui_interact(mob/user, datum/tgui/ui)
-	user.set_machine(src)
-
 	ui = SStgui.try_update_ui(user, src, ui)
-
 	if(!ui)
 		ui = new(user, src, "Fabricator")
 		ui.open()
@@ -249,6 +245,7 @@
 	var/coefficient
 	for(var/datum/design/design in cached_designs)
 		var/cost = list()
+
 		coefficient = build_efficiency(design.build_path)
 		for(var/datum/material/mat in design.materials)
 			cost[mat.name] = OPTIMAL_COST(design.materials[mat] * coefficient)
@@ -299,7 +296,7 @@
 				return
 
 			//we use initial(active_power_usage) because higher tier parts will have higher active usage but we have no benifit from it
-			if(!directly_use_energy(ROUND_UP((amount / MAX_STACK_SIZE) * 0.02 * initial(active_power_usage))))
+			if(!directly_use_energy(ROUND_UP((amount / MAX_STACK_SIZE) * 0.4 * initial(active_power_usage))))
 				say("No power to dispense sheets")
 				return
 
@@ -393,11 +390,14 @@
 	if(!directly_use_energy(charge_per_item)) // provide the wait time until lathe is ready
 		var/area/my_area = get_area(src)
 		var/obj/machinery/power/apc/my_apc = my_area.apc
-		var/charging_wait = my_apc.time_to_charge(charge_per_item)
-		if(!isnull(charging_wait))
-			say("Unable to continue production, APC overload. Wait [DisplayTimeText(charging_wait, round_seconds_to = 1)] and try again.")
+		if(!QDELETED(my_apc))
+			var/charging_wait = my_apc.time_to_charge(charge_per_item)
+			if(!isnull(charging_wait))
+				say("Unable to continue production, APC overload. Wait [DisplayTimeText(charging_wait, round_seconds_to = 1)] and try again.")
+			else
+				say("Unable to continue production, power grid overload.")
 		else
-			say("Unable to continue production, power grid overload.")
+			say("Unable to continue production, no APC in area.")
 		finalize_build()
 		return
 
@@ -421,8 +421,9 @@
 		var/number_to_make = (initial(stack_item.amount) * items_remaining)
 		while(number_to_make > max_stack_amount)
 			created = new stack_item(null, max_stack_amount) //it's imporant to spawn things in nullspace, since obj's like stacks qdel when they enter a tile/merge with other stacks of the same type, resulting in runtimes.
-			created.pixel_x = created.base_pixel_x + rand(-6, 6)
-			created.pixel_y = created.base_pixel_y + rand(-6, 6)
+			if(isitem(created))
+				created.pixel_x = created.base_pixel_x + rand(-6, 6)
+				created.pixel_y = created.base_pixel_y + rand(-6, 6)
 			created.forceMove(target)
 			number_to_make -= max_stack_amount
 
@@ -431,8 +432,9 @@
 		created = new design.build_path(null)
 		split_materials_uniformly(design_materials, material_cost_coefficient, created)
 
-	created.pixel_x = created.base_pixel_x + rand(-6, 6)
-	created.pixel_y = created.base_pixel_y + rand(-6, 6)
+	if(isitem(created))
+		created.pixel_x = created.base_pixel_x + rand(-6, 6)
+		created.pixel_y = created.base_pixel_y + rand(-6, 6)
 	SSblackbox.record_feedback("nested tally", "lathe_printed_items", 1, list("[type]", "[created.type]"))
 	created.forceMove(target)
 
@@ -450,7 +452,6 @@
 /// Called at the end of do_make_item's timer loop
 /obj/machinery/rnd/production/proc/finalize_build()
 	PROTECTED_PROC(TRUE)
-
 	busy = FALSE
 	SStgui.update_uis(src)
 	icon_state = initial(icon_state)
