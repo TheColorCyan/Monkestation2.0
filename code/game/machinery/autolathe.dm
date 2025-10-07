@@ -97,7 +97,7 @@
 	SIGNAL_HANDLER
 
 	//we use initial(active_power_usage) because higher tier parts will have higher active usage but we have no benifit from it
-	if(use_energy(ROUND_UP((amount_inserted / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * 0.02 * initial(active_power_usage))))
+	if(directly_use_energy(ROUND_UP((amount_inserted / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * 0.02 * initial(active_power_usage))))
 		flick_overlay_view(mutable_appearance('icons/obj/stationobjs.dmi', "autolathe_mat"), 1 SECONDS)
 
 		var/datum/material/highest_mat_ref
@@ -284,7 +284,7 @@
 	var/charge_per_item = 0
 	for(var/material in design.materials)
 		charge_per_item += design.materials[material]
-	charge_per_item = ROUND_UP((charge_per_item / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * material_cost_coefficient * 0.05 * active_power_usage)
+	charge_per_item = ROUND_UP((charge_per_item / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * material_cost_coefficient * active_power_usage)
 	var/build_time_per_item = (design.construction_time * design.lathe_time_factor) ** 0.8
 
 	//do the printing sequentially
