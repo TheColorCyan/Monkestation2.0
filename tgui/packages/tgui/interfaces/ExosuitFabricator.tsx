@@ -10,10 +10,16 @@ import { BooleanLike, classes } from 'common/react';
 
 type ExosuitDesign = Design & {
   constructionTime: number;
+  craftable: BooleanLike;
 };
 
 type ExosuitFabricatorData = FabricatorData & {
   processing: BooleanLike;
+  authorization: BooleanLike;
+  alert_level: Number;
+  combat_parts_allowed: BooleanLike;
+  emagged: BooleanLike;
+  silicon_user: BooleanLike;
   designs: Record<string, ExosuitDesign>;
 };
 
