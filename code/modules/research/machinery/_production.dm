@@ -26,9 +26,6 @@
 	var/link_on_init = TRUE
 
 /obj/machinery/rnd/production/Initialize(mapload)
-	. = ..()
-
-	cached_designs = list()
 	materials = AddComponent(
 		/datum/component/remote_materials, \
 		mapload, \
@@ -36,6 +33,10 @@
 			COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/rnd/production, local_material_insert)
 		) \
 	)
+
+	. = ..()
+
+	cached_designs = list()
 
 	RegisterSignal(src, COMSIG_SILO_ITEM_CONSUMED, TYPE_PROC_REF(/obj/machinery/rnd/production, silo_material_insert))
 
@@ -187,11 +188,10 @@
 /obj/machinery/rnd/production/RefreshParts()
 	. = ..()
 
-	if(materials)
-		var/total_storage = 0
-		for(var/datum/stock_part/matter_bin/bin in component_parts)
-			total_storage += bin.tier * 37.5 * SHEET_MATERIAL_AMOUNT
-		materials.set_local_size(total_storage)
+	var/total_storage = 0
+	for(var/datum/stock_part/matter_bin/bin in component_parts)
+		total_storage += bin.tier * 37.5 * SHEET_MATERIAL_AMOUNT
+	materials.set_local_size(total_storage)
 
 	efficiency_coeff = compute_efficiency()
 
