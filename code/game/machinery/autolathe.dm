@@ -98,7 +98,7 @@
 
 	//we use initial(active_power_usage) because higher tier parts will have higher active usage but we have no benifit from it
 	if(use_energy(ROUND_UP((amount_inserted / (MAX_STACK_SIZE * SHEET_MATERIAL_AMOUNT)) * 0.02 * initial(active_power_usage))))
-		flick_overlay_view(mutable_appearance('monkestation/icons/obj/machines/lathes.dmi', "autolathe_mat"), 1 SECONDS)
+		flick_overlay_view(mutable_appearance('icons/obj/stationobjs.dmi', "autolathe_mat"), 1 SECONDS)
 
 		var/datum/material/highest_mat_ref
 		var/highest_mat = 0

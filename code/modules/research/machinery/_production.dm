@@ -173,7 +173,7 @@
 	SHOULD_CALL_PARENT(FALSE)
 
 	//first play the insertion animation
-	flick_overlay_view(material_insertion_animation(mat_ref.greyscale_colors), 1 SECONDS)
+	flick_overlay_view(lathe_material_insertion_animation(mat_ref.greyscale_colors), 1.5 SECONDS)
 
 	//now play the progress bar animation
 	flick_overlay_view(mutable_appearance('monkestation/icons/obj/machines/research.dmi', "protolathe_progress"), 1 SECONDS)
@@ -389,6 +389,7 @@
 		finalize_build()
 		return
 	if(!materials.can_use_resource())
+		say("Unable to continue production, materials on hold.")
 		finalize_build()
 		return
 
