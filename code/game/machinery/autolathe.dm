@@ -376,17 +376,16 @@
 	SStgui.update_uis(src)
 
 /obj/machinery/autolathe/mouse_drop_dragged(atom/over, mob/user, src_location, over_location, params)
-	. = ..()
-	if((!issilicon(usr) && !isAdminGhostAI(usr)) && !Adjacent(usr))
+	if(!can_interact(user) || (!HAS_SILICON_ACCESS(user) && !isAdminGhostAI(user)) && !Adjacent(user))
 		return
 	if(busy)
-		balloon_alert(usr, "printing started!")
+		balloon_alert(user, "printing started!")
 		return
 	var/direction = get_dir(src, over_location)
 	if(!direction)
 		return
 	drop_direction = direction
-	balloon_alert(usr, "dropping [dir2text(drop_direction)]")
+	balloon_alert(user, "dropping [dir2text(drop_direction)]")
 
 /obj/machinery/autolathe/click_alt(mob/user)
 	if(!drop_direction)
