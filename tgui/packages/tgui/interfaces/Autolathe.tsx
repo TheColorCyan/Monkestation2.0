@@ -286,7 +286,7 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
         ])}
       >
         <Button.Input
-          content={'[Max: ' + maxmult + ']'}
+          content={`[Max: ${maxmult}]`}
           color={'transparent'}
           maxValue={maxmult}
           onCommit={(_e, value: string) =>
