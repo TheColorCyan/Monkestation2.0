@@ -28,7 +28,7 @@
 /obj/machinery/rnd/production/Initialize(mapload)
 	materials = AddComponent(
 		/datum/component/remote_materials, \
-		mapload, \
+		mapload && link_on_init, \
 		mat_container_signals = list( \
 			COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/rnd/production, local_material_insert)
 		) \
