@@ -1036,7 +1036,7 @@
 
 // Milthy
 /datum/loadout_item/suit/monkey_jacket
-	name = "Monkey Varsity Jacket"
+	name = "Monkey Jacket"
 	item_path = /obj/item/clothing/suit/monkey_jacket
 	donator_only = TRUE
 	requires_purchase = FALSE

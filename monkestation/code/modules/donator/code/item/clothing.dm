@@ -929,8 +929,8 @@
 	flags_inv = HIDEFACE|HIDEHAIR|HIDEFACIALHAIR
 
 /obj/item/clothing/suit/monkey_jacket
-	name = "Monkey Varsity Jacket"
-	desc = "Dark grey jacket with a monkey face on the back!"
+	name = "Monkey Jacket"
+	desc = "Dark grey varsity jacket with a monkey face on the back!"
 	icon = 'monkestation/code/modules/donator/icons/obj/clothing.dmi'
 	worn_icon = 'monkestation/code/modules/donator/icons/mob/clothing.dmi'
 	icon_state = "monkey_jacket"
