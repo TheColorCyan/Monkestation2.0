@@ -9,6 +9,7 @@
 	// Default research tech, prevents bricking
 	design_ids = list(
 		"basic_capacitor",
+		"basic_battery",
 		"basic_cell",
 		"basic_matter_bin",
 		"basic_micro_laser",
@@ -159,6 +160,7 @@
 		"boxcutter",
 		"cable_coil",
 		"cable_coil",
+		"chicken_scanner",
 		"industrial_coil",
 		"crowbar",
 		"cultivator",
