@@ -51,8 +51,8 @@
 	output_item = /obj/item/slimecross/reproductive/darkpurple
 
 /datum/compressor_recipe/crossbreed/reproductive/grey
-	required_oozes = list(
-		/datum/reagent/slime_ooze/grey = CROSSBREED_RECIPE_OOZE_AMOUNT * 2,
+	required_slimes = list(
+		/datum/slime_color/grey = 2,
 		)
 	output_item = /obj/item/slimecross/reproductive/grey
 

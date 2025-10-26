@@ -83,7 +83,14 @@
 	if(!current_recipe)
 		if(change_recipe(user))
 			return TRUE
-	else
+	// Check if we have all slimes needed to make the extract
+	// If we need one more of the components, break
+	var/component_check = TRUE
+	for(var/needed_color in slimes_for_recipe)
+		if(slimes_for_recipe[needed_color] > 0)
+			component_check = FALSE
+			break
+	if(component_check)
 		compress_recipe()
 
 /obj/machinery/slime_compressor/proc/change_recipe(mob/user, cross_breed = FALSE)
@@ -103,29 +110,31 @@
 /obj/machinery/slime_compressor/hitby(atom/movable/hit_by, skipcatch, hitpush, blocked, datum/thrownthing/throwingdatum)
 	if (active)
 		return
-	for(hit_by in mob_whitelist)
-		var/mob/living/victim = hit_by
-		if (isslime(victim))
-			if (!current_recipe)
-				return ..()
-			var/mob/living/basic/slime/slime = victim
-			if (!check_recipe(slime))
-				return ..()
-		mobs_inside |= hit_by
-		hit_by.forceMove(src)
+	var/mob/living/victim = hit_by
+	if (isslime(victim))
+		if (!current_recipe)
+			return ..()
+		var/mob/living/basic/slime/slime = victim
+		if(!check_recipe(slime))
+			return
+		mobs_inside |= slime
+		slime.forceMove(src)
+		return
 	return ..() // If it is anything else handle being hit normally.
 
 /obj/machinery/slime_compressor/proc/check_recipe(var/mob/living/basic/slime/slime)
-	// can't check without a recipe
-	if (!current_recipe)
-		return FALSE
-	var/datum/slime_color/color = slime.current_color
-	for (color in current_recipe.required_slimes)
-		return TRUE
+	for(var/needed_color in slimes_for_recipe)
+		var/datum/slime_color/color = slime.current_color
+		if (istype(color, needed_color))
+			slimes_for_recipe[needed_color]--
+			return TRUE
+		else
+			continue
 	return FALSE
 
 /obj/machinery/slime_compressor/proc/compress_recipe()
 	active = TRUE
+	Shake(6, 6, 3 SECONDS)
 	addtimer(CALLBACK(src, PROC_REF(finish_compressing)), 3 SECONDS)
 
 /obj/machinery/slime_compressor/proc/finish_compressing()
