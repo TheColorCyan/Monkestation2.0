@@ -1,9 +1,10 @@
 /datum/compressor_recipe/crossbreed/burning // EXISTS FOR SUBTYPING
 	output_item = /obj/item/slimecross/burning/grey
+
 /datum/compressor_recipe/crossbreed/burning/grey
-	required_oozes = list(
-		/datum/reagent/slime_ooze/grey = CROSSBREED_RECIPE_OOZE_AMOUNT,
-		/datum/reagent/slime_ooze/orange = CROSSBREED_RECIPE_OOZE_AMOUNT,
+	required_slimes = list(
+		/datum/slime_color/grey = 1,
+		/datum/slime_color/orange = 1,
 		)
 	output_item = /obj/item/slimecross/burning/grey
 
