@@ -15,9 +15,9 @@
 	name = "slime compressor"
 	desc = "Machine used to compress slimes into bases for crossbreed extracts."
 
-	icon = 'monkestation/code/modules/slimecore/icons/slime_grinder.dmi'
-	icon_state = "slime_grinder_backdrop"
-	base_icon_state = "slime_grinder_backdrop"
+	icon = 'monkestation/code/modules/slimecore/icons/64x64machines.dmi'
+	icon_state = "slime_compressor"
+	base_icon_state = "slime_compressor"
 
 	use_power = IDLE_POWER_USE
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION
