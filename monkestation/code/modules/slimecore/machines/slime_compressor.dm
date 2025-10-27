@@ -32,8 +32,9 @@
 	var/active = FALSE
 	/// What mobs can go inside the compressor. Initially only slimes
 	var/list/mob_whitelist = list(/mob/living/basic/slime)
-	/// Recipes we can choose from
+	/// Recipes we can choose from - base of crossbreed
 	var/static/list/base_choices = list()
+	/// Recipes we can choose from - subtype of base crossbreed
 	var/static/list/cross_breed_choices = list()
 	/// Recipe we have currently set
 	var/datum/compressor_recipe/crossbreed/current_recipe
@@ -107,6 +108,9 @@
 	slimes_for_recipe = current_recipe.required_slimes.Copy()
 	balloon_alert_to_viewers("set extract recipe")
 
+// On hit we check if mob is a slime
+// Then we do check_recipe(), and if it passes slime gets removed from slimes_for_recipe
+// After, we move the mob inside
 /obj/machinery/slime_compressor/hitby(atom/movable/hit_by, skipcatch, hitpush, blocked, datum/thrownthing/throwingdatum)
 	if (active)
 		return
@@ -120,8 +124,10 @@
 		mobs_inside |= slime
 		slime.forceMove(src)
 		return
-	return ..() // If it is anything else handle being hit normally.
+	return ..()
 
+// Check if the slime fits the recipe we have set
+// If they do, remove them from the slimes_for_recipe list and return TRUE
 /obj/machinery/slime_compressor/proc/check_recipe(var/mob/living/basic/slime/slime)
 	for(var/needed_color in slimes_for_recipe)
 		var/datum/slime_color/color = slime.current_color
@@ -143,3 +149,5 @@
 	active = FALSE
 	mobs_inside = list()
 	current_recipe = null
+	for (var/victim in mobs_inside)
+		qdel(victim)
