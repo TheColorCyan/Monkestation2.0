@@ -4,12 +4,12 @@
 	slab_overlay = "vanguard"
 	desc = "Provides the user with 30 seconds of stun immunity, however other scriptures cannot be invoked while it is active."
 	tip = "Gain temporary immunity against batons and disablers."
-	invocation_text = list("With Eng'ine's power coursing through me...", "I will stop them in their tracks!")
+	invocation_text = list("With Engine's power coursing through me...", "I will stop them in their tracks!")
 	invocation_time = 2 SECONDS
 	button_icon_state = "Vanguard"
 	category = SPELLTYPE_PRESERVATION
 	cogs_required = 2
-	power_cost = 150
+	power_cost = STANDARD_CELL_CHARGE * 0.15
 
 /datum/scripture/slab/vanguard/apply_effects(atom/applied_atom)
 	return FALSE

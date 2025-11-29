@@ -46,7 +46,7 @@
 			var/damage_healed = FREE_DAMAGE_HEALED + ((affected_mob.getMaxHealth() - affected_mob.health) * 0.6)
 			if(GLOB.clock_vitality >= damage_healed)
 				GLOB.clock_vitality -= damage_healed
-				affected_mob.revive(ADMIN_HEAL_ALL)
+				affected_mob.revive(ADMIN_HEAL_ALL, revival_policy = POLICY_ANTAGONISTIC_REVIVAL)
 				revived = TRUE
 
 		if(affected_mob.stat != DEAD && (!affected_mob.client || affected_mob.client.is_afk()))
@@ -69,8 +69,13 @@
 				affected_mob.PossessByPlayer(chosen_one.key)
 				revived = TRUE
 		if(revived)
+			var/pronoun_appropriate_demonym = "CLOCK-SIBLING"
+			if(affected_mob.gender == MALE)
+				pronoun_appropriate_demonym = "CLOCK-BROTHER"
+			if(affected_mob.gender == FEMALE)
+				pronoun_appropriate_demonym = "CLOCK-SISTER"
 			SEND_SOUND(affected_mob, 'sound/magic/clockwork/scripture_tier_up.ogg')
-			to_chat(affected_mob, span_bigbrass("\"[text2ratvar("MY LIGHT SHINES THROUGH YOU, YOUR SERVITUDE IS NOT FINISHED.")]\""))
+			to_chat(affected_mob, span_bigbrass("\"[text2ratvar("YOUR SERVITUDE IS NOT FINISHED, [uppertext(affected_mob.real_name)]. RISE, [pronoun_appropriate_demonym], AND BE RENEWED.")]\""))
 			affected_mob.visible_message(span_warning("[affected_mob] draws in a huge breath, a bright light shining from [affected_mob.p_their()] eyes."), \
 									   span_bigbrass("You awaken suddenly from the void. You're alive!"))
 		return

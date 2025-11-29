@@ -141,8 +141,13 @@
 /datum/round_event_control/proc/can_spawn_event(players_amt, allow_magic = FALSE, fake_check = FALSE)
 	SHOULD_CALL_PARENT(TRUE)
 // monkestation start: event groups and storyteller stuff
-	if(SSgamemode.current_storyteller?.disable_distribution || SSgamemode.halted_storyteller)
+	if(SSgamemode.halted_storyteller)
 		return FALSE
+	if(SSgamemode.current_storyteller)
+		if(SSgamemode.current_storyteller.disable_distribution)
+			return FALSE
+		if(!SSgamemode.current_storyteller.can_run_event(src))
+			return FALSE
 	if(dont_spawn_near_roundend && EMERGENCY_PAST_POINT_OF_NO_RETURN)
 		return FALSE
 	if(event_group && !GLOB.event_groups[event_group].can_run())
@@ -154,7 +159,7 @@
 		return FALSE
 	if(earliest_start >= (world.time - SSticker.round_start_time))
 		return FALSE
-	if(!allow_magic && wizardevent != SSevents.wizardmode)
+	if(!allow_magic && wizardevent != SSgamemode.wizardmode)
 		return FALSE
 	if(players_amt < min_players)
 		return FALSE

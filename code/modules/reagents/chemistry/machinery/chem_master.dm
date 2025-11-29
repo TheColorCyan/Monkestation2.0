@@ -110,8 +110,16 @@ GLOBAL_LIST_INIT(chem_master_containers, list(
 /obj/machinery/chem_master/RefreshParts()
 	. = ..()
 	reagents.maximum_volume = 0
+	var/cryogenic = TRUE
 	for(var/obj/item/reagent_containers/cup/beaker/beaker in component_parts)
 		reagents.maximum_volume += beaker.reagents.maximum_volume
+		if(!CHECK_BITFIELD(beaker.reagents.flags, NO_REACT))
+			cryogenic = FALSE //at least one of the beakers is not a cryo beaker
+			break // thus we can really just stop here.
+	if(cryogenic == TRUE)
+		ENABLE_BITFIELD(reagents.flags, NO_REACT)
+	else
+		DISABLE_BITFIELD(reagents.flags, NO_REACT)
 	printing_amount = 0
 	for(var/datum/stock_part/manipulator/manipulator in component_parts)//Monkestation Edit: We use manipulators instead of servos
 		printing_amount += manipulator.tier
@@ -227,7 +235,7 @@ GLOBAL_LIST_INIT(chem_master_containers, list(
 		var/container_data = list()
 		for(var/obj/item/reagent_containers/container as anything in printable_containers[category])
 			container_data += list(list(
-				"icon" = text_ref(initial(container.icon)),
+				"icon" = initial(container.icon),
 				"icon_state" = initial(container.icon_state),
 				"ref" = REF(container),
 				"name" = initial(container.name),
@@ -412,7 +420,7 @@ GLOBAL_LIST_INIT(chem_master_containers, list(
 	while(item_count > 0)
 		if(!is_printing)
 			break
-		use_power(active_power_usage)
+		use_energy(active_power_usage)
 		stoplag(printing_speed)
 		for(var/i in 1 to printing_amount_current)
 			if(!item_count)
@@ -441,7 +449,7 @@ GLOBAL_LIST_INIT(chem_master_containers, list(
 	if (!reagent)
 		return FALSE
 
-	use_power(active_power_usage)
+	use_energy(active_power_usage)
 
 	if (target == TARGET_BUFFER)
 		if(!check_reactions(reagent, beaker.reagents))
@@ -492,6 +500,8 @@ GLOBAL_LIST_INIT(chem_master_containers, list(
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
 		. += span_notice("The status display reads:<br>Reagent buffer capacity: <b>[reagents.maximum_volume]</b> units.<br>Number of containers printed at once increased by <b>[100 * (printing_amount / initial(printing_amount)) - 100]%</b>.")
+		if(CHECK_BITFIELD(reagents.flags, NO_REACT))
+			. += span_notice("This machine has been upgraded to put reagents in the buffer on cryostasis, preventing them from reacting.")
 
 /obj/machinery/chem_master/condimaster
 	name = "CondiMaster 3000"

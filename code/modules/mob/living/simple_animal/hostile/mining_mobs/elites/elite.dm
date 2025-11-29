@@ -7,6 +7,7 @@
 	name = "elite"
 	desc = "An elite monster, found in one of the strange tumors on lavaland."
 	icon = 'icons/mob/simple/lavaland/lavaland_elites.dmi'
+	mob_biotypes = MOB_ORGANIC|MOB_BEAST|MOB_MINING
 	faction = list(FACTION_BOSS)
 	robust_searching = TRUE
 	ranged_ignores_vision = TRUE
@@ -34,7 +35,7 @@
 		attack_action.Grant(src)
 
 //Prevents elites from attacking members of their faction (can't hurt themselves either) and lets them mine rock with an attack despite not being able to smash walls.
-/mob/living/simple_animal/hostile/asteroid/elite/AttackingTarget()
+/mob/living/simple_animal/hostile/asteroid/elite/AttackingTarget(atom/attacked_target)
 	if(ishostile(target))
 		var/mob/living/simple_animal/hostile/M = target
 		if(faction_check_atom(M))
@@ -157,9 +158,14 @@ While using this makes the system rely on OnFire, it still gives options for tim
 	fire = 100
 	acid = 100
 
+/obj/structure/elite_tumor/attack_robot(mob/living/user)
+	. = ..()
+	if (Adjacent(user))
+		return attack_hand(user)
+
 /obj/structure/elite_tumor/attack_hand(mob/user, list/modifiers)
 	. = ..()
-	if(!ishuman(user))
+	if(!ishuman(user) && !iscyborg(user))
 		return
 	switch(activity)
 		if(TUMOR_PASSIVE)
