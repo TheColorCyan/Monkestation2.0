@@ -1,4 +1,4 @@
-#define CROSSBREED_BASE_PATHS_1 list(\
+#define CROSSBREED_BASE_PATHS list(\
 /datum/compressor_recipe/crossbreed/burning,\
 /datum/compressor_recipe/crossbreed/charged,\
 /datum/compressor_recipe/crossbreed/chilling,\
@@ -15,9 +15,9 @@
 	name = "slime compressor"
 	desc = "Machine used to compress slimes into bases for crossbreed extracts."
 
-	icon = 'monkestation/code/modules/slimecore/icons/64x64machines.dmi'
-	icon_state = "slime_compressor"
-	base_icon_state = "slime_compressor"
+	icon = 'monkestation/code/modules/slimecore/icons/slime_compressor.dmi'
+	icon_state = "base"
+	base_icon_state = "base"
 
 	use_power = IDLE_POWER_USE
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION
@@ -25,7 +25,8 @@
 	anchored = TRUE
 	density = TRUE
 
-	var/grind_time = 5 SECONDS
+	/// amount of time it takes to compress, scales with manipulator tier
+	var/compress_time = 15 SECONDS
 	///list of all the slimes we have
 	var/list/mobs_inside = list()
 	///are we grinding some slimes
@@ -46,10 +47,11 @@
 	. = ..()
 	if(length(cross_breed_choices))
 		return
-	for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS_1)
+	for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS)
 		var/datum/compressor_recipe/stored_recipe = new listed
 		var/obj/item/slimecross/crossbreed = stored_recipe.output_item
 		var/image/new_image = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state))
+		new_image.color = return_color_from_string(initial(crossbreed.colour))
 		if(initial(crossbreed.colour) == "rainbow")
 			new_image.rainbow_effect()
 		base_choices |= list("[initial(stored_recipe.output_item.name)]" = new_image)
@@ -59,6 +61,7 @@
 			var/datum/compressor_recipe/subtype_stored = new subtype
 			var/obj/item/slimecross/subtype_breed = subtype_stored.output_item
 			var/image/subtype_image = image(icon = initial(subtype_stored.output_item.icon), icon_state = initial(subtype_stored.output_item.icon_state))
+			subtype_image.color = return_color_from_string(initial(subtype_breed.colour))
 			if(initial(subtype_breed.colour) == "rainbow")
 				subtype_image.rainbow_effect()
 
@@ -82,7 +85,7 @@
 		balloon_alert(user, "unanchored!")
 		return TRUE
 	if(!current_recipe)
-		if(change_recipe(user))
+		if (change_recipe(user))
 			return TRUE
 	// Check if we have all slimes needed to make the extract
 	// If we need one more of the components, break
@@ -94,7 +97,21 @@
 	if(component_check)
 		compress_recipe()
 
-/obj/machinery/slime_compressor/proc/change_recipe(mob/user, cross_breed = FALSE)
+/obj/machinery/slime_compressor/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || !can_interact(user))
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(!current_recipe)
+		return
+	if(active)
+		return
+	current_recipe = null
+	balloon_alert_to_viewers("cancelled recipe")
+	remove_mobs_inside()
+
+// Changing the recipe
+/obj/machinery/slime_compressor/proc/change_recipe(mob/user)
 	var/choice
 	var/base_choice = show_radial_menu(user, src, base_choices, require_near = TRUE, tooltips = TRUE)
 	if(!base_choice)
@@ -107,6 +124,12 @@
 	current_recipe = choice_to_datum[choice]
 	slimes_for_recipe = current_recipe.required_slimes.Copy()
 	balloon_alert_to_viewers("set extract recipe")
+	remove_mobs_inside()
+
+/obj/machinery/slime_compressor/proc/remove_mobs_inside()
+	for (var/victim in mobs_inside)
+		var/mob/living/slime = victim
+		slime.forceMove(get_turf(src))
 
 // On hit we check if mob is a slime
 // Then we do check_recipe(), and if it passes slime gets removed from slimes_for_recipe
@@ -138,11 +161,13 @@
 			continue
 	return FALSE
 
+// Set machine to active and start compressing process
 /obj/machinery/slime_compressor/proc/compress_recipe()
 	active = TRUE
-	Shake(6, 6, 3 SECONDS)
-	addtimer(CALLBACK(src, PROC_REF(finish_compressing)), 3 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(finish_compressing)), compress_time)
 
+// Finish compressing
+// Deactivates machine, removes everything inside and produces the extracts
 /obj/machinery/slime_compressor/proc/finish_compressing()
 	for(var/i in 1 to current_recipe.created_amount)
 		new current_recipe.output_item(drop_location())
@@ -151,3 +176,5 @@
 	current_recipe = null
 	for (var/victim in mobs_inside)
 		qdel(victim)
+
+#undef CROSSBREED_BASE_PATHS
