@@ -157,7 +157,7 @@
 		slime.forceMove(get_turf(src))
 
 // On hit we check if mob is a slime
-// Then we do check_recipe(), and if it passes slime gets removed from slimes_for_recipe
+// Then we do check_recipe(), and if it passes, complete part of the recipe
 // After, we move the mob inside
 /obj/machinery/slime_compressor/hitby(atom/movable/hit_by, skipcatch, hitpush, blocked, datum/thrownthing/throwingdatum)
 	if (active)
@@ -175,8 +175,11 @@
 	return ..()
 
 // Check if the slime fits the recipe we have set
-// If they do, remove them from the slimes_for_recipe list and return TRUE
 /obj/machinery/slime_compressor/proc/check_recipe(var/mob/living/basic/slime/slime)
+	// Cleaner slimes split very fast so it would make it...too easy
+	for(var/datum/slime_trait/trait in slime.slime_traits)
+		if (istype(trait,/datum/slime_trait/cleaner))
+			return FALSE
 	var/datum/slime_color/color = slime.current_color
 	if(istype(color, base_slime_required) && !base_complete)
 		base_complete = TRUE
