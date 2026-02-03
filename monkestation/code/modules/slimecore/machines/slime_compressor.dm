@@ -47,6 +47,7 @@
 
 	var/base_complete = FALSE
 	var/cross_complete = FALSE
+
 	var/static/list/choice_to_datum = list()
 
 /obj/machinery/slime_compressor/Initialize(mapload)
@@ -175,7 +176,7 @@
 	return ..()
 
 // Check if the slime fits the recipe we have set
-/obj/machinery/slime_compressor/proc/check_recipe(var/mob/living/basic/slime/slime)
+/obj/machinery/slime_compressor/proc/check_recipe(mob/living/basic/slime)
 	// Cleaner slimes split very fast so it would make it...too easy
 	for(var/datum/slime_trait/trait in slime.slime_traits)
 		if (istype(trait,/datum/slime_trait/cleaner))
