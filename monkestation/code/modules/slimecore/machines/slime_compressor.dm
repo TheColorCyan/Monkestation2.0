@@ -176,7 +176,7 @@
 	return ..()
 
 // Check if the slime fits the recipe we have set
-/obj/machinery/slime_compressor/proc/check_recipe(mob/living/basic/slime)
+/obj/machinery/slime_compressor/proc/check_recipe(mob/living/basic/slime/slime)
 	// Cleaner slimes split very fast so it would make it...too easy
 	for(var/datum/slime_trait/trait in slime.slime_traits)
 		if (istype(trait,/datum/slime_trait/cleaner))
