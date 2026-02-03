@@ -41,9 +41,9 @@
 	var/datum/crossbreed_recipe/current_recipe
 
 	/// Base slime required for the recipe (e.g. regenerative has purple as base)
-	var/base_slime_required
+	var/datum/slime_color/base_slime_required
 	/// Cross slime required to make the crossbreed
-	var/cross_slime_required
+	var/datum/slime_color/cross_slime_required
 
 	var/base_complete = FALSE
 	var/cross_complete = FALSE
@@ -85,9 +85,14 @@
 		return
 	. += span_notice("The recipe requires:")
 	if (!base_complete)
-		. += span_notice("[base_slime_required] slime as base.")
+		. += span_notice("[base_slime_required.name] slime as base.")
 	if (!cross_complete)
-		. += span_notice("[cross_slime_required] slime for cross.")
+		. += span_notice("[cross_slime_required.name] slime for cross.")
+
+/obj/machinery/slime_compressor/proc/clear_recipe()
+	current_recipe = null
+	base_complete = FALSE
+	cross_complete = FALSE
 
 /obj/machinery/slime_compressor/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
@@ -119,10 +124,8 @@
 		return
 	if(active)
 		return
-	current_recipe = null
 
-	base_complete = FALSE
-	cross_complete = FALSE
+	clear_recipe()
 
 	balloon_alert_to_viewers("cancelled recipe")
 	remove_mobs_inside()
@@ -196,9 +199,7 @@
 	active = FALSE
 	mobs_inside = list()
 
-	current_recipe = null
-	base_complete = FALSE
-	cross_complete = FALSE
+	clear_recipe()
 
 	for (var/victim in mobs_inside)
 		qdel(victim)
