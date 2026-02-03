@@ -35,7 +35,7 @@
 /obj/machinery/plumbing/ooze_compressor/Initialize(mapload, bolt, layer)
 	. = ..()
 	if(!length(recipe_choices))
-		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe) - typesof(/datum/compressor_recipe/crossbreed)))
+		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe)))
 			var/datum/compressor_recipe/stored_recipe = new listed
 			recipe_choices |= list("[initial(stored_recipe.output_item.name)]" = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state)))
 			choice_to_datum |= list("[initial(stored_recipe.output_item.name)]" = stored_recipe)

@@ -1,14 +1,14 @@
 #define CROSSBREED_BASE_PATHS list(\
-/datum/compressor_recipe/crossbreed/burning,\
-/datum/compressor_recipe/crossbreed/charged,\
-/datum/compressor_recipe/crossbreed/chilling,\
-/datum/compressor_recipe/crossbreed/consuming,\
-/datum/compressor_recipe/crossbreed/industrial,\
-/datum/compressor_recipe/crossbreed/prismatic,\
-/datum/compressor_recipe/crossbreed/regenerative,\
-/datum/compressor_recipe/crossbreed/reproductive,\
-/datum/compressor_recipe/crossbreed/selfsustaining,\
-/datum/compressor_recipe/crossbreed/stabilized,\
+/datum/crossbreed_recipe/burning,\
+/datum/crossbreed_recipe/charged,\
+/datum/crossbreed_recipe/chilling,\
+/datum/crossbreed_recipe/consuming,\
+/datum/crossbreed_recipe/industrial,\
+/datum/crossbreed_recipe/prismatic,\
+/datum/crossbreed_recipe/regenerative,\
+/datum/crossbreed_recipe/reproductive,\
+/datum/crossbreed_recipe/selfsustaining,\
+/datum/crossbreed_recipe/stabilized,\
 )
 
 /obj/machinery/slime_compressor
@@ -38,7 +38,7 @@
 	/// Recipes we can choose from - subtype of base crossbreed
 	var/static/list/cross_breed_choices = list()
 	/// Recipe we have currently set
-	var/datum/compressor_recipe/crossbreed/current_recipe
+	var/datum/crossbreed_recipe/current_recipe
 	/// What slimes we need for the recipe
 	var/list/slimes_for_recipe = list()
 	var/static/list/choice_to_datum = list()
@@ -70,6 +70,17 @@
 
 	register_context()
 
+/obj/machinery/slime_compressor/examine(mob/living/user)
+	. = ..()
+	if (!current_recipe)
+		return
+	if (!slimes_for_recipe)
+		. += span_notice("The extract is ready to be made!")
+		return
+	. += span_notice("The recipe requires:")
+	for (var/required_color in slimes_for_recipe)
+		. += span_notice("[required_color] slime.")
+
 /obj/machinery/slime_compressor/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
 	if(current_recipe)
@@ -90,8 +101,8 @@
 	// Check if we have all slimes needed to make the extract
 	// If we need one more of the components, break
 	var/component_check = TRUE
-	for(var/needed_color in slimes_for_recipe)
-		if(slimes_for_recipe[needed_color] > 0)
+	for(var/required_color in slimes_for_recipe)
+		if(slimes_for_recipe[required_color] > 0)
 			component_check = FALSE
 			break
 	if(component_check)
