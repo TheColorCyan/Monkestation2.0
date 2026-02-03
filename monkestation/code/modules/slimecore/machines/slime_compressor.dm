@@ -39,8 +39,14 @@
 	var/static/list/cross_breed_choices = list()
 	/// Recipe we have currently set
 	var/datum/crossbreed_recipe/current_recipe
-	/// What slimes we need for the recipe
-	var/list/slimes_for_recipe = list()
+
+	/// Base slime required for the recipe (e.g. regenerative has purple as base)
+	var/base_slime_required
+	/// Cross slime required to make the crossbreed
+	var/cross_slime_required
+
+	var/base_complete = FALSE
+	var/cross_complete = FALSE
 	var/static/list/choice_to_datum = list()
 
 /obj/machinery/slime_compressor/Initialize(mapload)
@@ -74,12 +80,14 @@
 	. = ..()
 	if (!current_recipe)
 		return
-	if (!slimes_for_recipe)
+	if (base_complete && cross_complete)
 		. += span_notice("The extract is ready to be made!")
 		return
 	. += span_notice("The recipe requires:")
-	for (var/required_color in slimes_for_recipe)
-		. += span_notice("[required_color] slime.")
+	if (!base_complete)
+		. += span_notice("[base_slime_required] slime as base.")
+	if (!cross_complete)
+		. += span_notice("[cross_slime_required] slime for cross.")
 
 /obj/machinery/slime_compressor/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
@@ -98,15 +106,9 @@
 	if(!current_recipe)
 		if (change_recipe(user))
 			return TRUE
-	// Check if we have all slimes needed to make the extract
-	// If we need one more of the components, break
-	var/component_check = TRUE
-	for(var/required_color in slimes_for_recipe)
-		if(slimes_for_recipe[required_color] > 0)
-			component_check = FALSE
-			break
-	if(component_check)
-		compress_recipe()
+	if (!base_complete || !cross_complete)
+		return TRUE
+	compress_recipe()
 
 /obj/machinery/slime_compressor/attack_hand_secondary(mob/living/user, list/modifiers)
 	. = ..()
@@ -118,6 +120,10 @@
 	if(active)
 		return
 	current_recipe = null
+
+	base_complete = FALSE
+	cross_complete = FALSE
+
 	balloon_alert_to_viewers("cancelled recipe")
 	remove_mobs_inside()
 
@@ -133,7 +139,12 @@
 		return
 
 	current_recipe = choice_to_datum[choice]
-	slimes_for_recipe = current_recipe.required_slimes.Copy()
+	base_slime_required = current_recipe.base_slime_color
+	cross_slime_required = current_recipe.cross_slime_color
+
+	base_complete = FALSE
+	cross_complete = FALSE
+
 	balloon_alert_to_viewers("set extract recipe")
 	remove_mobs_inside()
 
@@ -163,28 +174,32 @@
 // Check if the slime fits the recipe we have set
 // If they do, remove them from the slimes_for_recipe list and return TRUE
 /obj/machinery/slime_compressor/proc/check_recipe(var/mob/living/basic/slime/slime)
-	for(var/needed_color in slimes_for_recipe)
-		var/datum/slime_color/color = slime.current_color
-		if (istype(color, needed_color))
-			slimes_for_recipe[needed_color]--
-			return TRUE
-		else
-			continue
+	var/datum/slime_color/color = slime.current_color
+	if(istype(color, base_slime_required) && !base_complete)
+		base_complete = TRUE
+		return TRUE
+	else if (istype (color, cross_slime_required) && !cross_complete)
+		cross_complete = TRUE
+		return TRUE
 	return FALSE
 
 // Set machine to active and start compressing process
 /obj/machinery/slime_compressor/proc/compress_recipe()
 	active = TRUE
+	Shake(6, 6, compress_time)
 	addtimer(CALLBACK(src, PROC_REF(finish_compressing)), compress_time)
 
 // Finish compressing
 // Deactivates machine, removes everything inside and produces the extracts
 /obj/machinery/slime_compressor/proc/finish_compressing()
-	for(var/i in 1 to current_recipe.created_amount)
-		new current_recipe.output_item(drop_location())
+	new current_recipe.output_item(drop_location())
 	active = FALSE
 	mobs_inside = list()
+
 	current_recipe = null
+	base_complete = FALSE
+	cross_complete = FALSE
+
 	for (var/victim in mobs_inside)
 		qdel(victim)
 
