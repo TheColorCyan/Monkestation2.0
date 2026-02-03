@@ -7,9 +7,9 @@ GLOBAL_LIST_EMPTY_TYPED(compressor_recipe_previews, /image)
 
 /datum/crossbreed_recipe
 	/// What slime colors we need to make the crossbreed. Uses /datum/slime_color
-	var/list/required_slimes = list()
+	var/base_slime_color
+	var/cross_slime_color
 	var/obj/item/output_item
-	var/created_amount = 1
 
 /proc/create_compressor_previews()
 	. = list()
