@@ -31,8 +31,6 @@
 	var/list/mobs_inside = list()
 	///are we grinding some slimes
 	var/active = FALSE
-	/// What mobs can go inside the compressor. Initially only slimes
-	var/list/mob_whitelist = list(/mob/living/basic/slime)
 	/// Recipes we can choose from - base of crossbreed
 	var/static/list/base_choices = list()
 	/// Recipes we can choose from - subtype of base crossbreed
