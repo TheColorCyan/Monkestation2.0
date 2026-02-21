@@ -1,14 +1,14 @@
 #define CROSSBREED_BASE_PATHS list(\
-/datum/crossbreed_recipe/burning,\
-/datum/crossbreed_recipe/charged,\
-/datum/crossbreed_recipe/chilling,\
-/datum/crossbreed_recipe/consuming,\
-/datum/crossbreed_recipe/industrial,\
-/datum/crossbreed_recipe/prismatic,\
-/datum/crossbreed_recipe/regenerative,\
-/datum/crossbreed_recipe/reproductive,\
-/datum/crossbreed_recipe/selfsustaining,\
-/datum/crossbreed_recipe/stabilized,\
+/datum/compressor_recipe/crossbreed/burning,\
+/datum/compressor_recipe/crossbreed/charged,\
+/datum/compressor_recipe/crossbreed/chilling,\
+/datum/compressor_recipe/crossbreed/consuming,\
+/datum/compressor_recipe/crossbreed/industrial,\
+/datum/compressor_recipe/crossbreed/prismatic,\
+/datum/compressor_recipe/crossbreed/regenerative,\
+/datum/compressor_recipe/crossbreed/reproductive,\
+/datum/compressor_recipe/crossbreed/selfsustaining,\
+/datum/compressor_recipe/crossbreed/stabilized,\
 )
 
 /obj/machinery/slime_compressor
@@ -34,11 +34,12 @@
 	///are we grinding some slimes
 	var/active = FALSE
 	/// Recipes we can choose from - base of crossbreed
+	var/static/list/recipe_choices = list()
 	var/static/list/base_choices = list()
 	/// Recipes we can choose from - subtype of base crossbreed
 	var/static/list/cross_breed_choices = list()
 	/// Recipe we have currently set
-	var/datum/crossbreed_recipe/current_recipe
+	var/datum/compressor_recipe/crossbreed/current_recipe
 
 	/// Base slime required for the recipe (e.g. regenerative has purple as base)
 	var/datum/slime_color/base_slime_required
@@ -54,6 +55,12 @@
 	. = ..()
 	if(length(cross_breed_choices))
 		return
+	if(!length(recipe_choices))
+		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe)))
+			var/datum/compressor_recipe/stored_recipe = new listed
+			recipe_choices |= list("[initial(stored_recipe.output_item.name)]" = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state)))
+			choice_to_datum |= list("[initial(stored_recipe.output_item.name)]" = stored_recipe)
+
 	for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS)
 		var/datum/compressor_recipe/stored_recipe = new listed
 		var/obj/item/slimecross/crossbreed = stored_recipe.output_item
@@ -121,7 +128,7 @@
 		balloon_alert(user, "unanchored!")
 		return TRUE
 	if(!current_recipe)
-		if (change_recipe(user))
+		if(change_recipe(user))
 			return TRUE
 	if (!base_complete || (!cross_complete && cross_slime_required))
 		return TRUE
@@ -133,7 +140,8 @@
 		return
 	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(!current_recipe)
-		return
+		if(change_recipe(user, TRUE))
+			return TRUE
 	if(active)
 		return
 
@@ -143,12 +151,15 @@
 	remove_mobs_inside()
 
 // Changing the recipe
-/obj/machinery/slime_compressor/proc/change_recipe(mob/user)
+/obj/machinery/slime_compressor/proc/change_recipe(mob/user, cross_breed = FALSE)
 	var/choice
-	var/base_choice = show_radial_menu(user, src, base_choices, require_near = TRUE, tooltips = TRUE)
-	if(!base_choice)
-		return
-	choice = show_radial_menu(user, src, cross_breed_choices[base_choice], require_near = TRUE, tooltips = TRUE)
+	if(cross_breed)
+		var/base_choice = show_radial_menu(user, src, base_choices, require_near = TRUE, tooltips = TRUE)
+		if(!base_choice)
+			return
+		choice = show_radial_menu(user, src, cross_breed_choices[base_choice], require_near = TRUE, tooltips = TRUE)
+	else
+		choice = show_radial_menu(user, src, recipe_choices, require_near = TRUE, tooltips = TRUE)
 
 	if(active || !(choice in choice_to_datum))
 		return
