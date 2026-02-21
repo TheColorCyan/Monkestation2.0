@@ -26,7 +26,9 @@
 	density = TRUE
 
 	/// amount of time it takes to compress, scales with manipulator tier
-	var/compress_time = 15 SECONDS
+	var/compress_time = 40 SECONDS
+	///
+	var/bonus_extract_chance = 0
 	///list of all the slimes we have
 	var/list/mobs_inside = list()
 	///are we grinding some slimes
@@ -75,6 +77,17 @@
 
 	register_context()
 
+/obj/machinery/slime_compressor/RefreshParts()
+	. = ..()
+	var/bonus_chance = 0
+	var/compression_speed = 1
+	for(var/datum/stock_part/manipulator/manipulator in component_parts)
+		compression_speed = manipulator.tier
+	for(var/datum/stock_part/micro_laser/laser in component_parts)
+		bonus_chance = (laser.tier * 15) - 15
+	compress_time = compress_time / compression_speed
+	bonus_extract_chance = bonus_chance
+
 /obj/machinery/slime_compressor/examine(mob/living/user)
 	. = ..()
 	if (!current_recipe)
@@ -110,7 +123,7 @@
 	if(!current_recipe)
 		if (change_recipe(user))
 			return TRUE
-	if (!base_complete || !cross_complete)
+	if (!base_complete || (!cross_complete && cross_slime_required))
 		return TRUE
 	compress_recipe()
 
@@ -198,6 +211,9 @@
 // Deactivates machine, removes everything inside and produces the extracts
 /obj/machinery/slime_compressor/proc/finish_compressing()
 	new current_recipe.output_item(drop_location())
+	// Chance to have a bonus extract based on parts tier
+	if (bonus_extract_chance)
+		new current_recipe.output_item(drop_location())
 	active = FALSE
 	mobs_inside = list()
 
