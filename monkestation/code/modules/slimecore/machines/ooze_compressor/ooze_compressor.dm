@@ -1,4 +1,6 @@
 /// The maximum amount of extracts that can be on a compressor's tile before it stops.
+
+/*
 #define MAX_EXTRACTS_ON_TILE 30
 
 /obj/machinery/plumbing/ooze_compressor
@@ -229,3 +231,5 @@
 			.++
 
 #undef MAX_EXTRACTS_ON_TILE
+
+*/

@@ -1,3 +1,4 @@
+/*
 /obj/machinery/plumbing/ooze_compressor
 	var/image/hover_appearance
 	var/datum/atom_hud/alternate_appearance/basic/ooze_compressor/hover_popup
@@ -120,3 +121,4 @@
 		return
 	for(var/mob/user as anything in hud_users_all_z_levels)
 		user?.client?.images -= info_maptext
+*/
