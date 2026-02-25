@@ -37,10 +37,32 @@
 /obj/machinery/plumbing/ooze_compressor/Initialize(mapload, bolt, layer)
 	. = ..()
 	if(!length(recipe_choices))
-		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe)))
+		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe) - typesof(/datum/compressor_recipe/crossbreed)))
 			var/datum/compressor_recipe/stored_recipe = new listed
 			recipe_choices |= list("[initial(stored_recipe.output_item.name)]" = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state)))
 			choice_to_datum |= list("[initial(stored_recipe.output_item.name)]" = stored_recipe)
+
+	if(!length(cross_breed_choices))
+		for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS)
+			var/datum/compressor_recipe/stored_recipe = new listed
+			var/obj/item/slimecross/crossbreed = stored_recipe.output_item
+			var/image/new_image = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state))
+			new_image.color = return_color_from_string(initial(crossbreed.colour))
+			if(initial(crossbreed.colour) == "rainbow")
+				new_image.rainbow_effect()
+			base_choices |= list("[initial(stored_recipe.output_item.name)]" = new_image)
+			cross_breed_choices |= list("[initial(stored_recipe.output_item.name)]" = list())
+
+			for(var/datum/compressor_recipe/subtype as anything in subtypesof(listed))
+				var/datum/compressor_recipe/subtype_stored = new subtype
+				var/obj/item/slimecross/subtype_breed = subtype_stored.output_item
+				var/image/subtype_image = image(icon = initial(subtype_stored.output_item.icon), icon_state = initial(subtype_stored.output_item.icon_state))
+				subtype_image.color = return_color_from_string(initial(subtype_breed.colour))
+				if(initial(subtype_breed.colour) == "rainbow")
+					subtype_image.rainbow_effect()
+
+				cross_breed_choices["[initial(stored_recipe.output_item.name)]"] |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_image)
+				choice_to_datum |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_stored)
 	AddComponent(/datum/component/plumbing/ooze_compressor, bolt, layer)
 	register_context()
 

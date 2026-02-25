@@ -16,8 +16,8 @@
 	desc = "Machine used to compress slimes into bases for crossbreed extracts."
 
 	icon = 'monkestation/code/modules/slimecore/icons/slime_compressor.dmi'
-	icon_state = "base"
-	base_icon_state = "base"
+	icon_state = "compressor"
+	base_icon_state = "compressor"
 
 	use_power = IDLE_POWER_USE
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION
@@ -27,19 +27,23 @@
 
 	/// amount of time it takes to compress, scales with manipulator tier
 	var/compress_time = 40 SECONDS
-	///
+
+	/// chance to get a bonus crossbreed extract
 	var/bonus_extract_chance = 0
-	///list of all the slimes we have
-	var/list/mobs_inside = list()
+	/// base amount for regular slime extracts
+	var/base_extract_amount = 5
+
 	///are we grinding some slimes
 	var/active = FALSE
+
 	/// Recipes we can choose from - base of crossbreed
 	var/static/list/recipe_choices = list()
 	var/static/list/base_choices = list()
-	/// Recipes we can choose from - subtype of base crossbreed
 	var/static/list/cross_breed_choices = list()
+	var/static/list/choice_to_datum = list()
+
 	/// Recipe we have currently set
-	var/datum/compressor_recipe/crossbreed/current_recipe
+	var/datum/compressor_recipe/current_recipe
 
 	/// Base slime required for the recipe (e.g. regenerative has purple as base)
 	var/datum/slime_color/base_slime_required
@@ -49,38 +53,36 @@
 	var/base_complete = FALSE
 	var/cross_complete = FALSE
 
-	var/static/list/choice_to_datum = list()
 
 /obj/machinery/slime_compressor/Initialize(mapload)
 	. = ..()
-	if(length(cross_breed_choices))
-		return
 	if(!length(recipe_choices))
-		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe)))
+		for(var/datum/compressor_recipe/listed as anything in (subtypesof(/datum/compressor_recipe) - typesof(/datum/compressor_recipe/crossbreed)))
 			var/datum/compressor_recipe/stored_recipe = new listed
 			recipe_choices |= list("[initial(stored_recipe.output_item.name)]" = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state)))
 			choice_to_datum |= list("[initial(stored_recipe.output_item.name)]" = stored_recipe)
 
-	for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS)
-		var/datum/compressor_recipe/stored_recipe = new listed
-		var/obj/item/slimecross/crossbreed = stored_recipe.output_item
-		var/image/new_image = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state))
-		new_image.color = return_color_from_string(initial(crossbreed.colour))
-		if(initial(crossbreed.colour) == "rainbow")
-			new_image.rainbow_effect()
-		base_choices |= list("[initial(stored_recipe.output_item.name)]" = new_image)
-		cross_breed_choices |= list("[initial(stored_recipe.output_item.name)]" = list())
+	if(!length(cross_breed_choices))
+		for(var/datum/compressor_recipe/listed as anything in CROSSBREED_BASE_PATHS)
+			var/datum/compressor_recipe/stored_recipe = new listed
+			var/obj/item/slimecross/crossbreed = stored_recipe.output_item
+			var/image/new_image = image(icon = initial(stored_recipe.output_item.icon), icon_state = initial(stored_recipe.output_item.icon_state))
+			new_image.color = return_color_from_string(initial(crossbreed.colour))
+			if(initial(crossbreed.colour) == "rainbow")
+				new_image.rainbow_effect()
+			base_choices |= list("[initial(stored_recipe.output_item.name)]" = new_image)
+			cross_breed_choices |= list("[initial(stored_recipe.output_item.name)]" = list())
 
-		for(var/datum/compressor_recipe/subtype as anything in subtypesof(listed))
-			var/datum/compressor_recipe/subtype_stored = new subtype
-			var/obj/item/slimecross/subtype_breed = subtype_stored.output_item
-			var/image/subtype_image = image(icon = initial(subtype_stored.output_item.icon), icon_state = initial(subtype_stored.output_item.icon_state))
-			subtype_image.color = return_color_from_string(initial(subtype_breed.colour))
-			if(initial(subtype_breed.colour) == "rainbow")
-				subtype_image.rainbow_effect()
+			for(var/datum/compressor_recipe/subtype as anything in subtypesof(listed))
+				var/datum/compressor_recipe/subtype_stored = new subtype
+				var/obj/item/slimecross/subtype_breed = subtype_stored.output_item
+				var/image/subtype_image = image(icon = initial(subtype_stored.output_item.icon), icon_state = initial(subtype_stored.output_item.icon_state))
+				subtype_image.color = return_color_from_string(initial(subtype_breed.colour))
+				if(initial(subtype_breed.colour) == "rainbow")
+					subtype_image.rainbow_effect()
 
-			cross_breed_choices["[initial(stored_recipe.output_item.name)]"] |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_image)
-			choice_to_datum |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_stored)
+				cross_breed_choices["[initial(stored_recipe.output_item.name)]"] |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_image)
+				choice_to_datum |= list("[initial(subtype_breed.colour)] [initial(subtype_stored.output_item.name)]" = subtype_stored)
 
 	register_context()
 
@@ -105,13 +107,18 @@
 	. += span_notice("The recipe requires:")
 	if (!base_complete)
 		. += span_notice("[base_slime_required.name] slime as base.")
-	if (!cross_complete)
+	if (!cross_complete && cross_slime_required)
 		. += span_notice("[cross_slime_required.name] slime for cross.")
+
+/obj/machinery/slime_compressor/update_icon_state()
+	. = ..()
+	icon_state = active ? "compressor_active" : base_icon_state
 
 /obj/machinery/slime_compressor/proc/clear_recipe()
 	current_recipe = null
 	base_complete = FALSE
 	cross_complete = FALSE
+	manage_hud_as_needed()
 
 /obj/machinery/slime_compressor/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
@@ -139,16 +146,12 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || !can_interact(user))
 		return
 	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-	if(!current_recipe)
-		if(change_recipe(user, TRUE))
-			return TRUE
-	if(active)
-		return
-
-	clear_recipe()
-
-	balloon_alert_to_viewers("cancelled recipe")
-	remove_mobs_inside()
+	if(current_recipe && !active)
+		clear_recipe()
+		balloon_alert_to_viewers("cancelled recipe")
+		remove_mobs_inside()
+	else
+		change_recipe(user, TRUE)
 
 // Changing the recipe
 /obj/machinery/slime_compressor/proc/change_recipe(mob/user, cross_breed = FALSE)
@@ -175,7 +178,7 @@
 	remove_mobs_inside()
 
 /obj/machinery/slime_compressor/proc/remove_mobs_inside()
-	for (var/victim in mobs_inside)
+	for (var/victim in contents)
 		var/mob/living/slime = victim
 		slime.forceMove(get_turf(src))
 
@@ -192,8 +195,8 @@
 		var/mob/living/basic/slime/slime = victim
 		if(!check_recipe(slime))
 			return
-		mobs_inside |= slime
 		slime.forceMove(src)
+		manage_hud_as_needed()
 		return
 	return ..()
 
@@ -218,19 +221,27 @@
 	Shake(6, 6, compress_time)
 	addtimer(CALLBACK(src, PROC_REF(finish_compressing)), compress_time)
 
+	manage_hud_as_needed()
+	update_icon_state()
+
 // Finish compressing
 // Deactivates machine, removes everything inside and produces the extracts
 /obj/machinery/slime_compressor/proc/finish_compressing()
-	new current_recipe.output_item(drop_location())
-	// Chance to have a bonus extract based on parts tier
-	if (bonus_extract_chance)
+	if (!istype(current_recipe, /datum/compressor_recipe/crossbreed))
+		for(var/i in 1 to base_extract_amount)
+			new current_recipe.output_item(drop_location())
+	else
 		new current_recipe.output_item(drop_location())
+		// Chance to have a bonus extract based on parts tier
+		if (bonus_extract_chance)
+			new current_recipe.output_item(drop_location())
 	active = FALSE
-	mobs_inside = list()
 
 	clear_recipe()
 
-	for (var/victim in mobs_inside)
+	for (var/victim in contents)
 		qdel(victim)
+
+	update_icon_state()
 
 #undef CROSSBREED_BASE_PATHS
