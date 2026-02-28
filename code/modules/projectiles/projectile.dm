@@ -787,10 +787,13 @@
 	if(fired_from)
 		SEND_SIGNAL(fired_from, COMSIG_PROJECTILE_BEFORE_FIRE, src, original)
 	if(firer)
+		RegisterSignal(firer, COMSIG_QDELETING, PROC_REF(firer_deleted))
 		SEND_SIGNAL(firer, COMSIG_PROJECTILE_FIRER_BEFORE_FIRE, src, fired_from, original)
 	//If no angle needs to resolve it from xo/yo!
 	if(shrapnel_type && LAZYLEN(embedding))
 		AddElement(/datum/element/embed, projectile_payload = shrapnel_type)
+	if (original)
+		RegisterSignal(original, COMSIG_QDELETING, PROC_REF(original_deleted))
 	if(!log_override && firer && original)
 		log_combat(firer, original, "fired at", src, "from [get_area_name(src, TRUE)]")
 			//note: mecha projectile logging is handled in /obj/item/mecha_parts/mecha_equipment/weapon/action(). try to keep these messages roughly the sameish just for consistency's sake.
@@ -843,6 +846,14 @@
 		point_cache = trajectory.copy_to()
 		store_hitscan_collision(point_cache)
 	return TRUE
+
+/obj/projectile/proc/firer_deleted(datum/source)
+	SIGNAL_HANDLER
+	firer = null
+
+/obj/projectile/proc/original_deleted(datum/source)
+	SIGNAL_HANDLER
+	original = null
 
 /// Same as set_angle, but the reflection continues from the center of the object that reflects it instead of the side
 /obj/projectile/proc/set_angle_centered(new_angle)
@@ -1095,6 +1106,8 @@
 		finalize_hitscan_and_generate_tracers()
 	STOP_PROCESSING(SSprojectiles, src)
 	cleanup_beam_segments()
+	firer = null
+	original = null
 	if(trajectory)
 		QDEL_NULL(trajectory)
 	. = ..()
