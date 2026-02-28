@@ -433,7 +433,7 @@ Allows for flashlights bayonets and adds 1 slot to equipment.
 
 /obj/item/microfusion_gun_attachment/rail/remove_attachment(obj/item/gun/microfusion/microfusion_gun)
 	. = ..()
-	var/list/components_to_delete
+	var/list/components_to_delete = list()
 	components_to_delete += microfusion_gun.GetComponent(/datum/component/seclite_attachable)
 	components_to_delete += microfusion_gun.GetComponent(/datum/component/bayonet_attachable)
 	for (var/component in components_to_delete)
