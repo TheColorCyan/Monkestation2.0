@@ -28,7 +28,7 @@
 /obj/item/gun/ballistic/atlatl/proc/drop_spear()
 	if(chambered)
 		chambered.forceMove(drop_location())
-		magazine.get_round(keep = FALSE)
+		magazine.get_round()
 		chambered = null
 	update_appearance()
 
