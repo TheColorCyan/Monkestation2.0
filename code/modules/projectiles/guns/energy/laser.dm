@@ -216,11 +216,11 @@
 	shaded_charge = TRUE
 	ammo_x_offset = 1
 	obj_flags = UNIQUE_RENAME
-	can_bayonet = TRUE
-	knife_x_offset = 19
-	knife_y_offset = 13
 	w_class = WEIGHT_CLASS_NORMAL
 	dual_wield_spread = 10 //as intended by the coders
+
+/obj/item/gun/energy/laser/thermal/add_bayonet_point()
+	AddComponent(/datum/component/bayonet_attachable, offset_x = 19, offset_y = 13)
 
 /obj/item/gun/energy/laser/thermal/Initialize(mapload)
 	. = ..()

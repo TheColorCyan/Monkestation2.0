@@ -7,11 +7,11 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/musket)
 	slot_flags = ITEM_SLOT_BACK
 	obj_flags = UNIQUE_RENAME
-	can_bayonet = TRUE
-	knife_x_offset = 22
-	knife_y_offset = 11
 	//monke edit: fully charges per crank because it was really confusing and unintuitive
 	//monke edit: increased cooldown time to compensate for increased charge
+
+/obj/item/gun/energy/laser/musket/add_bayonet_point()
+	AddComponent(/datum/component/bayonet_attachable, offset_x = 22, offset_y = 11)
 
 /obj/item/gun/energy/laser/musket/Initialize(mapload)
 	. = ..()

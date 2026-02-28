@@ -135,7 +135,6 @@
 	accepted_magazine_type = /obj/item/ammo_box/magazine/c980_grenade
 	fire_sound = 'monkestation/code/modules/blueshift/sounds/grenade_launcher.ogg'
 	can_suppress = FALSE
-	can_bayonet = FALSE
 	burst_size = 1
 	fire_delay = 5
 	actions_types = list()
