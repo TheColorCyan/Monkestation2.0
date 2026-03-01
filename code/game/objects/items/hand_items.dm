@@ -562,7 +562,6 @@
 	icon_state = "heart"
 	hitsound = 'sound/effects/kiss.ogg'
 	hitsound_wall = 'sound/effects/kiss.ogg'
-	mixer_channel = CHANNEL_MOB_EMOTES
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	speed = 0.66
 	damage_type = BRUTE
