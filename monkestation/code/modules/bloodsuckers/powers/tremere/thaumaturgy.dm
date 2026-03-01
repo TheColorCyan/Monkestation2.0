@@ -189,7 +189,6 @@
 /datum/action/cooldown/bloodsucker/targeted/tremere/thaumaturgy/proc/handle_shot(mob/user, atom/target)
 	magic_9ball = new(get_turf(user))
 	magic_9ball.speed = speed
-	magic_9ball.pixel_speed_multiplier = pixel_speed
 	magic_9ball.firer = user
 	magic_9ball.power_ref = WEAKREF(src)
 	magic_9ball.damage = get_blood_bolt_damage()

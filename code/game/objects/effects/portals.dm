@@ -134,8 +134,8 @@
 	if(!teleport(O, TRUE))
 		return ..()
 
-/obj/effect/portal/proc/teleport(atom/movable/M, force = FALSE)
-	if(!force && (!istype(M) || iseffect(M) || (ismecha(M) && !mech_sized) || (!isobj(M) && !ismob(M)))) //Things that shouldn't teleport.
+/obj/effect/portal/proc/teleport(atom/movable/moving, force = FALSE)
+	if(!force && (!istype(moving) || iseffect(moving) || (ismecha(moving) && !mech_sized) || (!isobj(moving) && !ismob(moving)))) //Things that shouldn't teleport.
 		return
 	var/turf/real_target = get_link_target_turf()
 	if(!istype(real_target))
@@ -144,7 +144,7 @@
 	if(!force && (!ismecha(moving) && !isprojectile(moving) && moving.anchored && !allow_anchored))
 		return
 	var/no_effect = FALSE
-	if(last_effect == world.time)
+	if(last_effect == world.time || sparkless)
 		no_effect = TRUE
 	else
 		last_effect = world.time
