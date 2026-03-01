@@ -207,6 +207,8 @@
 	var/reflect_range_decrease = 5
 	/// If this projectile can be reflected
 	var/reflectable = FALSE
+	/// What is the multiplier vs lavaland fauna and megafauna?
+	var/fauna_mod = 1
 
 	// Status effects applied on hit
 	var/stun = 0 SECONDS
@@ -401,6 +403,9 @@
 	var/reagent_note
 	if(reagents?.reagent_list)
 		reagent_note = "REAGENTS: [pretty_string_from_reagent_list(reagents.reagent_list)]"
+
+	if(faction_check(living_target.faction, FACTION_MINING || FACTION_BOSS))
+		damage *= fauna_mod
 
 	if(ismob(firer))
 		log_combat(firer, living_target, "shot", src, reagent_note)
