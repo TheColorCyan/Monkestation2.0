@@ -53,7 +53,7 @@
 	ricochet_decay_damage = 1 //0.8 to 1 monkestation edit let them have fun
 	shrapnel_type = null
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 // premium .38 ammo from cargo, weak against armor, lower base damage, but excellent at embedding and causing slice wounds at close range
 /obj/projectile/bullet/c38/dumdum
@@ -138,7 +138,7 @@
 	stamina = 17.5
 	weak_against_armour = TRUE
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/g45l
 	name = ".45 Long bullet"

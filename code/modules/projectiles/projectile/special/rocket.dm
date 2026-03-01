@@ -2,7 +2,7 @@
 	name ="explosive bolt"
 	icon_state= "bolter"
 	damage = 50
-	embedding = null
+	embed_type = null
 	shrapnel_type = null
 
 /obj/projectile/bullet/gyro/on_hit(atom/target, blocked = 0, pierce_hit)

@@ -62,12 +62,7 @@
 	force = 2
 	throwforce = 15 //15 + 2 (WEIGHT_CLASS_SMALL) * 4 (EMBEDDED_IMPACT_PAIN_MULTIPLIER) = i didnt do the math
 	throw_speed = 4
-	embedding = list(
-		"embedded_pain_multiplier" = 4,
-		"embed_chance" = 100,
-		"embedded_fall_chance" = 0,
-		"embedded_ignore_throwspeed_threshold" = TRUE,
-	)
+	embed_type = /datum/embed_data/tongue_spike
 	w_class = WEIGHT_CLASS_SMALL
 	sharpness = SHARP_POINTY
 	custom_materials = list(/datum/material/biomass = SMALL_MATERIAL_AMOUNT * 5)
@@ -75,6 +70,13 @@
 	var/datum/weakref/fired_by_ref
 	/// if we missed our target
 	var/missed = TRUE
+
+/datum/embed_data/tongue_spike
+	impact_pain_mult = 0
+	pain_mult = 15
+	embed_chance = 100
+	fall_chance = 0
+	ignore_throwspeed_threshold = TRUE
 
 /obj/item/hardened_spike/Initialize(mapload, mob/living/carbon/source)
 	. = ..()
@@ -122,15 +124,12 @@
 	desc = "Hardened biomass, shaped into... something."
 	icon_state = "tonguespikechem"
 	throwforce = 2 //2 + 2 (WEIGHT_CLASS_SMALL) * 0 (EMBEDDED_IMPACT_PAIN_MULTIPLIER) = i didnt do the math again but very low or smthin
-	embedding = list(
-		"embedded_pain_multiplier" = 0,
-		"embed_chance" = 100,
-		"embedded_fall_chance" = 0,
-		"embedded_pain_chance" = 0,
-		"embedded_ignore_throwspeed_threshold" = TRUE,  //never hurts once it's in you
-	)
 	/// Whether the tongue's already embedded in a target once before
 	var/embedded_once_alread = FALSE
+
+/datum/embed_data/tongue_spike/chem
+	pain_mult = 0
+	pain_chance = 0
 
 /obj/item/hardened_spike/chem/embedded(mob/living/carbon/human/embedded_mob)
 	if(embedded_once_alread)

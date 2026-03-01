@@ -9,7 +9,7 @@
 	name = "9mm armor-piercing bullet"
 	damage = 27
 	armour_penetration = 75
-	embedding = null
+	embed_type = null
 	shrapnel_type = null
 
 /obj/projectile/bullet/c9mm/hp
@@ -75,7 +75,7 @@
 	ricochet_decay_damage = 0.8
 	shrapnel_type = null
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/c35sol/ripper // .35 Sol ripper, similar to the detective revolver's dumdum rounds, causes slash wounds and is weak to armor
 	name = ".35 Sol ripper bullet"
@@ -119,7 +119,7 @@
 	weak_against_armour = TRUE
 	shrapnel_type = null
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/c585trappiste/hollowpoint
 	name = ".585 Trappiste hollowhead bullet"
@@ -143,4 +143,4 @@
 	damage = 4
 	stamina = 24
 	sharpness = NONE
-	embedding = null
+	embed_type = null

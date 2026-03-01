@@ -739,7 +739,6 @@
 	mech_flags = EXOSUIT_MODULE_TRASHTANK
 
 /obj/projectile/bullet/pellet/shotgun_improvised/tank
-	tile_dropoff = 0 //its a peashooter that fires with bullets the size of pellets, but don't do this now...
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/peashooter
 	name = "peashooter breech"

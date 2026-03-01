@@ -398,63 +398,6 @@
 		new impact_effect_type(target_turf, impact_x, impact_y)
 
 	var/mob/living/living_target = target
-
-	if(isobj(living_target.buckled))
-		var/obj/buck_source = living_target.buckled
-		if(buck_source.cover_amount != 0)
-			if(prob(buck_source.cover_amount))
-				do_sparks(round((damage / 10)), FALSE, living_target)
-				src.impact(buck_source)
-				blocked = 100 ///Brute force time
-				damage = 0
-				wound_bonus = CANT_WOUND
-				embedding = list("embed_chance" = 0)
-				qdel(src)
-				return BULLET_ACT_HIT
-
-	if(blocked != 100) // not completely blocked
-		var/obj/item/bodypart/hit_bodypart = living_target.get_bodypart(def_zone)
-		if(faction_check(living_target.faction, list(FACTION_MINING, FACTION_BOSS)))
-			damage *= fauna_mod
-		if (damage)
-			if (living_target.blood_volume && damage_type == BRUTE && (isnull(hit_bodypart) || hit_bodypart.can_bleed()))
-				var/splatter_dir = dir
-				if(starting)
-					splatter_dir = get_dir(starting, target_turf)
-				living_target.do_splatter_effect(splatter_dir)
-				if(prob(damage))
-					living_target.blood_particles(amount = rand(1, 1 + round(damage/20, 1)), angle = src.angle)
-
-			else if (!isnull(hit_bodypart) && (hit_bodypart.biological_state & (BIO_METAL|BIO_WIRED)))
-				var/random_damage_mult = RANDOM_DECIMAL(0.85, 1.15) // SOMETIMES you can get more or less sparks
-				var/damage_dealt = ((damage / (1 - (blocked / 100))) * random_damage_mult)
-
-				var/spark_amount = round((damage_dealt / PROJECTILE_DAMAGE_PER_ROBOTIC_SPARK))
-				if (spark_amount > 0)
-					do_sparks(spark_amount, FALSE, living_target)
-
-		else if(impact_effect_type && !hitscan)
-			new impact_effect_type(target_turf, hitx, hity)
-
-		var/organ_hit_text = ""
-		if(def_zone)
-			organ_hit_text = " in \the [parse_zone(def_zone)]"
-		if(suppressed == SUPPRESSED_VERY)
-			playsound(loc, hitsound, 5, TRUE, -1, mixer_channel = mixer_channel)
-		else if(suppressed)
-			playsound(loc, hitsound, 5, TRUE, -1, mixer_channel = mixer_channel)
-			to_chat(living_target, span_userdanger("You're [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"))
-		else
-			playsound(loc, hitsound, vol_by_damage(), TRUE, -1, mixer_channel = mixer_channel)
-			living_target.visible_message(
-				span_danger("[living_target] is [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"),
-				span_userdanger("You're [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"),
-				span_hear("You hear a woosh."),
-				// vision_distance = COMBAT_MESSAGE_RANGE,
-			)
-			if(living_target.is_blind())
-				to_chat(living_target, span_userdanger("You feel something hit you[organ_hit_text]!"))
-
 	var/reagent_note
 	if(reagents?.reagent_list)
 		reagent_note = "REAGENTS: [pretty_string_from_reagent_list(reagents.reagent_list)]"
@@ -1200,7 +1143,7 @@
 		matrix.Turn(angle)
 		impact_effect.transform = matrix
 		impact_effect.color =  color
-		impact_effect.set_light(impact_light_range, impact_light_intensity, impact_light_color_override || color)
+		impact_effect.set_light(impact_light_outer_range, impact_light_intensity, impact_light_color_override || color)
 		QDEL_IN(impact_effect, PROJECTILE_TRACER_DURATION)
 
 /obj/projectile/proc/generate_tracer(datum/point/start_point, list/passed_turfs)
@@ -1354,26 +1297,6 @@
 /obj/projectile/experience_pressure_difference()
 	return
 
-///Like [/obj/item/proc/updateEmbedding] but for projectiles instead, call this when you want to add embedding or update the stats on the embedding element
-/obj/projectile/proc/updateEmbedding()
-	if(!shrapnel_type || !LAZYLEN(embedding))
-		return
-
-	AddElement(/datum/element/embed,\
-		embed_chance = (!isnull(embedding["embed_chance"]) ? embedding["embed_chance"] : EMBED_CHANCE),\
-		fall_chance = (!isnull(embedding["fall_chance"]) ? embedding["fall_chance"] : EMBEDDED_ITEM_FALLOUT),\
-		pain_chance = (!isnull(embedding["pain_chance"]) ? embedding["pain_chance"] : EMBEDDED_PAIN_CHANCE),\
-		pain_mult = (!isnull(embedding["pain_mult"]) ? embedding["pain_mult"] : EMBEDDED_PAIN_MULTIPLIER),\
-		remove_pain_mult = (!isnull(embedding["remove_pain_mult"]) ? embedding["remove_pain_mult"] : EMBEDDED_UNSAFE_REMOVAL_PAIN_MULTIPLIER),\
-		rip_time = (!isnull(embedding["rip_time"]) ? embedding["rip_time"] : EMBEDDED_UNSAFE_REMOVAL_TIME),\
-		ignore_throwspeed_threshold = (!isnull(embedding["ignore_throwspeed_threshold"]) ? embedding["ignore_throwspeed_threshold"] : FALSE),\
-		impact_pain_mult = (!isnull(embedding["impact_pain_mult"]) ? embedding["impact_pain_mult"] : EMBEDDED_IMPACT_PAIN_MULTIPLIER),\
-		jostle_chance = (!isnull(embedding["jostle_chance"]) ? embedding["jostle_chance"] : EMBEDDED_JOSTLE_CHANCE),\
-		jostle_pain_mult = (!isnull(embedding["jostle_pain_mult"]) ? embedding["jostle_pain_mult"] : EMBEDDED_JOSTLE_PAIN_MULTIPLIER),\
-		pain_stam_pct = (!isnull(embedding["pain_stam_pct"]) ? embedding["pain_stam_pct"] : EMBEDDED_PAIN_STAM_PCT),\
-		projectile_payload = shrapnel_type)
-	return TRUE
-
 /**
  * Is this projectile considered "hostile"?
  *
@@ -1393,7 +1316,7 @@
 
 ///Checks if the projectile can embed into someone
 /obj/projectile/proc/can_embed_into(atom/hit)
-	return embedding && shrapnel_type && iscarbon(hit) && !HAS_TRAIT(hit, TRAIT_PIERCEIMMUNE)
+	return get_embed() && shrapnel_type && iscarbon(hit) && !HAS_TRAIT(hit, TRAIT_PIERCEIMMUNE)
 
 /// Reflects the projectile off of something
 /obj/projectile/proc/reflect(atom/hit_atom)

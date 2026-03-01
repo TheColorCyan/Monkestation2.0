@@ -571,7 +571,7 @@
 	light_power = 1
 	light_color = COLOR_LIGHT_ORANGE
 	ammo_type = /obj/structure/mining_bomb
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/reusable/mining_bomb/handle_drop()
 	if(dropped)

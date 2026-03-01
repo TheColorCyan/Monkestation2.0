@@ -528,7 +528,7 @@
 	tracer_type = /obj/effect/projectile/tracer/tracer/beam_rifle
 	var/constant_tracer = FALSE
 
-/obj/projectile/beam/beam_rifle/hitscan/generate_hitscan_tracers(cleanup = TRUE, duration = 5, impacting = TRUE, highlander)
+/obj/projectile/beam/beam_rifle/hitscan/generate_hitscan_tracers(cleanup = TRUE, duration = 5, impact = TRUE, highlander)
 	set waitfor = FALSE
 	if(isnull(highlander))
 		highlander = constant_tracer

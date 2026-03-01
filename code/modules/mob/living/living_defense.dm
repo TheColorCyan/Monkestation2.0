@@ -179,8 +179,6 @@
 		silent = is_silent,
 		weak_against_armour = impacting_projectile.weak_against_armour,
 	)
-	if(impacting_projectile.grazing)
-		. += 50
 	return .
 
 /mob/living/proc/check_projectile_dismemberment(obj/projectile/proj, def_zone)

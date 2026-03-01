@@ -2,7 +2,7 @@
 	name = "reusable bullet"
 	desc = "How do you even reuse a bullet?"
 	impact_effect_type = null
-	embedding = null
+	embed_type = null
 	shrapnel_type = null
 	var/ammo_type = /obj/item/ammo_casing/caseless
 	var/dropped = FALSE

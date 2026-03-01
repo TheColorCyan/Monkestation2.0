@@ -57,8 +57,8 @@
 	if(bullet.reflectable)
 		if(check_reflect(def_zone)) // Checks if you've passed a reflection% check
 			visible_message(
-				span_danger("The [P.name] gets reflected by [src]!"),
-				span_userdanger("The [P.name] gets reflected by [src]!"),
+				span_danger("The [bullet.name] gets reflected by [src]!"),
+				span_userdanger("The [bullet.name] gets reflected by [src]!"),
 			)
 			// Find a turf near or on the original location to bounce to
 			if(!isturf(loc)) //Open canopy mech (ripley) check. if we're inside something and still got hit
@@ -66,8 +66,8 @@
 			bullet.reflect(src)
 			return BULLET_ACT_FORCE_PIERCE // complete projectile permutation
 
-	if(check_block(P, P.damage, "the [P.name]", PROJECTILE_ATTACK, P.armour_penetration, P.damage_type))
-		P.on_hit(src, 100, def_zone, piercing_hit)
+	if(check_block(bullet, bullet.damage, "the [bullet.name]", PROJECTILE_ATTACK, bullet.armour_penetration, bullet.damage_type))
+		bullet.on_hit(src, 100, def_zone, piercing_hit)
 		return BULLET_ACT_HIT
 
 	return ..()

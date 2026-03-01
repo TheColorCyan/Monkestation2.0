@@ -74,7 +74,7 @@
 		playsound(src.loc, SFX_SPARKS, vol = 100, vary = TRUE)
 	return ..()
 
-/obj/projectile/bullet/SRN_rocket/Impact(atom/impacted)
+/obj/projectile/bullet/SRN_rocket/impact(atom/impacted)
 	. = ..()
 
 	if(istype(impacted, /obj/singularity))
