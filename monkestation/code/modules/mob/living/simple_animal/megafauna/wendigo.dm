@@ -13,4 +13,17 @@ This is a monkestation override for wendigo
 
 	stomp_range = 0
 	scream_cooldown_time = 5 SECONDS
-	wave = null
+
+/mob/living/simple_animal/hostile/megafauna/wendigo/monkestation_override/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_NO_FLOATING_ANIM, INNATE_TRAIT)
+	teleport = new(src)
+	shotgun_blast = new(src)
+	ground_slam = new(src)
+	alternating_circle = new(src)
+	spiral = new(src)
+	teleport.Grant(src)
+	shotgun_blast.Grant(src)
+	ground_slam.Grant(src)
+	alternating_circle.Grant(src)
+	spiral.Grant(src)
