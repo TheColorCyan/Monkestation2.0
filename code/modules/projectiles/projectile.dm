@@ -406,7 +406,7 @@
 	if(reagents?.reagent_list)
 		reagent_note = "REAGENTS: [pretty_string_from_reagent_list(reagents.reagent_list)]"
 
-	if(faction_check(living_target.faction, FACTION_MINING || FACTION_BOSS))
+	if(faction_check(living_target.faction, list(FACTION_MINING, FACTION_BOSS)))
 		damage *= fauna_mod
 
 	if(ismob(firer))
