@@ -197,6 +197,8 @@
 	var/armor_flag = BULLET
 	/// How much armor this projectile pierces.
 	var/armour_penetration = 0
+	///flat armour pen, like the way old armour pen worked. Applied AFTER percentage pen
+	var/armour_ignorance = 0
 	/// Whether or not our projectile doubles the value of affecting armour
 	var/weak_against_armour = FALSE
 	/// This will de-increment every step. When 0, it will delete the projectile.
