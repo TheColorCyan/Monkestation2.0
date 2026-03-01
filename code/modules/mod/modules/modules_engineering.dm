@@ -163,6 +163,62 @@
 	QDEL_NULL(line)
 	return ..()
 
+/obj/item/tether_anchor
+	name = "tether anchor"
+	desc = "A reinforced anchor with a tether attachment point. A centuries old EVA tool which saved countless engineers' lives."
+	icon_state = "tether_latched"
+	icon = 'icons/obj/clothing/modsuit/mod_modules.dmi'
+	max_integrity = 60
+	interaction_flags_atom = INTERACT_ATOM_ATTACK_HAND | INTERACT_ATOM_UI_INTERACT
+
+/obj/item/tether_anchor/examine(mob/user)
+	. = ..()
+	. += span_info("It can be secured by using a wrench on it. Use right-click to tether yourself to [src].")
+	. += span_info("LMB shortens the tether while RMB lengthens it. Ctrl-click to cut the tether.")
+
+/obj/item/tether_anchor/wrench_act(mob/living/user, obj/item/tool)
+	. = ..()
+	default_unfasten_wrench(user, tool)
+	return ITEM_INTERACT_SUCCESS
+
+/obj/item/tether_anchor/attack_hand_secondary(mob/user, list/modifiers)
+	if (!can_interact(user) || !user.CanReach(src) || !isturf(loc))
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+
+	balloon_alert(user, "attached tether")
+	user.AddComponent(/datum/component/tether, src, 7, "tether")
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+
+/obj/item/tether_anchor/mouse_drop_receive(atom/target, mob/user, params)
+	if (!can_interact(user) || !user.CanReach(src) || !isturf(loc))
+		return
+
+	if (!isliving(target) || !target.CanReach(src))
+		return
+
+	if (target == user)
+		balloon_alert(user, "attached tether")
+		user.AddComponent(/datum/component/tether, src, 7, "tether")
+		return
+
+	balloon_alert(user, "attaching tether...")
+	to_chat(target, span_userdanger("[user] is trying to attach a tether to you!"))
+	if (!do_after(user, 5 SECONDS, target))
+		return
+
+	balloon_alert(user, "attached tether")
+	to_chat(target, span_userdanger("[user] attaches a tether to you!"))
+	target.AddComponent(/datum/component/tether, src, 7, "tether")
+
+/datum/embed_data/tether_projectile
+	embed_chance = 65 //spiky
+	fall_chance = 2
+	ignore_throwspeed_threshold = TRUE
+	pain_stam_pct = 0.4
+	pain_mult = 3
+	jostle_pain_mult = 2
+	rip_time = 1 SECONDS
+
 ///Radiation Protection - Protects the user from radiation, gives them a geiger counter and rad info in the panel.
 /obj/item/mod/module/rad_protection
 	name = "MOD radiation protection module"

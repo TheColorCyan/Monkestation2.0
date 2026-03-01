@@ -21,7 +21,6 @@
 
 
 /obj/projectile/beam/laser
-	generic_name = "laser beam"
 	tracer_type = /obj/effect/projectile/tracer/laser
 	muzzle_type = /obj/effect/projectile/muzzle/laser
 	impact_type = /obj/effect/projectile/impact/laser
@@ -29,7 +28,6 @@
 	bare_wound_bonus = 40
 
 /obj/projectile/beam/laser/lasrifle
-	generic_name = "rifle beam"
 	damage = 25
 	range = 30
 	tracer_type = /obj/effect/projectile/tracer/laser/rifle
@@ -120,7 +118,6 @@
 
 /obj/projectile/beam/practice
 	name = "practice laser"
-	generic_name = "practice laser beam"
 	damage = 0
 
 /obj/projectile/beam/scatter
@@ -170,7 +167,6 @@
 
 /obj/projectile/beam/pulse
 	name = "pulse"
-	generic_name = "pulse beam"
 	icon_state = "u_laser"
 	damage = 50
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/blue_laser

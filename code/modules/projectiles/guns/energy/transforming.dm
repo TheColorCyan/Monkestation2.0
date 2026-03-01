@@ -891,7 +891,7 @@
 	ricochet_decay_chance = 1
 	ricochet_shoots_firer = FALSE //something something biometrics
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/blue_laser
-	reflectable = REFLECT_NORMAL
+	reflectable = TRUE
 	light_system = OVERLAY_LIGHT
 	light_outer_range = 1
 	light_power = 1
@@ -1092,7 +1092,7 @@
 	armor_flag = ENERGY
 	hitsound = 'sound/weapons/tap.ogg'
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/blue_laser
-	reflectable = REFLECT_NORMAL
+	reflectable = TRUE
 	light_system = OVERLAY_LIGHT
 	light_outer_range = 1
 	light_power = 1

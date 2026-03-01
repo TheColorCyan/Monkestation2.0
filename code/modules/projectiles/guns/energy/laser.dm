@@ -150,6 +150,8 @@
 	icon_state = "scatterlaser"
 	range = 255
 	damage = 6
+	var/size_per_tile = 0.1
+	var/max_scale = 4
 
 /obj/projectile/beam/laser/accelerator/reduce_range()
 	..()

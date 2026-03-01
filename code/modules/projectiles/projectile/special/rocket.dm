@@ -199,7 +199,7 @@ among other potential differences. This granularity is helpful for things like t
 	light_color = COLOR_SOFT_RED
 	ricochets_max = 50 //Honk!
 	ricochet_chance = 80
-	reflectable = REFLECT_NORMAL
+	reflectable = TRUE
 	wound_bonus = -20
 	bare_wound_bonus = 10
 	tracer_type = /obj/effect/projectile/tracer/heavy_laser

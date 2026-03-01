@@ -9,7 +9,7 @@
 	shrapnel_type = null
 	range = 30
 
-/obj/projectile/bullet/a40mm/Range() //because you lob the grenade to achieve the range :)
+/obj/projectile/bullet/a40mm/reduce_range() //because you lob the grenade to achieve the range :)
 	if(!has_gravity(get_area(src)))
 		range++
 	return ..()
