@@ -570,6 +570,44 @@ effective or pretty fucking useless.
 	damage = 10
 	speed = 1.6
 
+/obj/machinery/porta_turret/syndicate/toolbox/nukie
+	name = "9mm turret"
+	icon_state = "syndie_off"
+	base_icon_state = "syndie"
+	//render the frame underneath?
+	frame = FALSE
+	max_integrity = 100
+	shot_delay = 1.5 SECONDS
+	stun_projectile = /obj/projectile/bullet/c9mm/nukie_turret
+	stun_projectile_sound = 'monkestation/code/modules/blueshift/sounds/pistol_heavy.ogg'
+	lethal_projectile = /obj/projectile/bullet/c9mm/nukie_turret
+	lethal_projectile_sound = 'monkestation/code/modules/blueshift/sounds/pistol_heavy.ogg'
+	var/activating
+	COOLDOWN_DECLARE(acquire_target_cooldown)
+
+/obj/projectile/bullet/c9mm/nukie_turret
+	name = "9mm bullet"
+	projectile_phasing = PASSMACHINE
+
+/obj/machinery/porta_turret/syndicate/toolbox/nukie/tryToShootAt(list/atom/movable/targets)
+	if(targets.len > 0)
+		var/atom/movable/M = pick(targets)
+		targets -= M
+		if(COOLDOWN_FINISHED(src, acquire_target_cooldown))
+			activating = TRUE
+			COOLDOWN_START(src, acquire_target_cooldown, 10 SECONDS)
+			playsound(src, 'sound/machines/beep.ogg', 75, FALSE)
+			sleep(0.25 SECONDS)
+			playsound(src, 'sound/machines/beep.ogg', 75, TRUE)
+			sleep(1.25 SECONDS)
+			target(M) //warning shot?
+			activating = FALSE
+			return
+		if(!activating)
+			COOLDOWN_START(src, acquire_target_cooldown, 10 SECONDS)
+			target(M)
+			return
+
 /obj/item/missile_targeter
 	name = "missile targeter"
 	desc = "A one time use targeter for calling a missile to bomb the designated target. Radius from epicenter: 12 meters."
