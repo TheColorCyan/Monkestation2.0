@@ -90,13 +90,6 @@
 	incompatible_modules = list(/obj/item/mod/module/tether)
 	cooldown_time = 1.5 SECONDS
 
-/obj/item/mod/module/tether/on_use()
-	if(mod.wearer.has_gravity(get_turf(src)))
-		balloon_alert(mod.wearer, "too much gravity!")
-		playsound(src, 'sound/weapons/gun/general/dry_fire.ogg', 25, TRUE)
-		return FALSE
-	return ..()
-
 /obj/item/mod/module/tether/on_select_use(atom/target)
 	. = ..()
 	if(!.)
@@ -118,8 +111,26 @@
 	hitsound_wall = 'sound/weapons/batonextend.ogg'
 	suppressed = SUPPRESSED_VERY
 	hit_threshhold = LATTICE_LAYER
+	embed_type = /datum/embed_data/tether_projectile
+	shrapnel_type = /obj/item/tether_anchor
 	/// Reference to the beam following the projectile.
 	var/line
+	/// Last turf that we passed before impact
+	var/turf/open/last_turf
+
+/obj/projectile/tether/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_PROJECTILE_ON_EMBEDDED, PROC_REF(on_embedded))
+
+/obj/projectile/tether/proc/on_embedded(datum/source, obj/item/payload, atom/hit)
+	SIGNAL_HANDLER
+
+	firer.AddComponent(/datum/component/tether, hit, 7, "MODtether", payload)
+
+/obj/projectile/tether/Moved(atom/old_loc, movement_dir, forced, list/old_locs, momentum_change)
+	. = ..()
+	if (isopenturf(loc))
+		last_turf = loc
 
 /obj/projectile/tether/fire(setAngle)
 	if(firer)
