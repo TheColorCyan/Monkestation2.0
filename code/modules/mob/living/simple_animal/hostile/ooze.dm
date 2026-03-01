@@ -356,9 +356,9 @@
 		oozy.adjust_ooze_nutrition(-5)
 
 	var/modifiers = params2list(params)
-	var/obj/projectile/globule/globule = new(caller.loc)
-	globule.aim_projectile(target, caller, modifiers)
-	globule.def_zone = caller.zone_selected
+	var/obj/projectile/globule/globule = new(user.loc)
+	globule.aim_projectile(target, user, modifiers)
+	globule.def_zone = user.zone_selected
 	globule.fire()
 
 	StartCooldown()

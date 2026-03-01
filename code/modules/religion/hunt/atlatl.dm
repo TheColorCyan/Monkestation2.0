@@ -52,19 +52,19 @@
 
 /obj/item/ammo_box/magazine/internal/atlatl
 	name = "notch"
-	ammo_type = /obj/item/ammo_casing/caseless/thrownspear
+	ammo_type = /obj/item/ammo_casing/thrownspear
 	max_ammo = 1
 	start_empty = TRUE
 	caliber = CALIBER_SPEAR
 
-/obj/item/ammo_casing/caseless/thrownspear
+/obj/item/ammo_casing/thrownspear
 	name = "throwing spear"
 	desc = "A light spear made for throwing from an atlatl"
 	icon = 'icons/obj/weapons/guns/atlatl/thrownspear.dmi'
 	icon_state = "thrownspear"
 	custom_materials = "wood"
 	inhand_icon_state = null
-	projectile_type = /obj/projectile/bullet/reusable/thrownspear
+	projectile_type = /obj/projectile/bullet/thrownspear
 	flags_1 = NONE
 	throwforce = 25
 	w_class = WEIGHT_CLASS_BULKY
@@ -72,17 +72,15 @@
 	caliber = CALIBER_SPEAR
 	heavy_metal = FALSE
 
-/obj/item/ammo_casing/caseless/thrownspear/Initialize(mapload)
+/obj/item/ammo_casing/thrownspear/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/element/envenomable_casing)
 
-
-/obj/projectile/bullet/reusable/thrownspear
+/obj/projectile/bullet/thrownspear
 	name = "thrown spear"
 	desc = "Beasts be felled!"
 	icon = 'icons/obj/weapons/guns/atlatl/thrownspear.dmi'
 	icon_state = "spear_projectile"
-	ammo_type = /obj/item/ammo_casing/caseless/thrownspear
 	damage = 50
 	speed = 1.5
 	range = 20
@@ -92,7 +90,11 @@
 	/// What biotype we look for
 	var/biotype_we_look_for = MOB_BEAST
 
-/obj/projectile/bullet/reusable/thrownspear/on_hit(atom/target, blocked, pierce_hit)
+/obj/projectile/bullet/champagne_cork/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/projectile_drop, /obj/item/ammo_casing/thrownspear)
+
+/obj/projectile/bullet/thrownspear/on_hit(atom/target, blocked, pierce_hit)
 	if(ismineralturf(target))
 		var/turf/closed/mineral/mineral_turf = target
 		mineral_turf.gets_drilled(firer, FALSE)
@@ -117,7 +119,7 @@
 	inhand_icon_state = null
 	worn_icon_state = "spearquiver"
 	/// type of arrow the quiver should hold
-	var/arrow_path = /obj/item/ammo_casing/caseless/thrownspear
+	var/arrow_path = /obj/item/ammo_casing/thrownspear
 
 /obj/item/storage/bag/spearquiver/Initialize(mapload)
 	. = ..()
@@ -125,7 +127,7 @@
 	atom_storage.max_slots = 5
 	atom_storage.max_total_storage = 100
 	atom_storage.set_holdable(list(
-		/obj/item/ammo_casing/caseless/thrownspear,
+		/obj/item/ammo_casing/thrownspear,
 	))
 
 /obj/item/storage/bag/spearquiver/PopulateContents()

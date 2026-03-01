@@ -36,14 +36,14 @@
 ///SRN Internal Magazine
 /obj/item/ammo_box/magazine/internal/SRN_rocket
 	name = "SRN Rocket"
-	ammo_type = /obj/item/ammo_casing/caseless/SRN_rocket
+	ammo_type = /obj/item/ammo_casing/SRN_rocket
 	caliber = "84mm"
 	max_ammo = 3
 
 
 
 /// SRN caseless ammo casing
-/obj/item/ammo_casing/caseless/SRN_rocket
+/obj/item/ammo_casing/SRN_rocket
 	name = "\improper Spatial Rift Nullifier Rocket"
 	desc = "A prototype Spatial Rift Nullifier (SRN) Rocket. Fire at a rogue singularity or Tesla and pray it hits"
 	caliber = "84mm"

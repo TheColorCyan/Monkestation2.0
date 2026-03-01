@@ -29,7 +29,7 @@
 		qdel(N)
 		to_chat(user, span_warning("You're incapable of readying a finger gun in your current state."))
 
-/obj/item/ammo_casing/caseless/fingergun_bullet
+/obj/item/ammo_casing/fingergun_bullet
 	name = "imaginary bullet"
 	desc = "Bullets are not real idiot."
 	projectile_type = /obj/projectile/bullet/fingergun_bullet
@@ -51,7 +51,7 @@
 /obj/item/ammo_box/magazine/fingergun_emote
 	name = "finger gun magazine"
 	desc = "You should not be seeing this..."
-	ammo_type = /obj/item/ammo_casing/caseless/fingergun_bullet
+	ammo_type = /obj/item/ammo_casing/fingergun_bullet
 	caliber = "bulletsarenotrealyouidiot"
 	max_ammo = 8
 

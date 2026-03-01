@@ -41,7 +41,7 @@
 
 /// Recharges a bolt, done after the delay in shoot_live_shot
 /obj/item/gun/ballistic/bow/shadow_caster/proc/recharge_bolt()
-	var/obj/item/ammo_casing/caseless/arrow/shadow/bolt = new
+	var/obj/item/ammo_casing/arrow/shadow/bolt = new
 	magazine.give_round(bolt)
 	chambered = bolt
 	update_icon()
@@ -52,11 +52,11 @@
 
 // the thing that holds the ammo inside the bow
 /obj/item/ammo_box/magazine/internal/bow/shadow
-	ammo_type = /obj/item/ammo_casing/caseless/arrow/shadow
+	ammo_type = /obj/item/ammo_casing/arrow/shadow
 	start_empty = FALSE
 
 //the object that appears when the arrow finishes flying
-/obj/item/ammo_casing/caseless/arrow/shadow
+/obj/item/ammo_casing/arrow/shadow
 	name = "shadow arrow"
 	desc = "it seems to suck light out of the surroundings."
 	icon = 'icons/obj/darkspawn_projectiles.dmi'
