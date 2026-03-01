@@ -23,7 +23,6 @@
 	damage = 60
 	dismemberment = 2 //It's a budget sniper rifle.
 	armour_penetration = 30 //A bit better versus armor.
-	armour_ignorance = 10 //Makes it one tap limbs against about the same level of armour as it did before the AP rework
 	wound_bonus = 10
 	bare_wound_bonus = 20
 	embed_falloff_tile = -3
@@ -65,7 +64,7 @@
 	shrapnel_type = /obj/item/ammo_casing/rebar/hydrogen
 	accurate_range = 205 //15 tiles before falloff starts to kick in
 
-/obj/projectile/bullet/rebar/hydrogen/Impact(atom/A) // TODO projectile refactor
+/obj/projectile/bullet/rebar/hydrogen/impact(atom/A) // TODO projectile refactor
 	. = ..()
 	def_zone = ran_zone(def_zone, clamp(205-(7*get_dist(get_turf(A), starting)), 5, 100))
 
@@ -83,7 +82,7 @@
 	armour_penetration = 100
 	wound_bonus = -100
 	bare_wound_bonus = -100
-	embedding = list(embed_chance = 0)
+	embed_type = null
 	embed_falloff_tile = -3
 	shrapnel_type = /obj/item/ammo_casing/rebar/healium
 

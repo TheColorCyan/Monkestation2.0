@@ -2668,68 +2668,6 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 	to_chat(src, "You tilt your head downwards.")
 	look_down()
 
-/**
- * Totals the physical cash on the mob and returns the total.
- */
-/mob/living/verb/tally_physical_credits()
-	//Here is all the possible non-ID payment methods.
-	var/list/counted_money = list()
-	var/physical_cash_total = 0
-	for(var/obj/item/credit as anything in typecache_filter_list(get_all_contents(), GLOB.allowed_money)) //Coins, cash, and credits.
-		physical_cash_total += credit.get_item_credit_value()
-		counted_money += credit
-
-	if(is_type_in_typecache(pulling, GLOB.allowed_money)) //Coins(Pulled).
-		var/obj/item/counted_credit = pulling
-		physical_cash_total += counted_credit.get_item_credit_value()
-		counted_money += counted_credit
-	return round(physical_cash_total)
-
-/// Returns an arbitrary number which very roughly correlates with how buff you look
-/mob/living/proc/calculate_fitness()
-	var/athletics_level = mind?.get_skill_level(/datum/skill/athletics) || 1
-	var/damage = (melee_damage_lower + melee_damage_upper) / 2
-
-	return ceil(damage * (ceil(athletics_level / 2)) * maxHealth)
-
-/// Create a report string about how strong this person looks, generated in a somewhat arbitrary fashion
-/mob/living/proc/compare_fitness(mob/living/scouter)
-	if (HAS_TRAIT(src, TRAIT_UNKNOWN))
-		return span_warning("It's impossible to tell whether this person lifts.")
-
-	var/our_fitness_level = calculate_fitness()
-	var/their_fitness_level = scouter.calculate_fitness()
-
-	var/comparative_fitness = our_fitness_level / their_fitness_level
-
-	if (comparative_fitness > 2)
-		scouter.set_jitter_if_lower(comparative_fitness SECONDS)
-		return "[span_notice("You'd estimate [p_their()] fitness level at about...")] [span_boldwarning("What?!? [our_fitness_level]???")]"
-
-	return span_notice("You'd estimate [p_their()] fitness level at about [our_fitness_level]. [comparative_fitness <= 0.33 ? "Pathetic." : ""]")
-
-///Performs the aftereffects of blocking a projectile.
-/mob/living/proc/block_projectile_effects()
-	var/static/list/icon/blocking_overlay
-	if(isnull(blocking_overlay))
-		blocking_overlay = list(
-			mutable_appearance('icons/mob/effects/blocking.dmi', "wow"),
-			mutable_appearance('icons/mob/effects/blocking.dmi', "nice"),
-			mutable_appearance('icons/mob/effects/blocking.dmi', "good"),
-		)
-	ADD_TRAIT(src, TRAIT_BLOCKING_PROJECTILES, BLOCKING_TRAIT)
-	var/icon/selected_overlay = pick(blocking_overlay)
-	add_overlay(selected_overlay)
-	playsound(src, 'sound/items/weapons/fwoosh.ogg', 90, FALSE, frequency = 0.7)
-	update_transform(1.25)
-	addtimer(CALLBACK(src, PROC_REF(end_block_effects), selected_overlay), 0.6 SECONDS)
-
-///Remoevs the effects of blocking a projectile and allows the user to block another.
-/mob/living/proc/end_block_effects(selected_overlay)
-	REMOVE_TRAIT(src, TRAIT_BLOCKING_PROJECTILES, BLOCKING_TRAIT)
-	cut_overlay(selected_overlay)
-	update_transform(0.8)
-
 /// Returns the string form of the def_zone we have hit.
 /mob/living/proc/check_hit_limb_zone_name(hit_zone)
 	if(has_limbs)
