@@ -160,11 +160,7 @@
 
 /obj/item/borg/projectile_dampen/proc/restore_projectile(datum/source, obj/projectile/projectile)
 	SIGNAL_HANDLER
-
-	tracked -= projectile
-	projectile.damage /= projectile_damage_coefficient
-	projectile.speed /= projectile_speed_coefficient
-	projectile.cut_overlay(projectile_effect)
+	tracked_bullet_cost -= REF(projectile)
 
 //bare minimum omni-toolset for modularity
 /obj/item/borg/cyborg_omnitool
