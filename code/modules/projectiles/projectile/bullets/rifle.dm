@@ -70,17 +70,18 @@
 	wound_bonus = -5
 	bare_wound_bonus = 10
 	shrapnel_type = /obj/item/shrapnel/stingball
-	embedding = list(
-		embed_chance = 50,
-		fall_chance = 5,
-		jostle_chance = 5,
-		ignore_throwspeed_threshold = TRUE,
-		pain_stam_pct = 0.4,
-		pain_mult = 2,
-		jostle_pain_mult = 3,
-		rip_time = 0.5 SECONDS,
-	)
+	embed_type = /datum/embed_data/c40sol
 	embed_falloff_tile = -5
+
+/datum/embed_data/c40sol
+	embed_chance = 50
+	fall_chance = 5
+	jostle_chance = 5
+	ignore_throwspeed_threshold = TRUE
+	pain_stam_pct = 0.4
+	pain_mult = 2
+	jostle_pain_mult = 3
+	rip_time = 0.5 SECONDS
 
 /obj/projectile/bullet/c40sol/pierce
 	name = ".40 Sol match bullet"
@@ -152,30 +153,3 @@
 	ricochet_decay_damage = 0.7
 	shrapnel_type = null
 	sharpness = NONE
-
-// Harpoons (Harpoon Gun)
-
-/obj/projectile/bullet/harpoon
-	name = "harpoon"
-	icon_state = "gauss"
-	damage = 60
-	armour_penetration = 50
-	wound_bonus = -20
-	bare_wound_bonus = 80
-	embedding = list(embed_chance=100, fall_chance=3, jostle_chance=4, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=10)
-	wound_falloff_tile = -5
-	shrapnel_type = /obj/item/ammo_casing/harpoon
-
-// Rebar (Rebar Crossbow)
-/obj/projectile/bullet/rebar
-	name = "rebar"
-	icon_state = "rebar"
-	damage = 30
-	speed = 2.5
-	dismemberment = 1 //because a 1 in 100 chance to just blow someones arm off is enough to be cool but also not enough to be reliable
-	armour_penetration = 10
-	wound_bonus = -20
-	bare_wound_bonus = 80
-	embedding = list(embed_chance=100, fall_chance=3, jostle_chance=4, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=10)
-	wound_falloff_tile = -5
-	shrapnel_type = /obj/item/ammo_casing/harpoon
