@@ -1377,6 +1377,9 @@
 	bullet.fire()
 	return bullet
 
+#undef MOVES_HITSCAN
+#undef MUZZLE_EFFECT_PIXEL_INCREMENT
+
 /// Fetches embedding data
 /obj/projectile/proc/get_embed()
 	RETURN_TYPE(/datum/embed_data)
@@ -1390,6 +1393,3 @@
 	if(!isnull(embed_data) && !GLOB.embed_by_type[embed_data.type])
 		qdel(embed_data)
 	embed_data = ispath(embed) ? get_embed_by_type(armor) : embed
-
-#undef MOVES_HITSCAN
-#undef MUZZLE_EFFECT_PIXEL_INCREMENT

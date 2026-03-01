@@ -263,7 +263,7 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 					var/angle = shot * difference + shoot_times * 5 * wave_direction * -1
 					var/obj/projectile/colossus/wendigo_shockwave/shockwave = new /obj/projectile/colossus/wendigo_shockwave(loc)
 					shockwave.firer = src
-					shockwave.wave_movement = TRUE
+					//shockwave.wave_movement = TRUE
 					shockwave.speed = 8
 					shockwave.wave_speed = 10 * wave_direction
 					shockwave.fire(angle)

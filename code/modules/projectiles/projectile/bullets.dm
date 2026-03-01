@@ -20,8 +20,6 @@
 	//light_on = TRUE
 	//This applies to casings too, for some reason, and regardless this shouldn't apply to every bullet not every bullet should or does have a tracer.
 
-	speed = 0.4 //twice as fast
-
 /datum/embed_data/bullet
 	embed_chance = 20
 	fall_chance = 2
