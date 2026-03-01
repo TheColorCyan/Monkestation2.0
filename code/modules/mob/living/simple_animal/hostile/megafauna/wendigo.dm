@@ -2,8 +2,8 @@
 #define WENDIGO_CIRCLE_SHOTCOUNT 24
 #define WENDIGO_CIRCLE_REPEATCOUNT 8
 #define WENDIGO_SPIRAL_SHOTCOUNT 40
-#define WENDIGO_WAVE_SHOTCOUNT 7
-#define WENDIGO_WAVE_REPEATCOUNT 32
+#define WENDIGO_WAVE_SHOTCOUNT 6
+#define WENDIGO_WAVE_REPEATCOUNT 12
 #define WENDIGO_SHOTGUN_SHOTCOUNT 5
 
 /*
@@ -267,7 +267,7 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 					shockwave.speed = 8
 					shockwave.wave_speed = 10 * wave_direction
 					shockwave.fire(angle)
-				SLEEP_CHECK_DEATH(2, src)
+				SLEEP_CHECK_DEATH(0.6 SECONDS, src)
 
 /mob/living/simple_animal/hostile/megafauna/wendigo/death(gibbed, list/force_grant)
 	if(health > 0)
@@ -298,14 +298,16 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 
 /obj/projectile/colossus/wendigo_shockwave/wave
 	speed = 0.125
-	homing = TRUE
 	wave_speed = 0.3
 
 /obj/projectile/colossus/wendigo_shockwave/wave/alternate
 	wave_speed = -0.3
 
-/obj/projectile/colossus/wendigo_shockwave/process_homing()
-	pixel_moves++
+/obj/projectile/colossus/wendigo_shockwave/process_movement(pixels_to_move, hitscan, tile_limit)
+	. = ..()
+	if (QDELETED(src))
+		return
+	pixel_moves += .
 	set_angle(original_angle + pixel_moves * wave_speed)
 
 /obj/item/wendigo_blood

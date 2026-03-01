@@ -658,10 +658,17 @@
 			return FALSE
 		if(HAS_TRAIT(living_target, TRAIT_IMMOBILIZED) && HAS_TRAIT(living_target, TRAIT_FLOORED) && HAS_TRAIT(living_target, TRAIT_HANDS_BLOCKED))
 			return FALSE
-		if(!hit_prone_targets)
+		if(hit_prone_targets)
 			var/mob/living/buckled_to = living_target.lowest_buckled_mob()
 			if((maximum_range - range) <= MAX_RANGE_HIT_PRONE_TARGETS) // after MAX_RANGE_HIT_PRONE_TARGETS tiles, auto-aim hit for mobs on the floor turns off
 				return TRUE
+			if(ignore_range_hit_prone_targets) // doesn't apply to projectiles that must hit the target in combat mode or something else, no matter what
+				return TRUE
+			if(buckled_to.density) // Will just be us if we're not buckled to another mob
+				return TRUE
+			return FALSE
+		else if(living_target.body_position == LYING_DOWN)
+			return FALSE
 	return TRUE
 
 /**
@@ -918,8 +925,9 @@
  */
 /obj/projectile/proc/process_movement(pixels_to_move, hitscan = FALSE, tile_limit = FALSE)
 	if (!isturf(loc) || !movement_vector)
-		return
+		return 0
 	var/total_move_distance = pixels_to_move
+	var/movements_done = 0
 	last_projectile_move = world.time
 	while (pixels_to_move > 0 && isturf(loc) && !QDELETED(src) && !deletion_queued)
 		// Because pixel_x/y represents offset and not actual visual position of the projectile, we add 16 pixels to each and cut the excess because projectiles are not meant to be highly offset by default
@@ -954,7 +962,7 @@
 		if (distance_to_border == INFINITY)
 			stack_trace("WARNING: Projectile had an empty movement vector and tried to process")
 			qdel(src)
-			return
+			return movements_done
 
 		var/distance_to_move = min(distance_to_border, pixels_to_move)
 		// For homing we cap the maximum distance to move every loop
@@ -976,14 +984,14 @@
 			// We've hit an invalid turf, end of a z level or smth went wrong
 			if (!istype(new_turf))
 				qdel(src)
-				return
+				return movements_done
 
 			// Move to the next tile
 			step_towards(src, new_turf)
 			SEND_SIGNAL(src, COMSIG_PROJECTILE_MOVE_PROCESS_STEP)
 			// We hit something and got deleted, stop the loop
 			if (QDELETED(src))
-				return
+				return movements_done
 			if (loc != new_turf)
 				moving_turfs = FALSE
 			// If we've impacted something, we need to animate our movement until the actual hit
@@ -993,6 +1001,7 @@
 				// to move in the next turf to get from entry to impact position
 				delete_distance = distance_to_move + sqrt((impact_x - entry_x) ** 2 + (impact_y - entry_y) ** 2)
 
+		movements_done += 1
 		// We cannot move more than one turf worth of distance per loop, so this is a safe solution
 		pixels_moved_last_tile += distance_to_move
 		if (!deletion_queued && pixels_moved_last_tile >= ICON_SIZE_ALL)
@@ -1024,7 +1033,7 @@
 			if (!move_animate(delete_x, delete_y, animate_time, deleting = TRUE))
 				animate(src, pixel_x = delete_x, pixel_y = delete_y, time = animate_time, flags = ANIMATION_PARALLEL | ANIMATION_CONTINUE)
 				animate(alpha = 0, time = 0, flags = ANIMATION_CONTINUE)
-			return
+			return movements_done
 
 		pixels_to_move -= distance_to_move
 		// animate() instantly changes pixel_x/y values and just interpolates them client-side so next loop processes properly
@@ -1044,16 +1053,18 @@
 
 		// We've hit a timestop field, abort any remaining movement
 		if (paused)
-			return
+			return movements_done
 
 		// Prevents long-range high-speed projectiles from ruining the server performance by moving 100 tiles per tick when subsystem is set to a high cap
 		if (TICK_CHECK)
 			// If we ran out of time, add whatever distance we're yet to pass to overrun debt to be processed next tick and break the loop
 			overrun += pixels_to_move
-			return
+			return movements_done
 
 		if (tile_limit && moving_turfs)
-			return
+			return movements_done
+
+	return movements_done
 
 /// Called every time projectile animates its movement, in case child wants to have custom animations.
 /// Returning TRUE cancels normal animation
