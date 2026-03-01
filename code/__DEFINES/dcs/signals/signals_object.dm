@@ -192,6 +192,8 @@
 
 ///sent to the projectile when spawning the item (shrapnel) that may be embedded: (new_item)
 #define COMSIG_PROJECTILE_ON_SPAWN_EMBEDDED "projectile_on_spawn_embedded"
+///sent to the projectile when successfully embedding into something
+#define COMSIG_PROJECTILE_ON_EMBEDDED "projectile_on_embedded"
 
 // /obj/vehicle/sealed/car/vim signals
 
