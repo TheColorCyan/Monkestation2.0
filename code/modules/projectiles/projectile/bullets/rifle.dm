@@ -127,8 +127,6 @@
 		gaslighter.adjust_fire_stacks(firestacks_to_give)
 		gaslighter.ignite_mob()
 
-
-
 ///.310 Strilka, like 7.62 nagant but also not
 
 /obj/projectile/bullet/strilka310
@@ -153,3 +151,12 @@
 	ricochet_decay_damage = 0.7
 	shrapnel_type = null
 	sharpness = NONE
+	embed_type = null
+
+/obj/projectile/bullet/strilka310/ap
+	name = ".310 armor-piercing bullet"
+	damage = 45
+	armour_penetration = 60
+	wound_falloff_tile = -2
+	wound_bonus = -45
+	speed = 0.3
