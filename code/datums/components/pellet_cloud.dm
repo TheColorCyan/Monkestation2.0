@@ -96,7 +96,7 @@
  * create_casing_pellets() is for directed pellet clouds for ammo casings that have multiple pellets (buckshot and scatter lasers for instance)
  *
  * Honestly this is mostly just a rehash of [/obj/item/ammo_casing/proc/fire_casing] for pellet counts > 1, except this lets us tamper with the pellets and hook onto them for tracking purposes.
- * The arguments really don't matter, while this proc is triggered by COMSIG_FIRE_CASING which is only for this really, it's just a big mess of the state vars we need for doing the stuff over here.
+ * The arguments really don't matter, while this proc is triggered by COMSIG_FIRE_CASING, it's just a big mess of the state vars we need for doing the stuff over here.
  */
 /datum/component/pellet_cloud/proc/create_casing_pellets(obj/item/ammo_casing/shell, atom/target, mob/living/user, fired_from, randomspread, spread, zone_override, params, distro, obj/projectile/proj)
 	SIGNAL_HANDLER
@@ -312,6 +312,14 @@
 					var/w_bonus = wound_info_by_part[hit_part][CLOUD_POSITION_W_BONUS]
 					var/bw_bonus = wound_info_by_part[hit_part][CLOUD_POSITION_BW_BONUS]
 					var/wounding_type = (initial(proj_type.damage_type) == BRUTE) ? WOUND_BLUNT : WOUND_BURN // sharpness is handled in the wound rolling
+					var/sharpness = initial(proj_type.sharpness)
+
+					if(wounding_type == WOUND_BLUNT && sharpness)
+						if(sharpness & SHARP_EDGED)
+							wounding_type = WOUND_SLASH
+						else if (sharpness & SHARP_POINTY)
+							wounding_type = WOUND_PIERCE
+
 					wound_info_by_part -= hit_part
 
 					// technically this only checks armor worn the moment that all the pellets resolve rather than as each one hits you,
@@ -324,7 +332,7 @@
 							armor_factor *= ARMOR_WEAKENED_MULTIPLIER
 						damage_dealt *= max(0, 1 - armor_factor*0.01)
 
-					hit_part.painless_wound_roll(wounding_type, damage_dealt, w_bonus, bw_bonus, initial(proj_type.sharpness))
+					hit_part.painless_wound_roll(wounding_type, damage_dealt, w_bonus, bw_bonus, sharpness)
 
 		var/limb_hit_text = ""
 		if(hit_part)
