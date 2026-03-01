@@ -77,6 +77,15 @@
 
 	return readout.Join("\n")
 
+///list of every bullet in the box
+///forces all bullets to lazyload
+/obj/item/ammo_box/proc/ammo_list()
+	for (var/i in 1 to length(stored_ammo))
+		if (ispath(stored_ammo[i]))
+			var/casing_type = stored_ammo[i]
+			stored_ammo[i] = new casing_type(src)
+	return stored_ammo.Copy()
+
 /**
  * top_off is used to refill the magazine to max, in case you want to increase the size of a magazine with VV then refill it at once
  *
@@ -126,6 +135,11 @@
 	if (stored_ammo.len < max_ammo)
 		stored_ammo += new_round
 		new_round.forceMove(src)
+		if(new_round.custom_materials && !(item_flags & ABSTRACT))
+			var/list/new_materials = custom_materials?.Copy() || list()
+			for(var/mat in new_round.custom_materials)
+				new_materials[mat] += new_round.custom_materials[mat]
+			set_custom_materials(new_materials)
 		return TRUE
 
 	if(!replace_spent)
@@ -148,13 +162,18 @@
 /obj/item/ammo_box/proc/can_load(mob/user)
 	return TRUE
 
-/obj/item/ammo_box/attackby(obj/item/tool, mob/user, params, silent = FALSE, replace_spent = 0)
+/obj/item/ammo_box/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(try_load(user, tool))
+		return ITEM_INTERACT_SUCCESS
+
+/obj/item/ammo_box/proc/try_load(mob/living/user, obj/item/tool, silent = FALSE, replace_spent = FALSE)
 	var/num_loaded = 0
 	if(!can_load(user))
 		return
+
 	if(istype(tool, /obj/item/ammo_box))
 		var/obj/item/ammo_box/other_box = tool
-		for(var/obj/item/ammo_casing/casing in other_box.stored_ammo)
+		for(var/obj/item/ammo_casing/casing in other_box.ammo_list())
 			var/did_load = give_round(casing, replace_spent)
 			if(did_load)
 				other_box.stored_ammo -= casing
@@ -217,15 +236,6 @@
 		if(ispath(bullet) || bullet && (bullet.loaded_projectile || countempties))
 			boolets++
 	return boolets
-
-///list of every bullet in the magazine
-///forces all bullets to lazyload
-/obj/item/ammo_box/magazine/proc/ammo_list()
-	for (var/i in 1 to length(stored_ammo))
-		if (ispath(stored_ammo[i]))
-			var/casing_type = stored_ammo[i]
-			stored_ammo[i] = new casing_type(src)
-	return stored_ammo.Copy()
 
 ///drops the entire contents of the magazine on the floor
 /obj/item/ammo_box/magazine/proc/empty_magazine()

@@ -20,8 +20,8 @@
 
 /obj/item/ammo_box/magazine/internal/cylinder/rus357/Initialize(mapload)
 	. = ..()
-	//for (var/i in 1 to max_ammo - 1)
-		//stored_ammo += new /obj/item/ammo_casing/a357/spent(src)
+	for (var/i in 1 to max_ammo - 1)
+		stored_ammo += new /obj/item/ammo_casing/a357/spent(src)
 	stored_ammo += new /obj/item/ammo_casing/a357(src)
 
 /obj/item/ammo_box/magazine/internal/cylinder/c35sol
