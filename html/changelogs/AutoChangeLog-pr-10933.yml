@@ -1,0 +1,4 @@
+author: "Mantle"
+delete-after: True
+changes:
+  - rscadd: "Traffic Cone Hat added to monkecoin store"
