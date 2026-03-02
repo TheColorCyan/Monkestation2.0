@@ -739,6 +739,7 @@
 	mech_flags = EXOSUIT_MODULE_TRASHTANK
 
 /obj/projectile/bullet/pellet/shotgun_improvised/tank
+	damage_falloff_tile = 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/peashooter
 	name = "peashooter breech"

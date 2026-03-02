@@ -34,6 +34,7 @@
 	impact_type = /obj/effect/projectile/impact/laser/rifle
 	muzzle_type = /obj/effect/projectile/muzzle/laser/rifle
 	hitscan = TRUE
+	damage_falloff_tile = -1 //This makes ricochets less impactful
 	armour_penetration = -30 //armor is * 130% more effective against it
 	wound_bonus = -15
 	wound_falloff_tile = 3
