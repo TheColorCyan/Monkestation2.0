@@ -479,9 +479,12 @@
 
 	if (sawn_off)
 		bonus_spread += SAWN_OFF_ACC_PENALTY
+
 	return ..()
 
 /obj/item/gun/ballistic/shoot_live_shot(mob/living/user, pointblank = 0, atom/pbtarget = null, message = 1)
+	if(isnull(chambered))
+		return ..()
 	if(can_misfire)
 		misfire_probability += misfire_percentage_increment
 		misfire_probability = clamp(misfire_probability, 0, misfire_probability_cap)
