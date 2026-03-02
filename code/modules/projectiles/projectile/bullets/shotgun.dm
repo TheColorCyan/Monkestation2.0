@@ -62,7 +62,7 @@
 /obj/projectile/bullet/pellet
 	icon_state = "pellet"
 	sharpness = SHARP_POINTY
-	damage_falloff_tile = -0.25
+	damage_falloff_tile = -0.45
 
 /obj/projectile/bullet/pellet/shotgun_buckshot ///6 pellets
 	name = "buckshot pellet"
