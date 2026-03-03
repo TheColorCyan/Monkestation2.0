@@ -308,7 +308,7 @@
 				casing.bounce_away(bounce_angle = bounce_angle, still_warm = TRUE)
 				SEND_SIGNAL(casing, COMSIG_CASING_EJECTED)
 		else if(empty_chamber)
-			chambered = null
+			clear_chambered()
 	if (chamber_next_round && (magazine?.max_ammo > 1))
 		chamber_round()
 
@@ -767,11 +767,7 @@ GLOBAL_LIST_INIT(gun_saw_types, typecacheof(list(
 
 ///used for sawing guns, causes the gun to fire without the input of the user
 /obj/item/gun/ballistic/proc/blow_up(mob/user)
-	. = FALSE
-	for(var/obj/item/ammo_casing/AC in magazine.stored_ammo)
-		if(AC.loaded_projectile)
-			process_fire(user, user, FALSE)
-			. = TRUE
+	return chambered && process_fire(user, user, FALSE)
 
 /obj/item/gun/ballistic/proc/instant_reload()
 	SIGNAL_HANDLER
