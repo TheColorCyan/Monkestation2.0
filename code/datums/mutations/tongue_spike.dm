@@ -139,7 +139,7 @@
 		return
 
 	var/datum/action/send_chems/chem_action = new(tongue_spike)
-	chem_action.transferred_ref = WEAKREF(victim)
+	chem_action.transfered_ref = WEAKREF(victim)
 	chem_action.Grant(fired_by)
 
 	to_chat(fired_by, span_notice("Link established! Use the \"Transfer Chemicals\" ability \

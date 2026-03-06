@@ -9,13 +9,13 @@
 	armour_penetration = 20
 	wound_bonus = -20
 	bare_wound_bonus = 20
-	embed_type = /datum/embed_data/rebar
+	embed_type = /datum/embedding/rebar
 	embed_falloff_tile = -5
 	wound_falloff_tile = -2
 	shrapnel_type = /obj/item/ammo_casing/rebar
 	accuracy_falloff = 7
 
-/datum/embed_data/rebar
+/datum/embedding/rebar
 	embed_chance = 60
 	fall_chance = 2
 	jostle_chance = 2
@@ -49,11 +49,11 @@
 	armour_penetration = 20 // not nearly as good, as its not as sharp.
 	wound_bonus = 10
 	bare_wound_bonus = 40
-	embed_type = /datum/embed_data/zaukerite
+	embed_type = /datum/embedding/zaukerite
 	embed_falloff_tile = 0 // very spiky.
 	shrapnel_type = /obj/item/ammo_casing/rebar/zaukerite
 
-/datum/embed_data/zaukerite
+/datum/embedding/zaukerite
 	embed_chance = 100
 	fall_chance = 0
 	jostle_chance = 5
@@ -79,12 +79,12 @@
 	wound_bonus = -15
 	bare_wound_bonus = 10
 	shrapnel_type = /obj/item/ammo_casing/rebar/hydrogen
-	embed_type = /datum/embed_data/hydrogen
+	embed_type = /datum/embedding/hydrogen
 	embed_falloff_tile = -3
 	shrapnel_type = /obj/item/ammo_casing/rebar/hydrogen
 	accurate_range = 205 //15 tiles before falloff starts to kick in
 
-/datum/embed_data/hydrogen
+/datum/embedding/hydrogen
 	embed_chance = 50
 	fall_chance = 2
 	jostle_chance = 3
@@ -175,10 +175,10 @@
 	armour_penetration = 80
 	wound_bonus = -20
 	bare_wound_bonus = 80
-	embed_type = /datum/embed_data/harpoon
+	embed_type = /datum/embedding/harpoon
 	wound_falloff_tile = -5
 
-/datum/embed_data/harpoon
+/datum/embedding/harpoon
 	embed_chance = 100
 	fall_chance = 3
 	jostle_chance = 4

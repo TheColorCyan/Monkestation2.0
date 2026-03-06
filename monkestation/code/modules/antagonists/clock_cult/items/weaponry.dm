@@ -70,7 +70,7 @@
 	desc = "A razor-sharp spear made of brass. It thrums with barely-contained energy."
 	base_icon_state = "ratvarian_spear"
 	icon_state = "ratvarian_spear0"
-	embed_type = /datum/embed_data/brass_spear
+	embed_type = /datum/embedding/brass_spear
 	throwforce = 40
 	force = 7
 	armour_penetration = 40
@@ -81,7 +81,7 @@
 	///weakref to our current holder
 	var/datum/weakref/current_holder
 
-/datum/embed_data/brass_spear
+/datum/embedding/brass_spear
 	impact_pain_mult = 15
 
 /obj/item/clockwork/weapon/brass_spear/Initialize(mapload)

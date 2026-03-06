@@ -62,7 +62,7 @@
 	icon = 'icons/obj/darkspawn_projectiles.dmi'
 	icon_state = "caster_arrow"
 	inhand_icon_state = null
-	embed_type = /datum/embed_data/shadow_arrow
+	embed_type = /datum/embedding/shadow_arrow
 	projectile_type = /obj/projectile/bullet/shadow_arrow
 
 //the projectile being shot from the bow
@@ -73,9 +73,9 @@
 	damage = 25 //reduced damage per arrow compared to regular ones
 	damage_type = BURN
 	wound_bonus = -100
-	embed_type = /datum/embed_data/shadow_arrow
+	embed_type = /datum/embedding/shadow_arrow
 
-/datum/embed_data/shadow_arrow
+/datum/embedding/shadow_arrow
 	embed_chance = 20
 	fall_chance = 0
 

@@ -100,9 +100,9 @@
 	sharpness = SHARP_POINTY
 	throwforce = 3
 	throw_speed = 1
-	embed_type = /datum/embed_data/olives
+	embed_type = /datum/embedding/olives
 
-/datum/embed_data/olives
+/datum/embedding/olives
 	pain_mult = 0
 	jostle_pain_mult = 0
 	ignore_throwspeed_threshold = 0

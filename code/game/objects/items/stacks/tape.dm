@@ -59,7 +59,7 @@
 	if(!do_after(user, 3 SECONDS, target=target))
 		return ITEM_INTERACT_BLOCKING
 
-	playsound(user, 'sound/items/duct_tape/duct_tape_snap.ogg', 50, TRUE)
+	playsound(user, 'sound/items/duct_tape_snap.ogg', 50, TRUE)
 	use(1)
 	if(istype(target, /obj/item/clothing/gloves/fingerless))
 		var/obj/item/clothing/gloves/tackler/offbrand/O = new /obj/item/clothing/gloves/tackler/offbrand

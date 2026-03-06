@@ -57,7 +57,7 @@
 	RegisterSignal(parent, COMSIG_QDELETING, PROC_REF(on_qdel))
 
 	RegisterSignal(parent, COMSIG_MOVABLE_IMPACT_ZONE, PROC_REF(try_embed))
-	RegisterSignal(parent, COMSIG_ATOM_EXAMINE_TAGS, PROC_REF(examined_tags))
+	//RegisterSignal(parent, COMSIG_ATOM_EXAMINE_TAGS, PROC_REF(examined_tags))
 
 /datum/embedding/Destroy(force)
 	if (!parent)
@@ -223,7 +223,7 @@
 	var/damage = parent.throwforce
 	if (!is_harmless())
 		owner.throw_alert(ALERT_EMBEDDED_OBJECT, /atom/movable/screen/alert/embeddedobject)
-		playsound(owner,'sound/items/weapons/bladeslice.ogg', 40)
+		playsound(owner,'sound/weapons/bladeslice.ogg', 40)
 		if (owner_limb.can_bleed())
 			parent.add_mob_blood(owner) // it embedded itself in you, of course it's bloody!
 		damage += parent.w_class * impact_pain_mult
@@ -274,6 +274,7 @@
 /// Avoid calling this directly as this doesn't move the object from its owner's contents
 /// Returns TRUE if the item got deleted due to DROPDEL flag
 /datum/embedding/proc/stop_embedding()
+	STOP_PROCESSING(SSprocessing, src)
 	if (owner_limb)
 		UnregisterSignal(owner_limb, COMSIG_BODYPART_REMOVED)
 		owner_limb._unembed_object(parent)
@@ -300,8 +301,8 @@
 /// Move self to owner's turf when our limb gets removed
 /datum/embedding/proc/on_removed(datum/source, mob/living/carbon/old_owner)
 	SIGNAL_HANDLER
-	stop_embedding()
-	parent.forceMove(old_owner.drop_location())
+	if (!stop_embedding()) // Dropdel?
+		parent.forceMove(old_owner.drop_location())
 
 /// Someone attempted to pull us out! Either the owner by inspecting themselves, or someone else by examining the owner and clicking the link.
 /datum/embedding/proc/rip_out(mob/living/jack_the_ripper)
@@ -366,15 +367,13 @@
 	if (stop_embedding()) // Dropdel?
 		return
 	parent.forceMove(stored_owner.drop_location())
-	if (!isnull(to_hands))
-		to_hands.put_in_hands(parent)
 
 /// When owner moves around, attempt to jostle the item
 /datum/embedding/proc/owner_moved(mob/living/carbon/source, atom/old_loc, dir, forced, list/old_locs)
 	SIGNAL_HANDLER
 
 	var/chance = jostle_chance
-	if(!forced && (owner.move_intent == MOVE_INTENT_WALK || owner.body_position == LYING_DOWN) && !CHECK_MOVE_LOOP_FLAGS(source, MOVEMENT_LOOP_OUTSIDE_CONTROL))
+	if(!forced && (owner.m_intent == MOVE_INTENT_WALK || owner.body_position == LYING_DOWN) && !CHECK_MOVE_LOOP_FLAGS(source, MOVEMENT_LOOP_OUTSIDE_CONTROL))
 		chance *= 0.5
 
 	if(is_harmless() || !prob(chance))
@@ -479,7 +478,7 @@
 
 	if (self_pluck)
 		owner.visible_message(span_danger("[owner] begins plucking [parent] from [owner.p_their()] [owner_limb.plaintext_zone] with [tool]..."),
-			span_notice("You start plucking [parent] from your [owner_limb.plaintext_zone] with [tool]..."), visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE)
+			span_notice("You start plucking [parent] from your [owner_limb.plaintext_zone] with [tool]..."))
 	else
 		user.visible_message(span_danger("[user] begins plucking [parent] from [owner]'s [owner_limb.plaintext_zone] with [tool]..."),
 			span_notice("You start plucking [parent] from [owner]'s [owner_limb.plaintext_zone] with [tool]..."), ignored_mobs = owner)

@@ -280,9 +280,9 @@
 	light_power = 1
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	hitsound_wall = 'sound/weapons/parry.ogg'
-	embed_type = /datum/embed_data/hardlight_spear
+	embed_type = /datum/embedding/hardlight_spear
 
-/datum/embed_data/hardlight_spear
+/datum/embedding/hardlight_spear
 	embed_chance = 100
 	fall_chance = 2
 	jostle_chance = 8
@@ -297,7 +297,7 @@
 	icon = 'monkestation/icons/obj/items_and_weapons.dmi'
 	icon_state = "lightspear"
 
-/obj/item/shrapnel/bullet/spear/unembedded()
+/datum/embedding/hardlight_spear/stop_embedding()
 	. = ..()
 	QDEL_NULL(src) //Deletes itself when unembedded
 	return TRUE

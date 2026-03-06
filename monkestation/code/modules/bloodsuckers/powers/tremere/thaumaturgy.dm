@@ -39,8 +39,7 @@
 	var/shot_cooldown = 0
 	var/datum/weakref/blood_shield
 	var/obj/projectile/magic/arcane_barrage/bloodsucker/magic_9ball
-	var/speed = 1
-	var/pixel_speed = 0.3
+	var/speed = 0.3
 
 /datum/action/cooldown/bloodsucker/targeted/tremere/thaumaturgy/Grant()
 	charges = get_max_charges()

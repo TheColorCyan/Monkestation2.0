@@ -77,10 +77,10 @@
 	holotool.force = 17
 	holotool.attack_verb_continuous = list("sliced", "torn", "cut")
 	holotool.armour_penetration = 45
-	holotool.embed_type = /datum/embed_data/holotool_knife
+	holotool.embed_type = /datum/embedding/holotool_knife
 	holotool.hitsound = 'sound/weapons/blade1.ogg'
 
-/datum/embed_data/holotool_knife
+/datum/embedding/holotool_knife
 	embed_chance = 40
 	fall_chance = 0
 	pain_mult = 5

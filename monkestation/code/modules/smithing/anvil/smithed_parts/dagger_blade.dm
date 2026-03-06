@@ -10,7 +10,7 @@
 /obj/item/smithed_part/weapon_part/dagger_blade/finish_weapon()
 	tool_behaviour = TOOL_KNIFE
 	sharpness = SHARP_POINTY
-	embed_type = /datum/embed_data/dagger_blade
+	embed_type = /datum/embedding/dagger_blade
 	armour_penetration = 35 * (smithed_quality / 100)
 
 	attack_speed = CLICK_CD_FAST_MELEE
@@ -20,7 +20,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	..()
 
-/datum/embed_data/dagger_blade
+/datum/embedding/dagger_blade
 	embed_chance = 65
 	pain_mult = 4
 	fall_chance = 10

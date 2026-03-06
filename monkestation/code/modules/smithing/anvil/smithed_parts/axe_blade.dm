@@ -9,7 +9,7 @@
 
 /obj/item/smithed_part/weapon_part/axe_blade/finish_weapon()
 	sharpness = SHARP_EDGED
-	embed_type = /datum/embed_data/axe_blade
+	embed_type = /datum/embedding/axe_blade
 	armour_penetration = 50 * (smithed_quality / 100)
 
 	tool_behaviour = TOOL_SAW
@@ -19,7 +19,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	..()
 
-/datum/embed_data/axe_blade
+/datum/embedding/axe_blade
 	embed_chance = 35
 	pain_mult = 4
 	fall_chance = 10

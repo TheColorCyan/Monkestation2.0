@@ -70,10 +70,10 @@
 	wound_bonus = -5
 	bare_wound_bonus = 10
 	shrapnel_type = /obj/item/shrapnel/stingball
-	embed_type = /datum/embed_data/c40sol
+	embed_type = /datum/embedding/c40sol
 	embed_falloff_tile = -5
 
-/datum/embed_data/c40sol
+/datum/embedding/c40sol
 	embed_chance = 50
 	fall_chance = 5
 	jostle_chance = 5

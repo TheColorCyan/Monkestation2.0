@@ -23,9 +23,9 @@
 	ricochet_incidence_leeway = 0 //They are living moths, buzzing around
 	hit_prone_targets = TRUE //You cant duck under a creature intent on pantsing you infront of everyone
 	sharpness = SHARP_POINTY
-	embed_type = /datum/embed_data/mothlet
+	embed_type = /datum/embedding/mothlet
 
-/datum/embed_data/mothlet
+/datum/embedding/mothlet
 	embed_chance = 0
 	ignore_throwspeed_threshold = TRUE
 	fall_chance = 1

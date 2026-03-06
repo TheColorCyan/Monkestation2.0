@@ -9,10 +9,10 @@
 	ricochet_auto_aim_range = 3
 	wound_bonus = -20
 	bare_wound_bonus = 10
-	embed_type = /datum/embed_data/n762
+	embed_type = /datum/embedding/n762
 	embed_falloff_tile = -4
 
-/datum/embed_data/n762
+/datum/embedding/n762
 	embed_chance = 25
 	fall_chance = 2
 	jostle_chance = 2
@@ -176,9 +176,9 @@
 	weak_against_armour = TRUE // High fire rate
 	wound_bonus = -10
 	sharpness = SHARP_EDGED
-	embed_type = /datum/embed_data/g45l
+	embed_type = /datum/embedding/g45l
 
-/datum/embed_data/g45l
+/datum/embedding/g45l
 	embed_chance = 25
 	fall_chance = 2
 	jostle_chance = 2

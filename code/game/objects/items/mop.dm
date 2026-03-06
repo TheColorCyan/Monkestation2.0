@@ -140,7 +140,7 @@
 	throwforce = 18
 	throw_speed = 4
 	demolition_mod = 0.75
-	embed_type = /datum/embed_data/mop
+	embed_type = /datum/embedding/mop
 	armour_penetration = 20
 	armour_ignorance = 10
 	attack_verb_continuous = list("mops", "stabs", "shanks", "jousts")
@@ -149,7 +149,7 @@
 	wound_bonus = -15
 	bare_wound_bonus = 15
 
-/datum/embed_data/mop
+/datum/embedding/mop
 	impact_pain_mult = 2
 	remove_pain_mult = 4
 	jostle_chance = 2.5

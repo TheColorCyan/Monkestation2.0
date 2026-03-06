@@ -11,7 +11,7 @@
 
 /obj/item/smithed_part/weapon_part/spear_blade/finish_weapon()
 	sharpness = SHARP_POINTY
-	embed_type = /datum/embed_data/spear_blade
+	embed_type = /datum/embedding/spear_blade
 	armour_penetration = 60 * (smithed_quality / 100)
 	reach = 2
 	AddComponent(/datum/component/multi_hit, icon_state = "stab", height = 2)
@@ -23,7 +23,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	..()
 
-/datum/embed_data/spear_blade
+/datum/embedding/spear_blade
 	embed_chance = 65
 	impact_pain_mult = 2
 	remove_pain_mult = 4

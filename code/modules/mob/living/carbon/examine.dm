@@ -43,7 +43,7 @@
 		if(body_part.bodypart_disabled)
 			disabled += body_part
 		missing -= body_part.body_zone
-		for(var/obj/item/leftover in body_part.embedded_objects)
+		for(var/obj/item/embedded as anything in body_part.embedded_objects)
 			var/harmless = embedded.get_embed().is_harmless()
 			var/stuck_wordage = harmless ? "stuck to" : "embedded in"
 			var/embed_line = "\a [embedded]"
