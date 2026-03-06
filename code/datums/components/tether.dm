@@ -118,6 +118,12 @@
 	if (get_dist(anchor, new_loc) != cur_dist || !ismovable(source))
 		return
 
+	/* Need spacemove refactor from tg station
+	var/datum/drift_handler/handler = movable_source.drift_handler
+	if (handler)
+		handler.remove_angle_force(get_angle(anchor, source))
+	*/
+
 /datum/component/tether/proc/check_snap()
 	SIGNAL_HANDLER
 
