@@ -32,8 +32,8 @@
 	damage = 50
 	speed = 1
 	range = 25
+	shrapnel_type = null
 	embed_type = /datum/embedding/arrow
-	shrapnel_type = /obj/item/ammo_casing/arrow
 
 /datum/embedding/arrow
 	embed_chance = 90
@@ -60,7 +60,6 @@
 	desc = "Here it comes, cultist scum!"
 	icon_state = "holy_arrow_projectile"
 	damage = 20 //still a lot but this is roundstart gear so far less
-	shrapnel_type =/obj/item/ammo_casing/arrow/holy
 	embed_type = /datum/embedding/arrow/holy
 
 /datum/embedding/arrow/holy
