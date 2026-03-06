@@ -392,6 +392,8 @@
 			new impact_effect_type(target_wall, impact_x, impact_y)
 
 		target_wall.add_dent(WALL_DENT_SHOT, impact_x, impact_y)
+		if(damage_walls)
+			target_wall.take_damage(damage * wall_dem_mod, damage_type, armor_flag, armour_penetration = 100)
 		return BULLET_ACT_HIT
 
 	if (hitsound)
