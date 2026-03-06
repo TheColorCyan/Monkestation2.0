@@ -38,6 +38,10 @@
 	custom_materials = list()
 	harmful = FALSE
 
+/obj/item/ammo_casing/fingergun_bullet/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/caseless)
+
 /obj/projectile/bullet/fingergun_bullet
 	name = "imaginary bullet"
 	desc = "Bullets are not real idiot."
