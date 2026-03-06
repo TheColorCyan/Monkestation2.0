@@ -444,11 +444,17 @@
 	// Shooting yourself point-blank
 	if (firer == original)
 		original = null
+	if (firer == fired_from)
+		fired_from = null
 	firer = null
 
 /obj/projectile/proc/original_deleted(datum/source)
 	SIGNAL_HANDLER
 	original = null
+
+/obj/projectile/proc/fired_from_deleted(datum/source)
+	SIGNAL_HANDLER
+	fired_from = null
 
 /obj/projectile/proc/on_ricochet(atom/target)
 	ricochets++
@@ -609,7 +615,7 @@
  */
 /obj/projectile/proc/select_target(turf/our_turf, atom/bumped)
 	// 1. special bumped border object check
-	if((bumped?.flags_1 & ON_BORDER_1) && can_hit_target(bumped, original == bumped, FALSE, TRUE))
+	if((bumped?.flags_1 & ON_BORDER_1) && can_hit_target(bumped, original == bumped, TRUE, TRUE))
 		return bumped
 	// 2. original
 	if(can_hit_target(original, TRUE, FALSE, original == bumped))
@@ -636,14 +642,14 @@
 /// Returns true if the target atom is on our current turf and above the right layer
 /// If direct target is true it's the originally clicked target.
 /obj/projectile/proc/can_hit_target(atom/target, direct_target = FALSE, ignore_loc = FALSE, cross_failed = FALSE)
-	if(QDELETED(target) || impacted[target])
+	if(QDELETED(target) || impacted[target.weak_reference])
 		return FALSE
 	if(!ignore_loc && (loc != target.loc) && !(can_hit_turfs && direct_target && loc == target))
 		return FALSE
 	// if pass_flags match, pass through entirely - unless direct target is set.
 	if((target.pass_flags_self & pass_flags) && !direct_target)
 		return FALSE
-	if(!ignore_source_check && firer)
+	if(!ignore_source_check && firer && !direct_target)
 		if(target == firer || (target == firer.loc && ismecha(firer.loc)) || (target in firer.buckled_mobs))
 			return FALSE
 		if(ismob(firer))
@@ -654,12 +660,12 @@
 		var/mob/target_mob = target
 		if(faction_check(target_mob.faction, ignored_factions))
 			return FALSE
-	if((target.density && !target.IsObscured()) || cross_failed) //This thing blocks projectiles, hit it regardless of layer/mob stuns/etc.
+	if(target.density || cross_failed) //This thing blocks projectiles, hit it regardless of layer/mob stuns/etc.
 		return TRUE
 	if(!isliving(target))
 		if(isturf(target)) // non dense turfs
 			return can_hit_turfs && direct_target
-		if(target.layer < hit_threshhold && !HAS_TRAIT(target, TRAIT_PROJECTILE_SINK))
+		if(target.layer < hit_threshhold)
 			return FALSE
 		else if(!direct_target) // non dense objects do not get hit unless specifically clicked
 			return FALSE
@@ -761,7 +767,7 @@
 	var/chance = ricochet_chance * target.receive_ricochet_chance_mod
 	if(firer && HAS_TRAIT(firer, TRAIT_NICE_SHOT))
 		chance += NICE_SHOT_RICOCHET_BONUS
-	if(prob(chance))
+	if(ricochets < min_ricochets || prob(chance))
 		return TRUE
 	return FALSE
 
@@ -777,11 +783,13 @@
 
 /obj/projectile/proc/fire(fire_angle, atom/direct_target)
 	LAZYINITLIST(impacted)
-	if (fired_from)
-		SEND_SIGNAL(fired_from, COMSIG_PROJECTILE_BEFORE_FIRE, src, original)
 	if (firer)
 		RegisterSignal(firer, COMSIG_QDELETING, PROC_REF(firer_deleted))
 		SEND_SIGNAL(firer, COMSIG_PROJECTILE_FIRER_BEFORE_FIRE, src, fired_from, original)
+	if (fired_from)
+		if (firer != fired_from)
+			RegisterSignal(fired_from, COMSIG_QDELETING, PROC_REF(fired_from_deleted))
+		SEND_SIGNAL(fired_from, COMSIG_PROJECTILE_BEFORE_FIRE, src, original)
 	if (original)
 		if (firer != original)
 			RegisterSignal(original, COMSIG_QDELETING, PROC_REF(original_deleted))

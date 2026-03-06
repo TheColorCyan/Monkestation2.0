@@ -227,6 +227,8 @@
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/red_laser
 	range = 30
 	armor_flag = LASER
+	//for cases where homing would act weird with prone targets
+	hit_prone_targets = TRUE
 	var/datum/weakref/power_ref
 
 /obj/projectile/magic/arcane_barrage/bloodsucker/on_hit(target, blocked = 0, pierce_hit)
