@@ -197,5 +197,5 @@
 /obj/item/gun/energy/laser/explorer/give_manufacturer_examine()
 	AddElement(/datum/element/manufacturer_examine, COMPANY_REMOVED)
 
-/obj/item/ammo_casing/energy/laser/explorer/add_bayonet_point()
+/obj/item/gun/energy/laser/explorer/add_bayonet_point()
 	AddComponent(/datum/component/bayonet_attachable, offset_x = 17, offset_y = 12)
