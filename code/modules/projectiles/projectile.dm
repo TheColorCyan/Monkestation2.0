@@ -1184,7 +1184,7 @@
 		matrix.Turn(original_angle)
 		muzzle_effect.transform = matrix
 		muzzle_effect.color =  color
-		muzzle_effect.set_light(muzzle_flash_range, muzzle_flash_intensity, muzzle_flash_color_override || color)
+		muzzle_effect.set_light(muzzle_flash_range, l_power = muzzle_flash_intensity, l_color = muzzle_flash_color_override || color)
 		QDEL_IN(muzzle_effect, PROJECTILE_TRACER_DURATION)
 
 	if (impact_type && impact_visual)
@@ -1194,7 +1194,7 @@
 		matrix.Turn(angle)
 		impact_effect.transform = matrix
 		impact_effect.color =  color
-		impact_effect.set_light(impact_light_outer_range, impact_light_intensity, impact_light_color_override || color)
+		impact_effect.set_light(impact_light_outer_range, l_power = impact_light_intensity, l_color = impact_light_color_override || color)
 		QDEL_IN(impact_effect, PROJECTILE_TRACER_DURATION)
 
 /obj/projectile/proc/generate_tracer(datum/point/start_point, list/passed_turfs)
