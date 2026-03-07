@@ -32,6 +32,12 @@
 		chambered = null
 	update_appearance()
 
+/obj/item/gun/ballistic/atlatl/chamber_round(keep_bullet = FALSE, spin_cylinder, replace_new_round)
+	if(chambered || !magazine)
+		return
+	if(magazine.ammo_count())
+		chambered = magazine.get_round()
+		chambered.forceMove(src)
 
 /obj/item/gun/ballistic/atlatl/equipped(mob/user, slot, initial)
 	. = ..()
@@ -40,15 +46,8 @@
 		drop_spear()
 		update_appearance()
 
-/obj/item/gun/ballistic/atlatl/afterattack(atom/target, mob/living/user, flag, params, passthrough = FALSE)
-	if(!chambered)
-		return
-	. = ..() //fires, removing the spear
-	update_appearance()
-
 /obj/item/gun/ballistic/atlatl/shoot_with_empty_chamber(mob/living/user)
 	return //no clicking sounds please
-
 
 /obj/item/ammo_box/magazine/internal/atlatl
 	name = "notch"
@@ -62,19 +61,22 @@
 	desc = "A light spear made for throwing from an atlatl"
 	icon = 'icons/obj/weapons/guns/atlatl/thrownspear.dmi'
 	icon_state = "thrownspear"
+	base_icon_state = "thrownspear"
 	custom_materials = "wood"
-	inhand_icon_state = null
 	projectile_type = /obj/projectile/bullet/thrownspear
 	flags_1 = NONE
 	throwforce = 25
-	w_class = WEIGHT_CLASS_BULKY
 	firing_effect_type = null
-	caliber = CALIBER_SPEAR
-	heavy_metal = FALSE
+	caliber =  CALIBER_SPEAR
 
 /obj/item/ammo_casing/thrownspear/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/element/envenomable_casing)
+	AddElement(/datum/element/envenomable_casing)
+	AddElement(/datum/element/caseless, TRUE)
+
+/obj/item/ammo_casing/thrownspear/update_icon_state()
+	. = ..()
+	icon_state = "[base_icon_state]"
 
 /obj/projectile/bullet/thrownspear
 	name = "thrown spear"
@@ -85,14 +87,11 @@
 	speed = 1.5
 	range = 20
 	wound_bonus = -20
+	shrapnel_type = null
 	/// How much the damage is multiplied by when we hit a mob with the correct biotype
 	var/biotype_damage_multiplier = 3
 	/// What biotype we look for
 	var/biotype_we_look_for = MOB_BEAST
-
-/obj/projectile/bullet/champagne_cork/Initialize(mapload)
-	. = ..()
-	AddElement(/datum/element/projectile_drop, /obj/item/ammo_casing/thrownspear)
 
 /obj/projectile/bullet/thrownspear/on_hit(atom/target, blocked, pierce_hit)
 	if(ismineralturf(target))
@@ -107,7 +106,6 @@
 	if(target_mob.mob_biotypes & biotype_we_look_for || istype(target_mob, /mob/living/simple_animal/hostile/megafauna))
 		damage *= biotype_damage_multiplier
 	return ..()
-
 
 /obj/item/storage/bag/spearquiver
 	name = "large quiver"

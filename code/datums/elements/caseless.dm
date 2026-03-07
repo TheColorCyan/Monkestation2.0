@@ -31,9 +31,6 @@
 	if(!proj)
 		return
 
-	if(reusable)
-		proj.AddElement(/datum/element/projectile_drop, shell.type)
-
 	if(isgun(fired_from))
 		var/obj/item/gun/shot_from = fired_from
 		if(shot_from.chambered == shell)
