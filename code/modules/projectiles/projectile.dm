@@ -17,6 +17,7 @@
 	generic_canpass = FALSE
 	blocks_emissive = EMISSIVE_BLOCK_GENERIC
 	layer = MOB_LAYER
+	plane = GAME_PLANE_FOV_HIDDEN
 	/// The sound this plays on impact.
 	var/hitsound = 'sound/weapons/pierce.ogg'
 	/// Sound played when the projectile hits a wall
@@ -1205,7 +1206,7 @@
 		color_override = color,
 		scaling = pixel_length_between_points(start_point, end_point) / ICON_SIZE_ALL
 	)
-	SET_PLANE_EXPLICIT(tracer_effect, GAME_PLANE, src)
+	SET_PLANE_EXPLICIT(tracer_effect, GAME_PLANE_FOV_HIDDEN, src)
 
 	QDEL_IN(tracer_effect, PROJECTILE_TRACER_DURATION)
 
