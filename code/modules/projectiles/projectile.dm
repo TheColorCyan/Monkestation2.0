@@ -477,12 +477,6 @@
 	if (can_hit_target(bumped_atom, bumped_atom == original, TRUE, TRUE))
 		impact(bumped_atom)
 
-/// Signal proc for when a projectile enters a turf.
-/obj/projectile/proc/on_enter(datum/source, atom/old_loc, dir, forced, list/old_locs)
-	SIGNAL_HANDLER
-
-	UnregisterSignal(old_loc, COMSIG_ATOM_ATTACK_HAND)
-
 /**
  * Called when the projectile hits something
  * This can either be from it bumping something,
@@ -803,7 +797,7 @@
 			stack_trace("WARNING: Projectile [type] deleted due to being unable to resolve a target after angle was null!")
 			qdel(src)
 			return
-		var/turf/target = locate(clamp(starting + xo, 1, world.maxx), clamp(starting + yo, 1, world.maxy), starting.z)
+		var/turf/target = locate(clamp(starting.x + xo, 1, world.maxx), clamp(starting.y + yo, 1, world.maxy), starting.z)
 		set_angle(get_angle(src, target))
 	if (spread)
 		set_angle(angle + (rand() - 0.5) * spread)
