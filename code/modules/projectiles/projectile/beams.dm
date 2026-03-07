@@ -67,7 +67,7 @@
 /obj/projectile/beam/laser/hellfire
 	name = "hellfire laser"
 	wound_bonus = 0
-	damage = 30
+	damage = 25
 	speed = 1.6
 	light_color = "#FF969D"
 
