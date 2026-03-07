@@ -331,12 +331,6 @@
 			return
 		deletion_queued = PROJECTILE_RANGE_DELETE
 
-	if(damage_falloff_tile && damage <= 0 || stamina_falloff_tile && stamina <= 0)
-		if (hitscan)
-			qdel(src)
-			return
-		deletion_queued = PROJECTILE_RANGE_DELETE
-
 /// Called next tick after the projectile reaches its maximum range so the animation has time to fully play out
 /obj/projectile/proc/on_range()
 	SEND_SIGNAL(src, COMSIG_PROJECTILE_RANGE_OUT)

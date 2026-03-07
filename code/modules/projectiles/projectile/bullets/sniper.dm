@@ -9,6 +9,7 @@
 	dismemberment = 50
 	catastropic_dismemberment = TRUE
 	armour_penetration = 75
+	armour_ignorance = 5
 	///Determines object damage.
 	var/object_damage = 80
 	///Determines how much additional damage the round does to mechs.

@@ -135,6 +135,7 @@
 	damage = 6
 	wound_bonus = 0
 	bare_wound_bonus = 5
+	damage_falloff_tile = -0.35
 
 /obj/projectile/bullet/pellet/shotgun_improvised/Initialize(mapload)
 	. = ..()
@@ -143,7 +144,6 @@
 /obj/projectile/bullet/pellet/shotgun_improvised/on_range()
 	do_sparks(1, TRUE, src)
 	..()
-
 
 
 /obj/projectile/bullet/incendiary/shotgun/dragonsbreath ///4 pellets
@@ -181,6 +181,7 @@
 /obj/projectile/bullet/pellet/trickshot
 	name = "trickshot pellet"
 	damage = 6
+	damage_falloff_tile = 0
 	ricochets_max = 5
 	ricochet_chance = 100
 	ricochet_decay_chance = 0
@@ -191,6 +192,7 @@
 	name = "incapacitating pellet"
 	damage = 1
 	stamina = 6
+	stamina_falloff_tile = -3
 
 /obj/projectile/bullet/pellet/shotgun_buckshot/beehive ///4 pellets
 	name = "hornet flechette"
@@ -241,6 +243,7 @@
 	hitsound = SFX_CLOWN_STEP
 	range = 4
 	icon_state = "guardian"
+	embed_data = null
 
 /obj/projectile/bullet/honkshot/Initialize(mapload)
 	. = ..()
