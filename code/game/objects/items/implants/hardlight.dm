@@ -274,7 +274,7 @@
 	wound_bonus = 5
 	bare_wound_bonus = 20 //Why was this fifty before wtf
 	wound_falloff_tile = -1
-	speed = 1.4
+	speed = 1.7
 	shrapnel_type = /obj/item/shrapnel/bullet/spear
 	light_outer_range = 1
 	light_power = 1
