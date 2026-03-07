@@ -57,6 +57,8 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 	var/scream_cooldown_time = 10 SECONDS
 	/// Should it create the portal? Special cases use this like ore_vents.
 	var/make_portal = TRUE //MONKESTATION EDIT
+	/// If true, will remove wave ability from wendigo
+	var/weakened = FALSE
 	/// Teleport Ability
 	var/datum/action/cooldown/mob_cooldown/teleport/teleport
 	/// Shotgun Ability
@@ -80,13 +82,14 @@ Warning the icebox version is being overridden in monkestation/code/modules/mob/
 	ground_slam = new(src)
 	alternating_circle = new(src)
 	spiral = new(src)
-	wave = new(src)
 	teleport.Grant(src)
 	shotgun_blast.Grant(src)
 	ground_slam.Grant(src)
 	alternating_circle.Grant(src)
 	spiral.Grant(src)
-	wave.Grant(src)
+	if(!weakened)
+		wave = new(src)
+		wave.Grant(src)
 
 /mob/living/simple_animal/hostile/megafauna/wendigo/Initialize(mapload)
 	. = ..()
