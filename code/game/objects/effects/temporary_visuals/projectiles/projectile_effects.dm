@@ -52,4 +52,4 @@
 
 /obj/effect/abstract/projectile_lighting/Initialize(mapload, color, range, intensity)
 	. = ..()
-	set_light(range, intensity, color)
+	set_light(l_outer_range = range, l_power = intensity, l_color = color)
