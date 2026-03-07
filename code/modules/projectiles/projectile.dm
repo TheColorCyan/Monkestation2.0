@@ -21,6 +21,7 @@
 	var/hitsound = 'sound/weapons/pierce.ogg'
 	/// Sound played when the projectile hits a wall
 	var/hitsound_wall
+	var/mixer_channel
 
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	/// Zone at which the projectile is aimed at
@@ -378,7 +379,7 @@
 		impact_y = entry_y + movement_vector?.pixel_y * rand(0, ICON_SIZE_Y / 2)
 
 	if(isturf(target) && hitsound_wall)
-		playsound(src, hitsound_wall, clamp(vol_by_damage() + (suppressed ? 0 : 20), 0, 100), TRUE, -1)
+		playsound(src, hitsound_wall, clamp(vol_by_damage() + (suppressed ? 0 : 20), 0, 100), TRUE, -1,  mixer_channel = mixer_channel)
 
 	if(damage > 0 && (damage_type == BRUTE || damage_type == BURN) && iswallturf(target_turf) && prob(75))
 		var/turf/closed/wall/target_wall = target_turf
@@ -391,7 +392,7 @@
 		return BULLET_ACT_HIT
 
 	if (hitsound)
-		playsound(src, hitsound, vol_by_damage(), TRUE, -1)
+		playsound(src, hitsound, vol_by_damage(), TRUE, -1,  mixer_channel = mixer_channel)
 
 	if (!isliving(target))
 		if(impact_effect_type && !hitscan)

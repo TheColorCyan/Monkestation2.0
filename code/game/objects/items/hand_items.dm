@@ -562,8 +562,9 @@
 	icon_state = "heart"
 	hitsound = 'sound/effects/kiss.ogg'
 	hitsound_wall = 'sound/effects/kiss.ogg'
+	mixer_channel = CHANNEL_MOB_EMOTES
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	speed = 0.66
+	speed = 1.6
 	damage_type = BRUTE
 	damage = 0 // love can't actually hurt you
 	armour_penetration = 100 // but if it could, it would cut through even the thickest plate
