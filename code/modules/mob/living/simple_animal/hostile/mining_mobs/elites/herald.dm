@@ -224,7 +224,7 @@
 	name ="death bolt"
 	icon_state= "chronobolt"
 	damage = 20
-	armour_penetration = 60
+	armour_penetration = 25
 	speed = 0.5
 	damage_type = BRUTE
 	pass_flags = PASSTABLE
