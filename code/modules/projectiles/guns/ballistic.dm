@@ -446,8 +446,12 @@
 		install_suppressor(tool)
 		return
 
-	if (can_be_sawn_off && sawoff(user, tool))
+	if(can_be_sawn_off && sawoff(user, tool))
 		return
+
+	if(can_misfire && istype(tool, /obj/item/stack/sheet/cloth))
+		if(guncleaning(user, tool))
+			return
 
 	return FALSE
 
