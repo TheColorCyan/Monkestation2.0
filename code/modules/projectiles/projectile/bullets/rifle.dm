@@ -5,12 +5,14 @@
 	name = "7.62 bullet"
 	damage = 60
 	armour_penetration = 0
+	armour_ignorance = 10
 	wound_bonus = -45
 	wound_falloff_tile = 0
 
 /obj/projectile/bullet/a762/surplus
 	name = "7.62 surplus bullet"
 	weak_against_armour = TRUE //this is specifically more important for fighting carbons than fighting noncarbons. Against a simple mob, this is still a full force bullet
+	armour_ignorance = 0
 
 /obj/projectile/bullet/a762/enchanted
 	name = "enchanted 7.62 bullet"
@@ -86,7 +88,7 @@
 /obj/projectile/bullet/c40sol/pierce
 	name = ".40 Sol match bullet"
 	icon_state = "gaussphase"
-	speed = 0.5
+	speed = 2
 	damage = 15
 	armour_penetration = 40
 	wound_bonus = -30
@@ -159,4 +161,4 @@
 	armour_penetration = 60
 	wound_falloff_tile = -2
 	wound_bonus = -45
-	speed = 0.3
+	speed = 3.3
