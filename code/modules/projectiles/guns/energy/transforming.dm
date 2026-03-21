@@ -409,7 +409,7 @@
 	icon_state = "hellfire"
 	damage = 20
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/red_laser
-	speed = 0.6
+	speed = 1.6
 	wound_bonus = -15
 	light_color = COLOR_SOFT_RED
 
