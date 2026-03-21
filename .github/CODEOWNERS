@@ -99,7 +99,7 @@
 
 # SmArtKar
 
-/code/modules/projectiles/projectile.dm @SmArtKar
+#/code/modules/projectiles/projectile.dm @SmArtKar
 
 # stylemistake
 
