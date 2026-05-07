@@ -46,7 +46,6 @@
 /obj/structure/table/bronze,
 /obj/item/clothing/suit/hooded/clockwork,
 /obj/item/clothing/suit/hooded/clockwork,
-/obj/item/clothing/suit/hooded/clockwork,
 /turf/open/indestructible/reebe_flooring/flat,
 /area/ruin/powered/reebe/city)
 "gL" = (
@@ -210,8 +209,6 @@
 "FK" = (
 /obj/structure/table/bronze,
 /obj/item/clothing/suit/hooded/clockwork/speed,
-/obj/item/clothing/suit/hooded/clockwork/speed,
-/obj/item/clothing/suit/hooded/clockwork/speed,
 /turf/open/indestructible/reebe_flooring/flat,
 /area/ruin/powered/reebe/city)
 "FY" = (
@@ -304,8 +301,6 @@
 /area/ruin/powered/reebe/city)
 "TL" = (
 /obj/structure/table/bronze,
-/obj/item/clothing/suit/hooded/clockwork/cloak,
-/obj/item/clothing/suit/hooded/clockwork/cloak,
 /obj/item/clothing/suit/hooded/clockwork/cloak,
 /turf/open/indestructible/reebe_flooring/flat,
 /area/ruin/powered/reebe/city)
