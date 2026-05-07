@@ -8,6 +8,7 @@
 	icon_state = "clockwork_cuirass"
 	armor_type = /datum/armor/suit_clockwork
 	slowdown = 0.2
+	clothing_flags = THICKMATERIAL
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	w_class = WEIGHT_CLASS_BULKY
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
@@ -52,9 +53,11 @@
 	if(!empowered)
 		set_armor(initial(armor_type))
 		slowdown = initial(slowdown)
+		clothing_flags &= ~STOPSPRESSUREDAMAGE
 		return
 	set_armor(empowered_armor)
 	slowdown = empowered_slowdown
+	clothing_flags |= STOPSPRESSUREDAMAGE
 
 /obj/item/clothing/head/helmet/clockwork
 	name = "brass helmet"
@@ -67,6 +70,9 @@
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	w_class = WEIGHT_CLASS_BULKY
 	flash_protect = FLASH_PROTECTION_FLASH
+	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH | PEPPERPROOF
+	flags_inv = HIDEEARS|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR|HIDESNOUT
+	clothing_flags = THICKMATERIAL | SNUG_FIT | PLASMAMAN_HELMET_EXEMPT | HEADINTERNALS
 	///what armor type do we use for helmet while empowered
 	var/datum/armor/empowered_armor = /datum/armor/helmet_clockwork_empowered
 
@@ -79,8 +85,10 @@
 /obj/item/clothing/head/helmet/clockwork/proc/set_empowered_state(datum/component/turf_checker/checker, empowered)
 	if(!empowered)
 		set_armor(initial(armor_type))
+		clothing_flags &= ~STOPSPRESSUREDAMAGE
 		return
 	set_armor(empowered_armor)
+	clothing_flags |= STOPSPRESSUREDAMAGE
 
 /datum/armor/helmet_clockwork
 	melee = 25

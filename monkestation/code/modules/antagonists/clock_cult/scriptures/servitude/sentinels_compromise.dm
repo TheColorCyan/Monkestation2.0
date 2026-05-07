@@ -1,5 +1,6 @@
 ///how much do we heal per do_after() loop
 #define HEALED_PER_LOOP 10
+
 /datum/scripture/slab/sentinels_compromise
 	name = "Sentinel's Compromise"
 	desc = "Continuously heals non-toxin damage on a target then converts 80% of it back as toxin damage to you."
@@ -14,6 +15,7 @@
 	use_time = 15 SECONDS
 	recital_sound = 'sound/magic/magic_missile.ogg'
 	fast_invoke_mult = 0.8
+	can_cast_while_moving = TRUE
 
 /datum/scripture/slab/sentinels_compromise/check_special_requirements(mob/user)
 	if(issilicon(user))

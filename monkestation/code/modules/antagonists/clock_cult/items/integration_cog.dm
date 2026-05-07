@@ -61,14 +61,17 @@
 	QDEL_NULL(integration_cog)
 	return ..()
 
+/obj/machinery/power/apc/examine(mob/user)
+	. = ..()
+	if(!integration_cog || !IS_CLOCK(user))
+		return
+	. += span_brass("This APC has an integration cog installed.")
+
 /obj/machinery/power/apc/examine_more(mob/user)
 	. = ..()
 	if(!isliving(user))
 		return
 	var/mob/living/living_user = user
-	if(integration_cog && IS_CLOCK(living_user))
-		. += span_brass("This APC has an integration cog installed.")
-		return
 	if(panel_open && (integration_cog || (living_user.has_status_effect(/datum/status_effect/hallucination) && prob(HALLUCINATION_COG_CHANCE))))
 		. += span_brass("A small cogwheel is inside of it.")
 
