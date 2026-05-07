@@ -71,7 +71,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	flash_protect = FLASH_PROTECTION_FLASH
 	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH | PEPPERPROOF
-	flags_inv = HIDEEARS|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR|HIDESNOUT
+	flags_inv = HIDEMASK|HIDEEARS|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR|HIDESNOUT|HIDEEYES
 	clothing_flags = THICKMATERIAL | SNUG_FIT | PLASMAMAN_HELMET_EXEMPT | HEADINTERNALS
 	///what armor type do we use for helmet while empowered
 	var/datum/armor/empowered_armor = /datum/armor/helmet_clockwork_empowered
