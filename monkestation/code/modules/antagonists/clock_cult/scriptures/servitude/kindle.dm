@@ -15,7 +15,7 @@
 	use_time = 15 SECONDS
 	cogs_required = 1
 	category = SPELLTYPE_SERVITUDE
-
+	can_cast_while_moving = TRUE
 
 /datum/scripture/slab/kindle/apply_effects(mob/living/hit_mob)
 	if(!istype(hit_mob))
