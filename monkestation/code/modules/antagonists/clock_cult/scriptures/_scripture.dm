@@ -150,7 +150,7 @@ GLOBAL_LIST_EMPTY(clock_scriptures_by_type)
 		return FALSE
 
 	if(power_cost > SSthe_ark.clock_power)
-		invoker.balloon_alert(invoker, "Not enough power!")
+		invoker.balloon_alert(invoker, "not enough power!")
 		return FALSE
 
 	var/invokers = 0
