@@ -55,6 +55,4 @@
 	name = "Clockwork Cultist Base"
 
 	suit = /obj/item/clothing/suit/hooded/clockwork
-	shoes = /obj/item/clothing/shoes/clockwork
 	gloves = /obj/item/clothing/gloves/clockwork
-	head = /obj/item/clothing/head/helmet/clockwork
