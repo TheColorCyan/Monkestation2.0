@@ -38,6 +38,8 @@ PROCESSING_SUBSYSTEM_DEF(the_ark)
 	var/list/clockwork_marauders = list()
 	///A list of all the areas on reebe
 	var/list/reebe_areas = list()
+	///Cooldown for updating action buttons of mobs in the cult
+	COOLDOWN_DECLARE(action_button_update)
 
 /datum/controller/subsystem/processing/the_ark/Initialize()
 	initialized = TRUE
@@ -66,14 +68,13 @@ PROCESSING_SUBSYSTEM_DEF(the_ark)
 
 	if((new_total > max_clock_power || new_total < 0) && !always_adjust)
 		return FALSE
-
-	if(always_adjust)
-		clock_power = clamp(new_total, 0, max_clock_power)
 	else
 		clock_power = new_total
 
-	for (var/datum/mind/member in GLOB.main_clock_cult.members)
-		member.current.update_mob_action_buttons(UPDATE_BUTTON_STATUS)
+	if(COOLDOWN_FINISHED(src, action_button_update))
+		for (var/datum/mind/member in GLOB.main_clock_cult.members)
+			member.current.update_mob_action_buttons(UPDATE_BUTTON_STATUS)
+		COOLDOWN_START(src, action_button_update, 1 SECOND)
 
 	return TRUE
 

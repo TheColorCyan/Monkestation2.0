@@ -15,7 +15,6 @@
 	use_time = 0
 	recital_sound = 'sound/magic/magic_missile.ogg'
 	fast_invoke_mult = 0.8
-	can_cast_while_moving = TRUE
 
 /datum/scripture/slab/sentinels_compromise/check_special_requirements(mob/user)
 	if(issilicon(user))
