@@ -66,10 +66,10 @@ PROCESSING_SUBSYSTEM_DEF(the_ark)
 /datum/controller/subsystem/processing/the_ark/proc/adjust_clock_power(amount, always_adjust = FALSE)
 	var/new_total = clock_power + amount
 
-	if((new_total > max_clock_power || new_total < 0) && !always_adjust)
+	if(!always_adjust && (new_total > max_clock_power || new_total < 0))
 		return FALSE
-	else
-		clock_power = new_total
+
+	clock_power = new_total
 
 	if(COOLDOWN_FINISHED(src, action_button_update))
 		for (var/datum/mind/member in GLOB.main_clock_cult.members)
