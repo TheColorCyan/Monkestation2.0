@@ -1157,7 +1157,7 @@
 	requires_purchase = FALSE
 
 //ZBunz
-/datum/loadout_item/pocket_items/donator/yato_neco_arc
+/datum/loadout_item/pocket_items/donator/shark_axolotl
 	name = "Pet Delivery Beacon - Shark Axolotl"
 	item_path = /obj/item/choice_beacon/pet/donator/shark_axolotl
 	ckeywhitelist = list("ZBunz")
