@@ -47,22 +47,12 @@
 	return -10
 
 /mob/living/carbon/alien/body_temperature_alerts()
-	if(bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)
+	if(bodytemperature <= bodytemp_heat_damage_limit)
 		clear_alert(ALERT_XENO_FIRE)
 		return
 
 	//Body temperature is too hot.
 	throw_alert(ALERT_XENO_FIRE, /atom/movable/screen/alert/alien_fire)
-	switch(bodytemperature)
-		if(360 to 400)
-			apply_damage(HEAT_DAMAGE_LEVEL_1 * seconds_per_tick, BURN)
-		if(400 to 460)
-			apply_damage(HEAT_DAMAGE_LEVEL_2 * seconds_per_tick, BURN)
-		if(460 to INFINITY)
-			if(on_fire)
-				apply_damage(HEAT_DAMAGE_LEVEL_3 * seconds_per_tick, BURN)
-			else
-				apply_damage(HEAT_DAMAGE_LEVEL_2 * seconds_per_tick, BURN)
 
 /mob/living/carbon/alien/get_bloodtype()
 	return get_blood_type(BLOOD_TYPE_XENO)
@@ -77,7 +67,7 @@ Des: Gives the client of the alien an image on each infected mob.
 
 	for (var/mob/living/target as anything in GLOB.mob_living_list)
 		if(HAS_TRAIT(target, TRAIT_XENO_HOST))
-			var/obj/item/organ/body_egg/alien_embryo/embryo = target.get_organ_by_type(/obj/item/organ/body_egg/alien_embryo)
+			var/obj/item/organ/internal/body_egg/alien_embryo/embryo = target.get_organ_by_type(/obj/item/organ/internal/body_egg/alien_embryo)
 			if(embryo)
 				client.images += image('icons/mob/nonhuman-player/alien.dmi', loc = target, icon_state = "infected[embryo.stage]")
 

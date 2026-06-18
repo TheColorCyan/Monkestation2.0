@@ -8518,7 +8518,6 @@
 #include "monkestation\code\modules\reagents\fun\austrialium.dm"
 #include "monkestation\code\modules\reagents\fun\liquid_justice.dm"
 #include "monkestation\code\modules\reagents\fun\shakeium.dm"
-#include "monkestation\code\modules\reagents\reagent_containers\blood_pack.dm"
 #include "monkestation\code\modules\reagents\reagent_containers\condiment.dm"
 #include "monkestation\code\modules\reagents\reagent_containers\drinks.dm"
 #include "monkestation\code\modules\reagents\reagent_containers\dropper.dm"
