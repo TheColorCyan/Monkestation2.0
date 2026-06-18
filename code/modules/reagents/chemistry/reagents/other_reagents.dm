@@ -24,9 +24,18 @@
 
 /datum/reagent/blood/on_new(list/data)
 	. = ..()
-	if(istype(data))
-		SetViruses(src, data)
-		color = GLOB.blood_types[data["blood_type"]]?.color || COLOR_BLOOD
+	// If we were artificially created without blood data, we still want to have the blood_reagent element for exposure effects
+	if(!istype(data) || !data["blood_type"])
+		AddElement(/datum/element/blood_reagent, null, get_blood_type(BLOOD_TYPE_UNIVERSAL))
+		return
+
+	var/datum/blood_type/blood_type = data["blood_type"]
+	if(!istype(blood_type))
+		return
+
+	var/blood_color = blood_type.get_color()
+	if(blood_color == BLOOD_COLOR_RED) // If the blood is default red, just use the darker red color for the reagent.
+		color = initial(color)
 
 /datum/reagent/blood/on_merge(list/mix_data)
 	// If we were artificially created without blood data, we still want to have the blood_reagent element for exposure effects
