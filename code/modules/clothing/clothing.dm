@@ -700,11 +700,7 @@ BLIND     // can't see anything
 	if (!GET_ATOM_BLOOD_DECAL_LENGTH(src))
 		return
 
-	var/mutable_appearance/blood_overlay = null
-	if(clothing_flags & LARGE_WORN_ICON)
-		blood_overlay = mutable_appearance('icons/effects/64x64.dmi', "[blood_state]blood_large")
-	else
-		blood_overlay = mutable_appearance('icons/effects/blood.dmi', "[blood_state]blood")
+	var/mutable_appearance/blood_overlay = mutable_appearance('icons/effects/blood.dmi', "[blood_state]blood")
 
 	blood_overlay.color = get_blood_dna_color()
 

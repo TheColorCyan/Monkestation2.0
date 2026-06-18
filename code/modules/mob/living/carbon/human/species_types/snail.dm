@@ -25,6 +25,7 @@
 		BODY_ZONE_L_LEG = /obj/item/bodypart/leg/left/snail,
 		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/snail
 	)
+	mutantliver = /obj/item/organ/liver/snail
 
 /datum/species/snail/on_species_gain(mob/living/carbon/new_snailperson, datum/species/old_species, pref_load)
 	. = ..()
