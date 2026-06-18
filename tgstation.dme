@@ -7255,7 +7255,6 @@
 #include "monkestation\code\modules\blood_datum\designs.dm"
 #include "monkestation\code\modules\blood_datum\components\item_receiver.dm"
 #include "monkestation\code\modules\blood_datum\components\limbless_aid.dm"
-#include "monkestation\code\modules\blood_datum\elements\easy_ignite.dm"
 #include "monkestation\code\modules\blood_datum\items\crutch.dm"
 #include "monkestation\code\modules\blood_datum\vital_monitor\operating_table_additions.dm"
 #include "monkestation\code\modules\blood_datum\vital_monitor\vital_reader.dm"
