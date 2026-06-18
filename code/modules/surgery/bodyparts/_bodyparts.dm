@@ -968,7 +968,7 @@
 	if(IS_ORGANIC_LIMB(src))
 		// Try to add a cached blood type data, we must do it in here because for some reason DNA gets initialized AFTER the mob's limbs are created.
 		// Should be fine as this gets called before all the important stuff happens
-		if(!(bodypart_flags & ORGAN_VIRGIN) && owner?.dna?.blood_type)
+		if(bodypart_flags & ORGAN_VIRGIN)
 			blood_dna_info = owner.get_blood_dna_list()
 			// need to remove the synethic blood DNA that is initialized
 			// wash also adds the blood dna again
@@ -991,8 +991,6 @@
 		draw_color = (species_color) || (skin_tone && skintone2hex(skin_tone))
 	else
 		draw_color = null
-
-	damage_color = owner?.get_blood_type()?.color || COLOR_BLOOD
 
 	if(!is_creating || !owner)
 		return
@@ -1070,7 +1068,7 @@
 			if(brutestate)
 				// divided into two overlays: one that gets colored and one that doesn't.
 				var/image/brute_blood_overlay = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER)
-				brute_blood_overlay.color = update_on.get_blood_dna_color()
+				brute_blood_overlay.color = get_color_from_blood_list(update_on ? update_on.get_blood_dna_list() : blood_dna_info) // living mobs can just get it fresh, dropped limbs use blood_dna_info
 				var/mutable_appearance/brute_damage_overlay = mutable_appearance('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0_overlay", -DAMAGE_LAYER, appearance_flags = RESET_COLOR)
 				if(brute_damage_overlay)
 					brute_blood_overlay.overlays += brute_damage_overlay

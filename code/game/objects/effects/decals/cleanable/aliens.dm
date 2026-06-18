@@ -54,7 +54,7 @@
 	icon_state = "xgiblarva1"
 	random_icon_states = list("xgiblarva1", "xgiblarva2")
 
-/obj/effect/decal/cleanable/blood/gibs/xeno/body
+/obj/effect/decal/cleanable/blood/gibs/xeno/larva/body
 	icon_state = "xgiblarvatorso"
 	random_icon_states = list("xgiblarvahead", "xgiblarvatorso")
 

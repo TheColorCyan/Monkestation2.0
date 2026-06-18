@@ -41,7 +41,7 @@
 ///Bloodbag of Bloodsucker blood (used by Vassals only)
 /obj/item/reagent_containers/blood/o_minus/bloodsucker
 	name = "blood pack"
-	blood_type = /datum/blood_type/crew/bloodsucker
+	blood_type = /datum/blood_type/human/universal/bloodsucker
 
 /obj/item/reagent_containers/blood/o_minus/bloodsucker/examine(mob/user)
 	. = ..()

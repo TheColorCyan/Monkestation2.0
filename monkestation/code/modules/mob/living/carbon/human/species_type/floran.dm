@@ -35,7 +35,7 @@
 	mutanttongue = /obj/item/organ/internal/tongue/floran
 	mutanteyes = /obj/item/organ/internal/eyes/floran
 	mutantheart = /obj/item/organ/internal/heart/pod
-	mutantliver = /obj/item/organ/liver/pod
+	mutantliver = /obj/item/organ/internal/liver/pod
 
 /datum/species/floran/spec_life(mob/living/carbon/human/H, seconds_per_tick, times_fired)
 	. = ..()

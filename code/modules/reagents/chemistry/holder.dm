@@ -160,7 +160,7 @@
 			return TRUE
 
 	//otherwise make a new one
-	var/datum/reagent/new_reagent = new reagent(data)
+	var/datum/reagent/new_reagent = new reagent_type(data)
 	cached_reagents += new_reagent
 	new_reagent.holder = src
 	new_reagent.volume = amount

@@ -331,7 +331,7 @@
 	icon_state = "ethereal_heart" //Welp. At least it's more unique in functionaliy.
 	visual = TRUE //This is used by the ethereal species for color
 	desc = "A crystal-like organ that functions similarly to a heart for Ethereals. It can revive its owner."
-	heart_bloodtype = /datum/blood_type/crew/ethereal
+	heart_bloodtype = BLOOD_TYPE_ETHEREAL
 
 	///Cooldown for the next time we can crystalize
 	COOLDOWN_DECLARE(crystalize_cooldown)

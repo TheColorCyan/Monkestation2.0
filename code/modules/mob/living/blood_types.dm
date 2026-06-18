@@ -233,6 +233,9 @@
 	. = ..()
 	compatible_types = subtypesof(/datum/blood_type)
 
+/datum/blood_type/human/universal/bloodsucker
+	name = BLOOD_TYPE_BLOODSUCKER
+
 /datum/blood_type/animal
 	name = BLOOD_TYPE_ANIMAL
 	desc = "Blood cells suspended in plasma, the most abundant of which being the hemoglobin-containing red blood cells."

@@ -63,6 +63,9 @@
 /obj/item/reagent_containers/blood/snail
 	blood_type = BLOOD_TYPE_SNAIL
 
+/obj/item/reagent_containers/blood/slime
+	blood_type = BLOOD_TYPE_TOX
+
 /obj/item/reagent_containers/blood/snail/examine()
 	. = ..()
 	. += span_notice("It's a bit slimy... The label indicates that this is meant for snails.")

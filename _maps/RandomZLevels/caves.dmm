@@ -728,7 +728,7 @@
 	},
 /area/awaymission/caves/northblock)
 "eg" = (
-/obj/effect/decal/cleanable/robot_debris/old,
+/obj/effect/decal/cleanable/blood/gibs/robot_debris/old,
 /turf/open/floor/iron,
 /area/awaymission/caves/listeningpost)
 "eh" = (
@@ -849,7 +849,7 @@
 /turf/open/floor/iron,
 /area/awaymission/caves/listeningpost)
 "eN" = (
-/obj/effect/decal/cleanable/oil,
+/obj/effect/decal/cleanable/blood/oil,
 /turf/open/floor/iron,
 /area/awaymission/caves/listeningpost)
 "eO" = (

@@ -334,7 +334,7 @@
 		if(!mendicant.transfer_blood_to(hurtguy, blood_to_hurtguy, forced = TRUE, ignore_incompatibility = TRUE))
 			return
 
-		var/datum/blood_type/blood = hurtguy.get_blood_type()
+		var/datum/blood_type/blood = hurtguy.get_bloodtype()
 		to_chat(mendicant, span_notice("Your veins (and brain) feel a bit lighter."))
 		. = TRUE
 		mendicant.blood_volume = min(mendicant.blood_volume - round(blood_to_hurtguy, 0.1), BLOOD_VOLUME_MAXIMUM)
