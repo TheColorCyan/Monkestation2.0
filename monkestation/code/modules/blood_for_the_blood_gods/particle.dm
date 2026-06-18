@@ -59,7 +59,7 @@
 				is_xenoblood = TRUE
 				break
 			var/datum/blood_type/blood = GLOB.blood_types[blood_type_value]
-			if(istype(blood, /datum/blood_type/xenomorph))
+			if(istype(blood, BLOOD_TYPE_XENO))
 				is_xenoblood = TRUE
 				break
 

@@ -43,7 +43,6 @@
 		organ_owner.stamina?.adjust(3.75 * REM * seconds_per_tick)
 		organ_owner.adjustFireLoss(5.0 * REM * seconds_per_tick, updating_health = TRUE)
 
-
 /obj/item/organ/internal/tongue/werewolf
 	name = "wolf tongue"
 	desc = "A large tongue that looks like a mix of a human's and a wolf's."
