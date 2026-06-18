@@ -8,8 +8,8 @@
  * * List of clothing fibers on the atom
  */
 /datum/forensics
-	/// Weakref to the parent owning this datum
-	var/datum/weakref/parent
+	/// Ref to the parent owning this datum
+	var/atom/parent
 	/**
 	 * List of fingerprints on this atom
 	 *
@@ -39,7 +39,7 @@
 	 */
 	var/list/fibers
 
-/datum/forensics/New(atom/parent, fingerprints, hiddenprints, blood_DNA, fibers)
+/datum/forensics/New(atom/parent, list/fingerprints, list/hiddenprints, list/blood_DNA, list/fibers)
 	if(!isatom(parent))
 		stack_trace("We tried adding a forensics datum to something that isnt an atom. What the hell are you doing?")
 		qdel(src)
@@ -47,7 +47,7 @@
 
 	RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(clean_act))
 
-	src.parent = WEAKREF(parent)
+	src.parent = parent
 	src.fingerprints = fingerprints
 	src.hiddenprints = hiddenprints
 	src.blood_DNA = blood_DNA
@@ -67,9 +67,8 @@
 	check_blood()
 
 /datum/forensics/Destroy(force)
-	var/atom/parent_atom = parent.resolve()
-	if (!isnull(parent_atom))
-		UnregisterSignal(parent_atom, list(COMSIG_COMPONENT_CLEAN_ACT))
+	UnregisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT)
+	parent = null
 	return ..()
 
 /// Empties the fingerprints list
@@ -152,8 +151,7 @@
 /// Adds a single fiber
 /datum/forensics/proc/add_fibers(mob/living/carbon/human/suspect)
 	var/fibertext
-	var/atom/actual_parent = parent.resolve()
-	var/item_multiplier = isitem(actual_parent) ? ITEM_FIBER_MULTIPLIER : NON_ITEM_FIBER_MULTIPLIER
+	var/item_multiplier = isitem(parent) ? ITEM_FIBER_MULTIPLIER : NON_ITEM_FIBER_MULTIPLIER
 	if(suspect.wear_suit)
 		if(suspect.wear_suit.clothing_flags & BLOCKS_FIBERS)
 			return TRUE
@@ -224,8 +222,7 @@
 		if(last_stamp_pos)
 			LAZYSET(hiddenprints, suspect.key, copytext(hiddenprints[suspect.key], 1, last_stamp_pos))
 		hiddenprints[suspect.key] += "\nLast: \[[current_time]\] \"[suspect.real_name]\"[has_gloves]. Ckey: [suspect.ckey]" //made sure to be existing by if(!LAZYACCESS);else
-	var/atom/parent_atom = parent.resolve()
-	parent_atom.fingerprintslast = suspect.ckey
+	parent.fingerprintslast = suspect.ckey
 	return TRUE
 
 /// Adds the given list into blood_DNA
