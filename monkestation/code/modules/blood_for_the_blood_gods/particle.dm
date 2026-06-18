@@ -78,6 +78,7 @@
 
 	else if(istype(bumped_atom, /obj/structure/window))
 		var/obj/structure/window/the_window = bumped_atom
+
 		if(!the_window.fulltile)
 			return FALSE
 
@@ -87,3 +88,4 @@
 		qdel(src)
 		return TRUE
 
+	qdel(src)
