@@ -180,6 +180,13 @@
 		return
 	holder.remove_reagent(type, metabolization_rate * metabolizer.metabolism_efficiency * seconds_per_tick) //By default it slowly disappears.
 
+///Metabolizes a portion of the reagent after on_mob_life() is called
+/datum/reagent/proc/metabolize_reagent(mob/living/carbon/affected_mob, seconds_per_tick, metabolized_volume)
+	if(isnull(holder))
+		return
+	volume -= metabolized_volume
+	holder.update_total()
+
 /// Called in burns.dm *if* the reagent has the REAGENT_AFFECTS_WOUNDS process flag
 /datum/reagent/proc/on_burn_wound_processing(datum/wound/burn/flesh/burn_wound)
 	return
