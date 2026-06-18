@@ -269,7 +269,6 @@
 	plane = GAME_PLANE
 	vis_flags = VIS_INHERIT_PLANE
 	alpha = 180
-	is_mopped = FALSE
 
 /obj/effect/decal/cleanable/blood/splatter/over_window/NeverShouldHaveComeHere(turf/here_turf)
 	return isgroundlessturf(here_turf)
@@ -488,7 +487,7 @@
 	name = "gibs"
 	desc = "They look extremely gruesome."
 	icon_state = "gib1"
-	layer = GIB_LAYER
+	layer = BELOW_OBJ_LAYER
 	plane = GAME_PLANE
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
 	mergeable_decal = FALSE
@@ -498,7 +497,6 @@
 	dry_desc = "They look extremely gruesome as some terrible smell fills the air."
 	decal_reagent = /datum/reagent/consumable/liquidgibs
 	reagent_amount = 5
-	is_mopped = TRUE // probably shouldn't be, but janitor powercreep
 
 	/// Lazylist with information about the diseases our streaking spawns
 	var/list/streak_diseases
@@ -568,7 +566,7 @@
 		return
 
 	if(!mapload)
-		var/datum/move_loop/loop = GLOB.move_manager.move_to(src, get_step(src, direction), delay = delay, timeout = range * delay, priority = MOVEMENT_ABOVE_SPACE_PRIORITY)
+		var/datum/move_loop/loop = SSmove_manager.move_to(src, get_step(src, direction), delay = delay, timeout = range * delay, priority = MOVEMENT_ABOVE_SPACE_PRIORITY)
 		if (leave_blood)
 			RegisterSignal(loop, COMSIG_MOVELOOP_POSTPROCESS, PROC_REF(spread_movement_effects))
 		return
@@ -762,7 +760,6 @@
 
 	plane = GAME_PLANE
 	layer = ABOVE_WINDOW_LAYER
-	is_mopped = FALSE
 
 	base_name = null
 	base_suffix = "splatter"
@@ -799,7 +796,7 @@
 /// Set the splatter up to fly through the air until it rounds out of steam or hits something
 /obj/effect/decal/cleanable/blood/hitsplatter/proc/fly_towards(turf/target_turf, range)
 	flight_dir = get_dir(src, target_turf)
-	var/datum/move_loop/loop = GLOB.move_manager.move_towards(src, target_turf, splatter_speed, timeout = splatter_speed * range, priority = MOVEMENT_ABOVE_SPACE_PRIORITY, flags = MOVEMENT_LOOP_START_FAST)
+	var/datum/move_loop/loop = SSmove_manager.move_towards(src, target_turf, splatter_speed, timeout = splatter_speed * range, priority = MOVEMENT_ABOVE_SPACE_PRIORITY, flags = MOVEMENT_LOOP_START_FAST)
 	RegisterSignal(loop, COMSIG_MOVELOOP_PREPROCESS_CHECK, PROC_REF(pre_move))
 	RegisterSignal(loop, COMSIG_MOVELOOP_POSTPROCESS, PROC_REF(post_move))
 	RegisterSignal(loop, COMSIG_QDELETING, PROC_REF(loop_done))

@@ -250,6 +250,10 @@
 		return TRUE
 
 	target.blood_volume = min(target.blood_volume + round(amount, 0.1), BLOOD_VOLUME_MAX_LETHAL)
+
+	var/datum/antagonist/bloodsucker/bloodsuckerdatum = mind?.has_antag_datum(/datum/antagonist/bloodsucker)
+	bloodsuckerdatum?.bloodsucker_blood_volume -= amount
+
 	return TRUE
 
 /// Callback that adds blood_reagent to any blood extracted from ourselves

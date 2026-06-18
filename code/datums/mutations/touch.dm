@@ -339,8 +339,7 @@
 		. = TRUE
 		mendicant.blood_volume = min(mendicant.blood_volume - round(blood_to_hurtguy, 0.1), BLOOD_VOLUME_MAXIMUM)
 		hurtguy.blood_volume = min(hurtguy.blood_volume + round(blood_to_hurtguy, 0.1), BLOOD_VOLUME_MAXIMUM)
-		if(!(mendicant.get_blood_type_path() in blood.compatible_types))
-		// MONKESTATION EDIT NEW END
+		if(!(mendicant.get_bloodtype() in blood.compatible_types))
 			hurtguy.adjustToxLoss((blood_to_hurtguy * 0.1) * pain_multiplier) // 1 dmg per 10 blood
 			to_chat(hurtguy, span_notice("Your veins feel thicker, but they itch a bit."))
 		else

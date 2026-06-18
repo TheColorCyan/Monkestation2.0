@@ -237,7 +237,7 @@
 
 /// Updates the blood displayed on parent
 /datum/forensics/proc/check_blood()
-	if(!parent || !isitem(parent.resolve()))
+	if(!isitem(parent) || isorgan(parent)) // organs don't spawn with blood decals by default
 		return
 	var/blood_color = parent.get_blood_dna_color()
 	if (blood_color)
@@ -256,7 +256,7 @@
 
 	if (!expose_flag)
 		return
-	var/atom/parent_atom = parent.resolve()
+
 	var/visible_blood = list()
 	for (var/blood_key in blood_DNA)
 		var/datum/blood_type/blood_type = blood_DNA[blood_key]

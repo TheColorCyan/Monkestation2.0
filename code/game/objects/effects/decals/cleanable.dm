@@ -27,9 +27,6 @@
 				handle_merge_decal(other)
 				return INITIALIZE_HINT_QDEL
 
-	if(is_mopped)
-		ADD_TRAIT(src, TRAIT_MOPABLE, INNATE_TRAIT)
-
 	if (LAZYLEN(diseases))
 		add_diseases(diseases)
 
