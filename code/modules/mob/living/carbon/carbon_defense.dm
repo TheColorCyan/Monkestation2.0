@@ -483,6 +483,7 @@
 		to_chat(helper, span_notice("You give [src] a pat on the head to make [p_them()] feel better!"))
 		to_chat(src, span_notice("[helper] gives you a pat on the head to make you feel better! "))
 
+		share_blood_on_touch(helper, ITEM_SLOT_HEAD|ITEM_SLOT_MASK)
 		if(HAS_TRAIT(src, TRAIT_BADTOUCH))
 			to_chat(helper, span_warning("[src] looks visibly upset as you pat [p_them()] on the head."))
 
@@ -533,6 +534,7 @@
 			feeble_quirk_wound_chest(src, hugger=helper, force=helper.grab_state >= GRAB_AGGRESSIVE)
 		//MONKESTATION EDIT END
 
+		share_blood_on_touch(helper, ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_GLOVES)
 		// Warm them up with hugs
 		share_bodytemperature(helper)
 

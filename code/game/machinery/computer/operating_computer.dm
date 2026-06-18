@@ -139,7 +139,7 @@
 	data["patient"]["health"] = patient.health
 
 	// check here to see if the patient has standard blood reagent, or special blood (like how ethereals bleed liquid electricity) to show the proper name in the computer
-	data["patient"]["blood_type"] = patient.get_bloodtype()?.name || "UNKNOWN"
+	data["patient"]["blood_type"] = patient.dna?.blood_type.name
 
 	data["patient"]["maxHealth"] = patient.maxHealth
 	data["patient"]["minHealth"] = patient.dead_threshold
