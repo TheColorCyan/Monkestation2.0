@@ -65,7 +65,7 @@
 
 	var/obj/effect/decal/cleanable/splatter
 	if(is_xenoblood)
-		splatter = new /obj/effect/decal/cleanable/xenoblood(loc)
+		splatter = new /obj/effect/decal/cleanable/blood/xeno(loc)
 		if(blood_dna)
 			splatter.add_blood_DNA(blood_dna)
 	else if(!ispath(splatter_type_floor, /obj/effect/decal/cleanable/blood/splatter/stacking))

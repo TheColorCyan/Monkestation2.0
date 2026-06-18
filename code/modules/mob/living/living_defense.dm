@@ -258,9 +258,6 @@
 		emote("scream", intentional=FALSE)
 	return ..()
 
-/mob/living/proc/create_splatter(splatter_dir)
-	new /obj/effect/temp_visual/dir_setting/bloodsplatter(get_turf(src), splatter_dir)
-
 /mob/living/fire_act()
 	. = ..()
 	adjust_fire_stacks(3)

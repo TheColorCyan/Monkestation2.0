@@ -45,7 +45,12 @@
 /obj/machinery/gibber/update_overlays()
 	. = ..()
 	if(dirty)
-		. +="grbloody"
+		var/mutable_appearance/blood_overlay = mutable_appearance(icon, "grinder_bloody", appearance_flags = RESET_COLOR|KEEP_APART)
+		if(blood_dna_info)
+			blood_overlay.color = get_color_from_blood_list(blood_dna_info)
+		else
+			blood_overlay.color = BLOOD_COLOR_RED
+		. += blood_overlay
 	if(machine_stat & (NOPOWER|BROKEN))
 		return
 	if(!occupant)
@@ -234,7 +239,7 @@
 		for (var/turfs=1 to meat_produced)
 			var/turf/gibturf = pick(nearby_turfs)
 			if (!gibturf.density && (src in view(gibturf)))
-				new gibtype(gibturf,i,diseases)
+				new gibtype(gibturf, diseases, blood_dna_info)
 
 	pixel_x = base_pixel_x //return to its spot after shaking
 	operating = FALSE

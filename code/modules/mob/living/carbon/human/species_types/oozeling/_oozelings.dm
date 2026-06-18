@@ -28,7 +28,7 @@
 	)
 
 	meat = /obj/item/food/meat/slab/human/mutant/slime
-	exotic_bloodtype = /datum/blood_type/slime
+	exotic_bloodtype = BLOOD_TYPE_TOX
 	inert_mutation = /datum/mutation/acid_touch
 	coldmod = 6   // = 3x cold damage
 	heatmod = 0.5 // = 1/4x heat damage

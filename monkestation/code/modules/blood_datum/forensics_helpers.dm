@@ -12,7 +12,7 @@
 		var/blood_color = GLOB.blood_types[dna_type]?.color
 		if(blood_color)
 			colors += blood_color
-	var/final_color = COLOR_BLOOD
+	var/final_color = BLOOD_COLOR_RED
 	if(length(colors))
 		final_color = pop(colors)
 		for(var/color in colors)
@@ -21,11 +21,11 @@
 	return final_color
 
 /obj/effect/decal/cleanable/blood/get_blood_dna_color()
-	return ..() || COLOR_BLOOD
+	return ..() || BLOOD_COLOR_RED
 
 /obj/effect/decal/cleanable/blood/drip/get_blood_dna_color()
 	var/list/all_dna = GET_ATOM_BLOOD_DNA(src)
-	return GLOB.blood_types[all_dna[all_dna[1]]]?.color || COLOR_BLOOD
+	return GLOB.blood_types[all_dna[all_dna[1]]]?.color || BLOOD_COLOR_RED
 
 /obj/effect/decal/cleanable/blood/add_blood_DNA(list/blood_DNA_to_add)
 	var/first_dna = GET_ATOM_BLOOD_DNA_LENGTH(src)

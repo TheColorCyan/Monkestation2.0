@@ -70,8 +70,20 @@
  * * added_ph - override to force a pH when added
  * * override_base_ph - ingore the present pH of the reagent, and instead use the default (i.e. if buffers/reactions alter it)
  * * ignore splitting - Don't call the process that handles reagent spliting in a mob (impure/inverse) - generally leave this false unless you care about REAGENTS_DONOTSPLIT flags (see reagent defines)
+ * * creation_callback - Callback to invoke when the reagent is created
  */
-/datum/reagents/proc/add_reagent(reagent, amount, list/data=null, reagtemp = DEFAULT_REAGENT_TEMPERATURE, added_purity = null, added_ph, no_react = FALSE, override_base_ph = FALSE, ignore_splitting = FALSE)
+/datum/reagents/proc/add_reagent(
+	datum/reagent/reagent_type,
+	amount,
+	list/data = null,
+	reagtemp = DEFAULT_REAGENT_TEMPERATURE,
+	added_purity = null,
+	added_ph = null,
+	no_react = FALSE,
+	override_base_ph = FALSE,
+	ignore_splitting = FALSE,
+	datum/callback/creation_callback = null,
+)
 	// Prevents small amount problems, as well as zero and below zero amounts.
 	if(amount <= CHEMICAL_QUANTISATION_LEVEL)
 		return FALSE
@@ -155,6 +167,8 @@
 	new_reagent.purity = added_purity
 	new_reagent.creation_purity = added_purity
 	new_reagent.ph = added_ph
+	if (creation_callback)
+		creation_callback.Invoke(new_reagent)
 	new_reagent.on_new(data)
 
 	if(isliving(my_atom))
@@ -396,7 +410,7 @@
 				var/obj/item/reagent_containers/container = my_atom
 				if(SEND_SIGNAL(R, COMSIG_REAGENT_CACHE_ADD_ATTEMPT, reagent, src, container.amount_per_transfer_from_this))
 					return
-			if(!R.add_reagent(reagent.type, transfer_amount * multiplier, trans_data, chem_temp, reagent.purity, reagent.ph, no_react = TRUE, ignore_splitting = reagent.chemical_flags & REAGENT_DONOTSPLIT)) //we only handle reaction after every reagent has been transfered.
+			if(!R.add_reagent(reagent.type, transfer_amount * multiplier, trans_data, chem_temp, reagent.purity, reagent.ph, no_react = TRUE, ignore_splitting = reagent.chemical_flags & REAGENT_DONOTSPLIT, creation_callback = CALLBACK(src, PROC_REF(on_transfer_creation), reagent, target_holder))) //we only handle reaction after every reagent has been transferred.
 				continue
 			if(methods)
 				r_to_send += reagent
@@ -457,6 +471,9 @@
 		R.handle_reactions()
 		src.handle_reactions()
 	return amount
+
+/datum/reagents/proc/on_transfer_creation(datum/reagent/reagent, datum/reagents/target_holder, datum/reagent/new_reagent)
+	SEND_SIGNAL(reagent, COMSIG_REAGENT_ON_TRANSFER, target_holder, new_reagent)
 
 /// Transfer a specific reagent id to the target object
 /datum/reagents/proc/trans_id_to(obj/target, reagent, amount=1, preserve_data=1)//Not sure why this proc didn't exist before. It does now! /N
@@ -638,7 +655,6 @@
  * * liverless - Stops reagents that aren't set as [/datum/reagent/var/self_consuming] from metabolizing
  */
 /datum/reagents/proc/metabolize_reagent(mob/living/carbon/owner, datum/reagent/reagent, seconds_per_tick, times_fired, can_overdose = FALSE, liverless = FALSE, dead = FALSE)
-	var/need_mob_update = FALSE
 	SEND_SIGNAL(src, COMSIG_REAGENT_METABOLIZE_REAGENT, reagent, seconds_per_tick)
 	if(QDELETED(reagent.holder))
 		return FALSE
@@ -646,29 +662,41 @@
 	if(!owner)
 		owner = reagent.holder.my_atom
 
-	if(owner && reagent && (!dead || (reagent.chemical_flags & REAGENT_DEAD_PROCESS)))
-		if(owner.reagent_check(reagent, seconds_per_tick, times_fired))
-			return
-		if(liverless && !reagent.self_consuming) //need to be metabolized
-			return
-		if(!reagent.metabolizing)
-			reagent.metabolizing = TRUE
-			reagent.on_mob_metabolize(owner)
-		if(can_overdose)
-			if(reagent.overdose_threshold)
-				if(reagent.volume >= reagent.overdose_threshold && !reagent.overdosed)
-					reagent.overdosed = TRUE
-					need_mob_update += reagent.overdose_start(owner)
-					owner.log_message("has started overdosing on [reagent.name] at [reagent.volume] units.", LOG_GAME)
-			for(var/addiction in reagent.addiction_types)
-				owner.mind?.add_addiction_points(addiction, reagent.addiction_types[addiction] * REAGENTS_METABOLISM)
+	if(!owner || !reagent || (dead && !(reagent.chemical_flags & REAGENT_DEAD_PROCESS)))
+		return FALSE
 
-			if(reagent.overdosed)
-				need_mob_update += reagent.overdose_process(owner, seconds_per_tick, times_fired)
-		if(!dead)
-			need_mob_update += reagent.on_mob_life(owner, seconds_per_tick, times_fired)
-	if(dead)
+	if(owner.reagent_tick(reagent, seconds_per_tick, times_fired))
+		return FALSE
+
+	if(liverless && !reagent.self_consuming) //need to be metabolized
+		return FALSE
+
+	var/need_mob_update = FALSE
+	if(!reagent.metabolizing)
+		reagent.metabolizing = TRUE
+		reagent.on_mob_metabolize(owner)
+
+	if(can_overdose && !HAS_TRAIT(owner, TRAIT_OVERDOSEIMMUNE))
+		if(reagent.overdose_threshold && reagent.volume >= reagent.overdose_threshold && !reagent.overdosed)
+			reagent.overdosed = TRUE
+			need_mob_update += reagent.overdose_start(owner)
+			owner.log_message("has started overdosing on [reagent.name] at [reagent.volume] units.", LOG_GAME)
+
+		for(var/addiction in reagent.addiction_types)
+			owner.mind?.add_addiction_points(addiction, reagent.addiction_types[addiction] * REAGENTS_METABOLISM)
+
+		if(reagent.overdosed)
+			need_mob_update += reagent.overdose_process(owner, seconds_per_tick, times_fired)
+
+	reagent.current_cycle++
+	need_mob_update += reagent.on_mob_life(owner, seconds_per_tick, times_fired)
+
+	if(dead && !QDELETED(owner) && !QDELETED(reagent))
 		need_mob_update += reagent.on_mob_dead(owner, seconds_per_tick)
+
+	if(!QDELETED(owner) && !QDELETED(reagent))
+		reagent.metabolize_reagent(owner, seconds_per_tick, times_fired)
+
 	return need_mob_update
 
 /// Signals that metabolization has stopped, triggering the end of trait-based effects
@@ -1276,8 +1304,10 @@
 	// that could possibly eat up a lot of memory needlessly
 	// if most data lists are read-only.
 	if(trans_data["viruses"])
-		var/list/v = trans_data["viruses"]
-		trans_data["viruses"] = v.Copy()
+		var/list/viruses = list()
+		for (var/datum/disease/disease as anything in trans_data["viruses"])
+			viruses += disease.Copy()
+		trans_data["viruses"] = viruses
 
 	return trans_data
 

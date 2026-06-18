@@ -55,7 +55,7 @@
 	mutantbladder = null
 	mutantspleen = null
 	mutantappendix = null
-	exotic_bloodtype = /datum/blood_type/oil
+	exotic_bloodtype = BLOOD_TYPE_OIL
 
 	bodypart_overrides = list(
 		BODY_ZONE_HEAD = /obj/item/bodypart/head/ipc,

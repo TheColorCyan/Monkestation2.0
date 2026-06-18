@@ -377,13 +377,12 @@
 
 	var/list/overlays
 	if(brutestate)
-		var/mutable_appearance/brute_overlay = mutable_appearance(
-			icon = 'icons/mob/effects/dam_mob.dmi',
-			icon_state = "[dmg_overlay_type]_[body_zone]_[brutestate]0",
-			layer = -DAMAGE_LAYER,
-		)
-		brute_overlay.color = damage_color
-		LAZYADD(overlays, brute_overlay)
+		// divided into two overlays: one that gets colored and one that doesn't.
+		var/image/brute_blood_overlay = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER)
+		brute_blood_overlay.color = get_color_from_blood_list(update_on ? update_on.get_blood_dna_list() : blood_dna_info) // living mobs can just get it fresh, dropped limbs use blood_dna_info
+		var/mutable_appearance/brute_damage_overlay = mutable_appearance('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0_overlay", -DAMAGE_LAYER, appearance_flags = RESET_COLOR)
+		if(brute_damage_overlay)
+			brute_blood_overlay.overlays += brute_damage_overlay
 	if(burnstate)
 		var/mutable_appearance/burn_overlay = mutable_appearance(
 			icon = 'icons/mob/effects/dam_mob.dmi',
@@ -1037,7 +1036,7 @@
 	add_overlay(standing)
 
 ///Generates an /image for the limb to be used as an overlay
-/obj/item/bodypart/proc/get_limb_icon(dropped)
+/obj/item/bodypart/proc/get_limb_icon(dropped, mob/living/carbon/update_on)
 	SHOULD_CALL_PARENT(TRUE)
 	RETURN_TYPE(/list)
 
@@ -1050,9 +1049,13 @@
 		image_dir = SOUTH
 		if(dmg_overlay_type)
 			if(brutestate)
-				var/image/bruteimage = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER, image_dir)
-				bruteimage.color = damage_color
-				. += bruteimage
+				// divided into two overlays: one that gets colored and one that doesn't.
+				var/image/brute_blood_overlay = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER)
+				brute_blood_overlay.color = update_on.get_blood_dna_color()
+				var/mutable_appearance/brute_damage_overlay = mutable_appearance('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0_overlay", -DAMAGE_LAYER, appearance_flags = RESET_COLOR)
+				if(brute_damage_overlay)
+					brute_blood_overlay.overlays += brute_damage_overlay
+				. += brute_blood_overlay
 			if(burnstate)
 				. += image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_0[burnstate]", -DAMAGE_LAYER, image_dir)
 
