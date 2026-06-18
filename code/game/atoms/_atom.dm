@@ -146,7 +146,11 @@
 
 	var/resistance_flags = NONE // INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ON_FIRE | UNACIDABLE | ACID_PROOF
 	/// forensics datum, contains fingerprints, fibres, blood_dna and hiddenprints on this atom
-	var/datum/forensics/forensics
+	var/datum/forensics/forensics = null
+	/// Cached color for all blood on us to avoid doing constant math
+	var/cached_blood_color = null
+	/// Cached emissive alpha for all blood on us to avoid doing constant math
+	var/cached_blood_emissive = null
 
 	/// How this atom should react to having its astar blocking checked
 	var/can_astar_pass = CANASTARPASS_DENSITY
@@ -634,7 +638,7 @@
 ///returns the mob's dna info as a list, to be inserted in an object's blood_DNA list
 /mob/living/proc/get_blood_dna_list()
 	var/datum/blood_type/blood_type = get_bloodtype()
-	if(!blood_type)
+	if (!blood_type)
 		return
 
 	return list(blood_type.dna_string = blood_type)

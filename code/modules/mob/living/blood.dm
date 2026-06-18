@@ -626,5 +626,18 @@
 
 	return blood_alcohol_content
 
+/**
+ * Helper proc for throwing blood particles around, similar to the spray_blood proc.
+ */
+/mob/living/proc/blood_particles(amount = rand(1, 3), angle = rand(0,360), min_deviation = -30, max_deviation = 30, min_pixel_z = 0, max_pixel_z = 6)
+	if(QDELETED(src) || !isturf(loc) || !blood_volume || HAS_TRAIT(src, TRAIT_NOBLOOD))
+		return
+	for(var/i in 1 to amount)
+		var/obj/effect/decal/cleanable/blood/particle/droplet = new(loc, get_static_viruses(), get_blood_dna_list())
+		if(QDELETED(droplet)) // if they're deleting upon init, let's not waste any more time, any others will prolly just do the same thing
+			return
+		droplet.pixel_z = rand(min_pixel_z, max_pixel_z)
+		droplet.start_movement(angle + rand(min_deviation, max_deviation))
+
 #undef BLOOD_DRIP_RATE_MOD
 #undef DRUNK_POWER_TO_BLOOD_ALCOHOL

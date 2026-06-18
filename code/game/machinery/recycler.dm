@@ -225,8 +225,8 @@
 		if(L.stat == CONSCIOUS)
 			L.say("ARRRRRRRRRRRGH!!!", forced="recycler grinding")
 
-	if(!issilicon(living_mob))
-		add_mob_blood(living_mob)
+	if(!issilicon(L))
+		add_mob_blood(L)
 		bloody = TRUE
 
 	// Instantly lie down, also go unconscious from the pain, before you die.
