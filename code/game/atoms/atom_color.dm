@@ -94,6 +94,7 @@
 ///Resets the atom's color to null, and then sets it to the highest priority colour available
 /atom/proc/update_atom_colour()
 	var/old_filter = cached_color_filter
+	var/old_color = color
 	color = null
 	cached_color_filter = null
 	remove_filter(ATOM_PRIORITY_COLOR_FILTER)
