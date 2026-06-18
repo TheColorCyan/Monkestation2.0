@@ -313,15 +313,15 @@
 	icon_state = "liver-bone" // Its greyscale, so works perfectly for coloring
 	color = "#96DB00"
 
-/obj/item/organ/internal/snail/on_insert(mob/living/carbon/organ_owner, special)
+/obj/item/organ/internal/liver/snail/on_insert(mob/living/carbon/organ_owner, special)
 	. = ..()
 	organ_owner.AddElement(/datum/element/snailcrawl)
 
-/obj/item/organ/internal/snail/on_remove(mob/living/carbon/organ_owner, special)
+/obj/item/organ/internal/liver/snail/on_remove(mob/living/carbon/organ_owner, special)
 	. = ..()
 	organ_owner.RemoveElement(/datum/element/snailcrawl)
 
-/obj/item/organ/internal/snail/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
+/obj/item/organ/internal/liver/snail/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
 	. = ..()
 	if((. & COMSIG_MOB_STOP_REAGENT_TICK) || (organ_flags & ORGAN_FAILING))
 		return
