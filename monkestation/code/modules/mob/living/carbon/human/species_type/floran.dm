@@ -50,18 +50,6 @@
 			H.adjustToxLoss(-0.25 * seconds_per_tick)
 			H.adjustOxyLoss(-0.25 * seconds_per_tick)
 
-/datum/species/floran/handle_chemical(datum/reagent/chem, mob/living/carbon/human/H, seconds_per_tick, times_fired)
-	if(chem.type == /datum/reagent/toxin/plantbgone)
-		H.adjustToxLoss(3 * REM * seconds_per_tick)
-		H.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
-		return TRUE
-	if(chem.type == /datum/reagent/potassium) //Floran "blood" is water, water does not like potassium
-		to_chat(H, span_danger("You feel your skin bubble and pop painfully!"))
-		H.adjustBruteLoss(10*REM, FALSE)
-		H.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
-		return TRUE
-	return ..()
-
 /datum/species/floran/get_species_description()
 	return "Plant-based humanoids, they are extremely violent carnivores with no central government or power structure, \
 	split into numerous tribes spread across the universe, each led by a Greenfinger. \

@@ -45,45 +45,44 @@
 
 /obj/item/reagent_containers/blood/random/Initialize(mapload, vol)
 	icon_state = "bloodpack"
-	blood_type = pick(subtypesof(/datum/blood_type/crew) - /datum/blood_type/crew/human)
+	blood_type = pick(BLOOD_TYPE_A_PLUS, BLOOD_TYPE_A_MINUS, BLOOD_TYPE_B_PLUS, BLOOD_TYPE_B_MINUS, BLOOD_TYPE_O_PLUS, BLOOD_TYPE_O_MINUS, BLOOD_TYPE_LIZARD)
 	return ..()
 
 /obj/item/reagent_containers/blood/a_plus
-	blood_type = /datum/blood_type/crew/human/a_plus
+	blood_type = BLOOD_TYPE_A_PLUS
 
 /obj/item/reagent_containers/blood/a_minus
-	blood_type = /datum/blood_type/crew/human/a_minus
+	blood_type = BLOOD_TYPE_A_MINUS
 
 /obj/item/reagent_containers/blood/b_plus
-	blood_type = /datum/blood_type/crew/human/b_plus
+	blood_type = BLOOD_TYPE_B_PLUS
 
 /obj/item/reagent_containers/blood/b_minus
-	blood_type = /datum/blood_type/crew/human/b_minus
+	blood_type = BLOOD_TYPE_B_MINUS
 
 /obj/item/reagent_containers/blood/o_plus
-	blood_type = /datum/blood_type/crew/human/o_plus
+	blood_type = BLOOD_TYPE_O_PLUS
 
 /obj/item/reagent_containers/blood/o_minus
-	blood_type = /datum/blood_type/crew/human/o_minus
+	blood_type = BLOOD_TYPE_O_MINUS
 
 /obj/item/reagent_containers/blood/lizard
-	blood_type = /datum/blood_type/crew/lizard
+	blood_type = BLOOD_TYPE_LIZARD
 
 /obj/item/reagent_containers/blood/ethereal
-	blood_type = /datum/blood_type/crew/ethereal
+	blood_type = BLOOD_TYPE_ETHEREAL
 
 /obj/item/reagent_containers/blood/spider
-	blood_type = /datum/blood_type/crew/spider
+	blood_type = BLOOD_TYPE_SPIDER
 
 /obj/item/reagent_containers/blood/snail
-	blood_type = /datum/blood_type/snail
-
+	blood_type = BLOOD_TYPE_SNAIL
 /obj/item/reagent_containers/blood/snail/examine()
 	. = ..()
 	. += span_notice("It's a bit slimy... The label indicates that this is meant for snails.")
 
 /obj/item/reagent_containers/blood/podperson
-	blood_type = /datum/blood_type/water
+	blood_type = BLOOD_TYPE_H2O
 
 /obj/item/reagent_containers/blood/podperson/examine()
 	. = ..()
@@ -91,7 +90,7 @@
 
 // for slimepeople
 /obj/item/reagent_containers/blood/toxin
-	blood_type = /datum/blood_type/slime
+	blood_type = BLOOD_TYPE_TOX
 
 /obj/item/reagent_containers/blood/toxin/examine()
 	. = ..()
