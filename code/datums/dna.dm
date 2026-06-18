@@ -113,7 +113,6 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	new_dna.unique_enzymes = unique_enzymes
 	new_dna.unique_identity = unique_identity
 	new_dna.unique_features = unique_features
-	new_dna.set_blood_type(blood_type)
 	new_dna.features = features.Copy()
 	new_dna.color_palettes = list()
 	for(var/palette_type, value in color_palettes)
