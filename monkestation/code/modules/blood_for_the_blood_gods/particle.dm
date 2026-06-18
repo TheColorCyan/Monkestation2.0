@@ -118,14 +118,9 @@
 		var/obj/structure/window/the_window = bumped_atom
 		if(!the_window.fulltile)
 			return
-		if(the_window.bloodied)
-			qdel(src)
-			return
 		var/obj/effect/decal/cleanable/blood/splatter/over_window/final_splatter = new splatter_type_wall()
 		final_splatter.forceMove(the_window)
 		final_splatter.color = color
-		the_window.vis_contents += final_splatter
-		the_window.bloodied = TRUE
 		qdel(src)
 
 /// subtype of splatter capable of doing proper "stacking" behavior
@@ -149,8 +144,6 @@
 	our_appearance.color = src.color
 	our_appearance.pixel_x = src.pixel_x
 	our_appearance.pixel_y = src.pixel_y
-	if(glows)
-		SET_PLANE_EXPLICIT(our_appearance, ABOVE_LIGHTING_PLANE, src)
 	icon_state = null
 	color = null
 	pixel_x = 0
