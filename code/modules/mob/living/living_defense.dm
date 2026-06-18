@@ -161,7 +161,7 @@
 
 	var/obj/item/bodypart/hit_bodypart = get_bodypart(check_hit_limb_zone_name(def_zone))
 	if (blood_volume && (isnull(hit_bodypart) || hit_bodypart.can_bleed()))
-		do_splatter_effect(angle2dir(proj.angle))
+		create_splatter(angle2dir(proj.angle))
 		if(prob(33))
 			add_splatter_floor(get_turf(src))
 		return

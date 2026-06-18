@@ -223,45 +223,6 @@
 		return COMPONENT_NO_EXPOSE_REAGENTS
 	return NONE
 
-/datum/species/oozeling/handle_chemical(datum/reagent/chem, mob/living/carbon/human/slime, seconds_per_tick, times_fired)
-	// slimes use plasma to fix wounds, and if they have enough blood, organs
-	var/static/list/organs_we_mend = list(
-		ORGAN_SLOT_BRAIN,
-		ORGAN_SLOT_LUNGS,
-		ORGAN_SLOT_LIVER,
-		ORGAN_SLOT_STOMACH,
-		ORGAN_SLOT_EYES,
-		ORGAN_SLOT_EARS,
-	)
-	if(chem.type == /datum/reagent/toxin/plasma || chem.type == /datum/reagent/toxin/hot_ice)
-		if(slime.getBruteLoss() || slime.getFireLoss())
-			if(!HAS_TRAIT(slime, TRAIT_SLIME_HYDROPHOBIA) && slime.get_skin_temperature() > slime.bodytemp_cold_damage_limit)
-				var/list/to_heal = rand(2) ? list(BRUTE, BURN) : list(BURN, BRUTE) // Randomize what is healed first
-				slime.heal_ordered_damage(HEALTH_HEALED * REM * seconds_per_tick, to_heal)
-				slime.reagents.remove_reagent(chem.type, min(chem.volume * 0.22, 10))
-			else
-				to_chat(slime, span_purple("Your membrane is too viscous to mend its wounds..."))
-		if(slime.blood_volume > BLOOD_VOLUME_SLIME_SPLIT)
-			slime.adjustOrganLoss(
-				pick(organs_we_mend),
-				-2 * seconds_per_tick,
-			)
-		if(SPT_PROB(5, seconds_per_tick))
-			to_chat(slime, span_purple("Your body's thirst for plasma is quenched, your inner and outer membrane using it to regenerate."))
-
-	else if(chem.type == /datum/reagent/water)
-		if(HAS_TRAIT(slime, TRAIT_SLIME_HYDROPHOBIA) || HAS_TRAIT(slime, TRAIT_GODMODE) || slime.blood_volume <= 0)
-			return ..()
-
-		remove_blood_volume(slime, 3 * seconds_per_tick)
-		chem.holder?.remove_reagent(chem.type, min(chem.volume * 0.22, 10))
-		if(SPT_PROB(25, seconds_per_tick))
-			to_chat(slime, span_warning("The water starts to weaken and adulterate your insides!"))
-
-		return TRUE
-
-	return ..()
-
 /datum/species/oozeling/proc/water_exposure(mob/living/carbon/human/slime, check_clothes = TRUE, quiet_if_protected = FALSE)
 	var/water_multiplier = 1
 	// thick clothing won't protect you if you just drink or inject tho

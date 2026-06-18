@@ -26,16 +26,6 @@
 		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/snail
 	)
 
-/datum/species/snail/handle_chemical(datum/reagent/chem, mob/living/carbon/human/affected, seconds_per_tick, times_fired)
-	. = ..()
-	if(. & COMSIG_MOB_STOP_REAGENT_CHECK)
-		return
-	if(istype(chem,/datum/reagent/consumable/salt))
-		//playsound(affected, SFX_SEAR, 30, TRUE)
-		affected.adjustFireLoss(2 * REM * seconds_per_tick)
-		affected.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
-		return COMSIG_MOB_STOP_REAGENT_CHECK
-
 /datum/species/snail/on_species_gain(mob/living/carbon/new_snailperson, datum/species/old_species, pref_load)
 	. = ..()
 	var/obj/item/storage/backpack/bag = new_snailperson.get_item_by_slot(ITEM_SLOT_BACK)

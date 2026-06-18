@@ -176,7 +176,7 @@
 			if(victim.stat == DEAD)
 				to_chat(H, span_warning("You need a living victim!"))
 				return
-			if(!istype(victim.get_blood_type(), /datum/blood_type/crew/human))
+			if(!istype(victim.get_blood_type(), /datum/blood_type/human))
 				to_chat(H, span_warning("[victim] doesn't have valid blood!"))
 				return
 			COOLDOWN_START(V, drain_cooldown, 3 SECONDS)
