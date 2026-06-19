@@ -413,7 +413,7 @@
 /turf/open/floor/plating/abductor,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "Yq" = (
-/obj/effect/decal/cleanable/blood/xeno/xsplatter,
+/obj/effect/decal/cleanable/blood/splatter/xeno,
 /turf/open/floor/plating/abductor,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "ZM" = (

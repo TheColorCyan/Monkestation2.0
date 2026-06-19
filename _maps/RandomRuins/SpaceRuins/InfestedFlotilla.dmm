@@ -1141,7 +1141,7 @@
 	},
 /area/ruin/space/has_grav/infested_flotilla)
 "gB" = (
-/obj/effect/decal/cleanable/blood/xeno/xsplatter,
+/obj/effect/decal/cleanable/blood/splatter/xeno,
 /obj/effect/decal/cleanable/blood/tracks/xeno,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/infested_flotilla)

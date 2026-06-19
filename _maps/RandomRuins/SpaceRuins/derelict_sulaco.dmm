@@ -219,7 +219,7 @@
 /area/ruin/space/has_grav/derelictsulaco)
 "gL" = (
 /obj/machinery/light/broken/directional/south,
-/obj/effect/decal/cleanable/blood/xeno/xsplatter,
+/obj/effect/decal/cleanable/blood/splatter/xeno,
 /obj/effect/turf_decal/tile/red/half,
 /turf/open/floor/iron/smooth_edge,
 /area/ruin/space/has_grav/derelictsulaco)
