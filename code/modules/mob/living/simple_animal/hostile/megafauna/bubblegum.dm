@@ -362,9 +362,8 @@ Difficulty: Hard
 	can_dry = FALSE
 	clean_type = CLEAN_TYPE_HARD_DECAL
 
-/obj/effect/decal/cleanable/blood/bubblegum/Initialize(mapload, list/datum/disease/diseases)
-	. = ..()
-	add_blood_DNA(list("DEMON BLOOD" = /datum/blood_type/animal))
+/obj/effect/decal/cleanable/blood/bubblegum/get_bloodtype()
+	return get_blood_type(BLOOD_TYPE_ANIMAL)
 
 /obj/effect/decal/cleanable/blood/bubblegum/can_bloodcrawl_in()
 	return TRUE
@@ -378,9 +377,8 @@ Difficulty: Hard
 	can_dry = FALSE
 	clean_type = CLEAN_TYPE_HARD_DECAL
 
-/obj/effect/decal/cleanable/blood/gibs/bubblegum/Initialize(mapload, list/datum/disease/diseases)
-	. = ..()
-	add_blood_DNA(list("DEMON BLOOD" = /datum/blood_type/animal))
+/obj/effect/decal/cleanable/blood/gibs/bubblegum/get_bloodtype()
+	return get_blood_type(BLOOD_TYPE_ANIMAL)
 
 /obj/effect/decal/cleanable/blood/gibs/bubblegum/can_bloodcrawl_in()
 	return TRUE
