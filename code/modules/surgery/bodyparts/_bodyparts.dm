@@ -387,6 +387,8 @@
 		var/mutable_appearance/brute_damage_overlay = mutable_appearance('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0_overlay", -DAMAGE_LAYER, appearance_flags = RESET_COLOR)
 		if(brute_damage_overlay)
 			brute_blood_overlay.overlays += brute_damage_overlay
+		LAZYADD(overlays, brute_blood_overlay)
+
 	if(burnstate)
 		var/mutable_appearance/burn_overlay = mutable_appearance(
 			icon = 'icons/mob/effects/dam_mob.dmi',
@@ -394,6 +396,7 @@
 			layer = -DAMAGE_LAYER,
 		)
 		LAZYADD(overlays, burn_overlay)
+
 	return overlays
 
 /obj/item/bodypart/blob_act()
