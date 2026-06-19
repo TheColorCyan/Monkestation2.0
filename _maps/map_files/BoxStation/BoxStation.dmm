@@ -57780,7 +57780,7 @@
 /area/station/maintenance/department/engine/atmos)
 "sIW" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/effect/decal/cleanable/blood/splatter/oil/streak,
 /turf/open/floor/stone,
 /area/station/smithing)
 "sJa" = (

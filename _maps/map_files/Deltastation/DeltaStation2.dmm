@@ -6731,7 +6731,7 @@
 /turf/open/floor/iron,
 /area/station/science/lab)
 "bBY" = (
-/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/effect/decal/cleanable/blood/splatter/oil/streak,
 /obj/effect/spawner/random/structure/crate,
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/fore)

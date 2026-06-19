@@ -10881,7 +10881,7 @@
 /obj/effect/turf_decal/trimline/purple/filled/line{
 	dir = 9
 	},
-/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/effect/decal/cleanable/blood/splatter/oil/streak,
 /obj/machinery/disposal/bin,
 /obj/effect/turf_decal/bot,
 /obj/structure/disposalpipe/trunk{
@@ -35255,7 +35255,7 @@
 "kpO" = (
 /obj/effect/turf_decal/bot,
 /obj/machinery/field/generator,
-/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/effect/decal/cleanable/blood/splatter/oil/streak,
 /turf/open/floor/plating,
 /area/station/engineering/storage)
 "kqa" = (
@@ -80580,7 +80580,7 @@
 /turf/open/floor/iron,
 /area/station/cargo/storage)
 "xmz" = (
-/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/effect/decal/cleanable/blood/splatter/oil/streak,
 /obj/structure/cable,
 /obj/machinery/camera/autoname/directional/north,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
