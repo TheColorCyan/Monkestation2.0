@@ -11,7 +11,7 @@
 
 /obj/item/reagent_containers/blood/Initialize(mapload, vol)
 	. = ..()
-	if (!blood_type)
+	if(!blood_type)
 		return
 	var/datum/blood_type/bloodtype = get_blood_type(blood_type)
 	reagents.add_reagent(bloodtype.reagent_type, volume, list("blood_type" = bloodtype, "blood_DNA" = bloodtype.dna_string), creation_callback = CALLBACK(src, PROC_REF(on_blood_created)))

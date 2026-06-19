@@ -57,6 +57,5 @@
 	base_name = ""
 	can_dry = FALSE
 
-/obj/effect/decal/cleanable/blood/innards/Initialize(mapload, list/datum/disease/diseases)
-	. = ..()
-	add_blood_DNA(list("DEMON BLOOD" = /datum/blood_type/animal))
+/obj/effect/decal/cleanable/blood/innards/get_default_blood_type()
+	return get_blood_type(BLOOD_TYPE_ANIMAL)

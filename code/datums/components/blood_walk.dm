@@ -28,6 +28,7 @@
 	target_dir_change = FALSE,
 	transfer_blood_dna = FALSE,
 	max_blood = INFINITY,
+	list/blood_dna_info = list("meaty DNA" = get_blood_type(BLOOD_TYPE_MEAT))
 )
 
 	if(!ismovable(parent))
@@ -76,7 +77,7 @@
 	SIGNAL_HANDLER
 
 	var/turf/current_turf = source.loc
-	if(!isturf(current_turf))
+	if(!isturf(current_turf) || isclosedturf(current_turf) || isgroundlessturf(current_turf))
 		return
 
 	if(!prob(blood_spawn_chance))
