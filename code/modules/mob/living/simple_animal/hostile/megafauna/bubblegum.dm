@@ -362,9 +362,6 @@ Difficulty: Hard
 	can_dry = FALSE
 	clean_type = CLEAN_TYPE_HARD_DECAL
 
-/obj/effect/decal/cleanable/blood/bubblegum/get_bloodtype()
-	return get_blood_type(BLOOD_TYPE_ANIMAL)
-
 /obj/effect/decal/cleanable/blood/bubblegum/can_bloodcrawl_in()
 	return TRUE
 
@@ -376,9 +373,6 @@ Difficulty: Hard
 	base_name = ""
 	can_dry = FALSE
 	clean_type = CLEAN_TYPE_HARD_DECAL
-
-/obj/effect/decal/cleanable/blood/gibs/bubblegum/get_bloodtype()
-	return get_blood_type(BLOOD_TYPE_ANIMAL)
 
 /obj/effect/decal/cleanable/blood/gibs/bubblegum/can_bloodcrawl_in()
 	return TRUE
