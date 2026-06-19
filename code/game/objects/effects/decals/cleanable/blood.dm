@@ -890,3 +890,25 @@
 	the_window.vis_contents += final_splatter
 	expire()
 	return TRUE
+
+/obj/effect/decal/cleanable/blood/line
+	name = "blood line"
+	desc = "Raining blood, from a lacerated sky, bleeding its horror!"
+	icon_state = "line"
+	random_icon_states = null
+	base_name = "dried blood line"
+	dry_desc = "Creating my structure - Now I shall reign in blood!"
+
+/obj/effect/decal/cleanable/blood/line/Initialize(mapload, direction)
+	if(!isnull(direction))
+		//has to be done before we call replace_decal()
+		setDir(direction)
+	return ..()
+
+/obj/effect/decal/cleanable/blood/line/replace_decal(obj/effect/decal/cleanable/merger)
+	. = ..()
+	if(!.)
+		return
+	//squirts of the same dir are redundant, but not if they're different
+	if(merger.dir != src.dir)
+		return FALSE
