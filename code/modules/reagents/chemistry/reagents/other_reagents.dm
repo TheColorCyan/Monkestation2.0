@@ -37,27 +37,6 @@
 	if(blood_color == BLOOD_COLOR_RED) // If the blood is default red, just use the darker red color for the reagent.
 		color = initial(color)
 
-/datum/reagent/blood/on_merge(list/mix_data)
-	// If we were artificially created without blood data, we still want to have the blood_reagent element for exposure effects
-	if(!istype(data) || !data["blood_type"])
-		AddElement(/datum/element/blood_reagent, null, get_blood_type(BLOOD_TYPE_UNIVERSAL))
-		return
-
-	var/datum/blood_type/blood_type = data["blood_type"]
-	if(!istype(blood_type))
-		return
-
-	var/blood_color = blood_type.get_color()
-	if(blood_color == BLOOD_COLOR_RED) // If the blood is default red, just use the darker red color for the reagent.
-		color = initial(color)
-
-/datum/reagent/blood/proc/get_diseases()
-	. = list()
-	if(data && data["viruses"])
-		for(var/thing in data["viruses"])
-			var/datum/disease/D = thing
-			. += D
-
 /datum/reagent/blood/expose_turf(turf/exposed_turf, reac_volume)//splash the blood all over the place
 	. = ..()
 	if(!istype(exposed_turf))
