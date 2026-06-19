@@ -184,7 +184,7 @@
 "aM" = (
 /obj/structure/alien/weeds,
 /obj/machinery/recharge_station,
-/obj/effect/decal/cleanable/xenoblood/xgibs/up,
+/obj/effect/decal/cleanable/blood/gibs/xeno/up,
 /turf/open/floor/iron/dark,
 /area/ruin/space/ancientstation/delta/ai)
 "aN" = (
@@ -825,7 +825,7 @@
 /area/ruin/space/ancientstation/charlie/bridge)
 "dd" = (
 /obj/structure/alien/weeds,
-/obj/effect/decal/cleanable/xenoblood/xgibs/larva/body,
+/obj/effect/decal/cleanable/blood/gibs/xeno/larva/body,
 /turf/open/floor/iron/dark,
 /area/ruin/space/ancientstation/delta/ai)
 "df" = (
@@ -1877,7 +1877,7 @@
 /area/ruin/space/ancientstation/delta/rnd)
 "gQ" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/core,
+/obj/effect/decal/cleanable/blood/gibs/xeno/core,
 /obj/machinery/duct,
 /turf/open/floor/iron/white,
 /area/ruin/space/ancientstation/delta/rnd)
@@ -2818,7 +2818,7 @@
 /area/ruin/space/ancientstation/charlie/dorms)
 "kq" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/core,
+/obj/effect/decal/cleanable/blood/gibs/xeno/core,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 4
 	},
@@ -3822,7 +3822,7 @@
 "nX" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4{
 	dir = 8
@@ -3936,7 +3936,7 @@
 "oq" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/larva/body,
+/obj/effect/decal/cleanable/blood/gibs/xeno/larva/body,
 /turf/open/floor/iron,
 /area/ruin/space/ancientstation/delta/hall)
 "or" = (
@@ -3966,7 +3966,7 @@
 "ou" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/up,
+/obj/effect/decal/cleanable/blood/gibs/xeno/up,
 /turf/open/floor/iron,
 /area/ruin/space/ancientstation/delta/hall)
 "ov" = (
@@ -3995,18 +3995,18 @@
 /area/ruin/space/ancientstation/delta/rnd)
 "oG" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/structure/table,
 /obj/machinery/cell_charger,
 /turf/open/floor/iron/white,
 /area/ruin/space/ancientstation/delta/rnd)
 "oH" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/core,
+/obj/effect/decal/cleanable/blood/gibs/xeno/core,
 /turf/open/floor/iron/white,
 /area/ruin/space/ancientstation/delta/rnd)
 "oI" = (
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
 	dir = 8
 	},
@@ -4077,7 +4077,7 @@
 "oU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable,
-/obj/effect/decal/cleanable/xenoblood/xgibs/up,
+/obj/effect/decal/cleanable/blood/gibs/xeno/up,
 /turf/open/floor/iron,
 /area/ruin/space/ancientstation/delta/hall)
 "oV" = (
@@ -4415,7 +4415,7 @@
 /turf/open/floor/iron,
 /area/ruin/space/ancientstation/charlie/hall)
 "rC" = (
-/obj/effect/decal/cleanable/xenoblood/xtracks{
+/obj/effect/decal/cleanable/blood/tracks/xeno{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/glass,
@@ -4823,7 +4823,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/item/shard,
-/obj/effect/decal/cleanable/xenoblood/xtracks{
+/obj/effect/decal/cleanable/blood/tracks/xeno{
 	dir = 6
 	},
 /obj/effect/turf_decal/tile/purple/half/contrasted,
@@ -7461,7 +7461,7 @@
 /obj/machinery/door/airlock/highsecurity,
 /obj/structure/alien/weeds,
 /obj/structure/cable,
-/obj/effect/decal/cleanable/xenoblood/xtracks,
+/obj/effect/decal/cleanable/blood/tracks/xeno,
 /obj/effect/decal/cleanable/blood/tracks,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
 	cycle_id = "oldstation-aisat"
@@ -7551,7 +7551,7 @@
 /turf/open/floor/iron,
 /area/ruin/space/ancientstation/charlie/hall)
 "Np" = (
-/obj/effect/decal/cleanable/xenoblood/xtracks{
+/obj/effect/decal/cleanable/blood/tracks/xeno{
 	dir = 10
 	},
 /turf/open/floor/engine,
@@ -8341,7 +8341,7 @@
 /area/ruin/space/ancientstation/beta/supermatter)
 "Sz" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood/xgibs/larva/body,
+/obj/effect/decal/cleanable/blood/gibs/xeno/larva/body,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -8817,7 +8817,7 @@
 /turf/open/floor/iron/airless,
 /area/ruin/space/ancientstation/beta/medbay)
 "Wd" = (
-/obj/effect/decal/cleanable/xenoblood/xtracks{
+/obj/effect/decal/cleanable/blood/tracks/xeno{
 	dir = 5
 	},
 /turf/open/floor/engine,

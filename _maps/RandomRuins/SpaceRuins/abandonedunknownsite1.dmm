@@ -9704,7 +9704,7 @@
 /area/ruin/space/has_grav/abandonedscpsite/czprison)
 "Kw" = (
 /obj/effect/spawner/structure/window/reinforced/tinted,
-/obj/effect/decal/cleanable/blood/splatter/stacking,
+/obj/effect/decal/cleanable/blood/splatter,
 /obj/effect/decal/cleanable/blood/splatter/over_window,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,

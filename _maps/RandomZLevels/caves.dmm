@@ -472,7 +472,7 @@
 /area/awaymission/caves/bmp_asteroid/level_two)
 "cN" = (
 /obj/machinery/door/window/left/directional/east,
-/obj/effect/decal/cleanable/xenoblood/xgibs,
+/obj/effect/decal/cleanable/blood/gibs/xeno,
 /turf/open/floor/plating,
 /area/awaymission/caves/research)
 "cP" = (
@@ -492,7 +492,7 @@
 /turf/open/floor/plating,
 /area/awaymission/caves/research)
 "cV" = (
-/obj/effect/decal/cleanable/xenoblood/xgibs,
+/obj/effect/decal/cleanable/blood/gibs/xeno,
 /turf/open/floor/plating,
 /area/awaymission/caves/research)
 "cX" = (
@@ -1761,7 +1761,7 @@
 /area/awaymission/caves/bmp_asteroid/level_three)
 "JP" = (
 /obj/structure/window/reinforced/spawner/directional/east,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/plating,
 /area/awaymission/caves/research)
 "Kq" = (

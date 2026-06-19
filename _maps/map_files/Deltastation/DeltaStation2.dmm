@@ -55231,7 +55231,7 @@
 /obj/item/kirbyplants/random,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/mapping_helpers/broken_floor,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/structure/sign/warning/electric_shock/directional/north,
 /turf/open/floor/iron/dark,
 /area/station/service/abandoned_gambling_den)
@@ -59278,7 +59278,7 @@
 /area/station/service/kitchen/abandoned)
 "nTd" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/structure/sign/warning/xeno_mining/directional/south,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden,
@@ -77058,7 +77058,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
 "sfE" = (
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/circuit/green,
 /area/station/science/xenobiology/cell)
 "sfH" = (
@@ -78736,7 +78736,7 @@
 /area/station/service/barber)
 "sAi" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/structure/sign/warning/xeno_mining/directional/north,
 /obj/effect/decal/cleanable/cobweb/cobweb2,
 /obj/structure/cable,

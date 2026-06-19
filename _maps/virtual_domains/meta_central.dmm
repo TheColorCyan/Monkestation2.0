@@ -1828,7 +1828,7 @@
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "pI" = (
-/obj/effect/decal/cleanable/xenoblood/xgibs/up,
+/obj/effect/decal/cleanable/blood/gibs/xeno/up,
 /obj/structure/alien/weeds,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/virtual_domain)
@@ -2309,7 +2309,7 @@
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "tn" = (
-/obj/effect/decal/cleanable/xenoblood/xgibs/core,
+/obj/effect/decal/cleanable/blood/gibs/xeno/core,
 /obj/structure/alien/weeds,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/virtual_domain)
@@ -3452,7 +3452,7 @@
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "CQ" = (
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/structure/alien/weeds,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/virtual_domain)
@@ -3723,7 +3723,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/powered/virtual_domain)
 "Fr" = (
-/obj/effect/decal/cleanable/xenoblood/xgibs/down,
+/obj/effect/decal/cleanable/blood/gibs/xeno/down,
 /obj/structure/alien/weeds,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/virtual_domain)

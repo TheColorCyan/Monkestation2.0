@@ -48608,7 +48608,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/fore)
 "lxU" = (
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /obj/item/toy/toy_xeno,
 /turf/open/floor/engine,
 /area/station/science/xenobiology/cell)

@@ -47463,7 +47463,7 @@
 	},
 /area/station/security/prison/work)
 "nlj" = (
-/obj/effect/decal/cleanable/xenoblood,
+/obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/circuit/green,
 /area/station/science/xenobiology/cell)
 "nll" = (
