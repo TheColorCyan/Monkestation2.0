@@ -329,6 +329,16 @@
 		organ_owner.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
 		return COMSIG_MOB_STOP_REAGENT_TICK
 
+/obj/item/organ/internal/liver/apid
+	name = "apid liver"
+
+/obj/item/organ/internal/liver/apid/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
+	. = ..()
+	if((. & COMSIG_MOB_STOP_REAGENT_TICK)  || (organ_flags & ORGAN_FAILING))
+		return
+	if(chem.type == /datum/reagent/toxin/pestkiller)
+		organ_owner.adjustToxLoss(3 * REM * seconds_per_tick)
+
 #undef HAS_SILENT_TOXIN
 #undef HAS_NO_TOXIN
 #undef HAS_PAINFUL_TOXIN
