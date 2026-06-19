@@ -582,4 +582,4 @@
 
 /obj/item/organ/internal/heart/spider
 	name = "spider heart"
-	heart_bloodtype = BLOOD_TYPE_SPIDER
+	heart_bloodtype = BLOOD_TYPE_HEMOLYMPH

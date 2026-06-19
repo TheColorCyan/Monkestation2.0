@@ -33,6 +33,7 @@
 
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
 	species_language_holder = /datum/language_holder/apid
+	exotic_bloodtype = BLOOD_TYPE_HEMOLYMPH
 
 	external_organs = list(
 		/obj/item/organ/external/wings/apid = "Normal",

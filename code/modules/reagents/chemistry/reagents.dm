@@ -257,14 +257,12 @@ Primarily used in reagents/reaction_agents
 	SHOULD_CALL_PARENT(TRUE)
 	REMOVE_TRAITS_IN(L, "metabolized:[type]")
 
-/// Called when a reagent is inside of a mob when they are dead
-/datum/reagent/proc/on_mob_dead(mob/living/carbon/C, seconds_per_tick)
-	if(!(chemical_flags & REAGENT_DEAD_PROCESS))
-		return
-	current_cycle++
-	if(length(reagent_removal_skip_list))
-		return
-	holder.remove_reagent(type, metabolization_rate * C.metabolism_efficiency * seconds_per_tick)
+/**
+ * Called when a reagent is inside of a mob when they are dead if the reagent has the REAGENT_DEAD_PROCESS flag
+ * Returning UPDATE_MOB_HEALTH will cause updatehealth() to be called on the holder mob by /datum/reagents/proc/metabolize.
+ */
+/datum/reagent/proc/on_mob_dead(mob/living/carbon/affected_mob, seconds_per_tick)
+	SHOULD_CALL_PARENT(TRUE)
 
 /// Called by [/datum/reagents/proc/conditional_update_move]
 /datum/reagent/proc/on_move(mob/M)

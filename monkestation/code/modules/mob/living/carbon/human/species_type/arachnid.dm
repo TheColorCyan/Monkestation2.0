@@ -19,7 +19,7 @@
 	mutanttongue = /obj/item/organ/internal/tongue/arachnid
 	mutanteyes = /obj/item/organ/internal/eyes/night_vision/arachnid
 	mutantheart = /obj/item/organ/internal/heart/spider
-	exotic_bloodtype = BLOOD_TYPE_SPIDER
+	exotic_bloodtype = BLOOD_TYPE_HEMOLYMPH
 	inherent_factions = list(FACTION_SPIDER)
 	bodypart_overrides = list(
 		BODY_ZONE_HEAD = /obj/item/bodypart/head/arachnid,

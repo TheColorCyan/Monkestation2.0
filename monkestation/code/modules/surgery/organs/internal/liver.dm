@@ -27,14 +27,14 @@
 		ORGAN_SLOT_EYES,
 		ORGAN_SLOT_EARS,
 	)
-	if(istype(chem.type, /datum/reagent/toxin/plasma) || istype(chem.type, /datum/reagent/toxin/hot_ice))
-		if(organ_owner.getBruteLoss() || organ_owner.getFireLoss())
-			if(!HAS_TRAIT(organ_owner, TRAIT_SLIME_HYDROPHOBIA) && organ_owner.get_skin_temperature() > organ_owner.bodytemp_cold_damage_limit)
-				var/list/to_heal = rand(2) ? list(BRUTE, BURN) : list(BURN, BRUTE) // Randomize what is healed first
-				organ_owner.heal_ordered_damage(HEALTH_HEALED * REM * seconds_per_tick, to_heal)
-				organ_owner.reagents.remove_reagent(chem.type, min(chem.volume * 0.22, 10))
-			else
-				to_chat(organ_owner, span_purple("Your membrane is too viscous to mend its wounds..."))
+	if(chem.type == /datum/reagent/toxin/plasma || chem.type == /datum/reagent/toxin/hot_ice)
+		if(!organ_owner.getBruteLoss() && !organ_owner.getFireLoss())
+			return
+		if(HAS_TRAIT(organ_owner, TRAIT_SLIME_HYDROPHOBIA) || organ_owner.get_skin_temperature() < organ_owner.bodytemp_cold_damage_limit)
+			to_chat(organ_owner, span_purple("Your membrane is too viscous to mend its wounds..."))
+			return
+		var/list/to_heal = rand(2) ? list(BRUTE, BURN) : list(BURN, BRUTE) // Randomize what is healed first
+		organ_owner.heal_ordered_damage(HEALTH_HEALED * REM * seconds_per_tick, to_heal)
 
 		if(organ_owner.blood_volume > BLOOD_VOLUME_SLIME_SPLIT)
 			organ_owner.adjustOrganLoss(
@@ -44,8 +44,7 @@
 		if(SPT_PROB(5, seconds_per_tick))
 			to_chat(organ_owner, span_purple("Your body's thirst for plasma is quenched, your inner and outer membrane using it to regenerate."))
 
-	else if(istype(chem.type, /datum/reagent/water))
-
+	else if(chem.type == /datum/reagent/water)
 		if(HAS_TRAIT(organ_owner, TRAIT_SLIME_HYDROPHOBIA) || HAS_TRAIT(organ_owner, TRAIT_GODMODE) || organ_owner.blood_volume <= 0)
 			return
 
@@ -55,7 +54,6 @@
 		else
 			organ_owner.blood_volume = max(organ_owner.blood_volume - (3 * seconds_per_tick), 0)
 
-		chem.holder?.remove_reagent(chem.type, min(chem.volume * 0.22, 10))
 		if(SPT_PROB(25, seconds_per_tick))
 			to_chat(organ_owner, span_warning("The water starts to weaken and adulterate your insides!"))
 

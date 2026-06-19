@@ -57,8 +57,8 @@
 /obj/item/reagent_containers/blood/ethereal
 	blood_type = BLOOD_TYPE_ETHEREAL
 
-/obj/item/reagent_containers/blood/spider
-	blood_type = BLOOD_TYPE_SPIDER
+/obj/item/reagent_containers/blood/hemolymph
+	blood_type = BLOOD_TYPE_HEMOLYMPH
 
 /obj/item/reagent_containers/blood/snail
 	blood_type = BLOOD_TYPE_SNAIL

@@ -402,7 +402,7 @@
 /datum/blood_type/random_chemical/type_key()
 	return reagent_type
 
-/datum/blood_type/spider
-	name = BLOOD_TYPE_SPIDER
-	dna_string = "Spider DNA"
-	color = BLOOD_COLOR_SPIDER
+/datum/blood_type/hemolymph
+	name = BLOOD_TYPE_HEMOLYMPH
+	dna_string = "Insect DNA"
+	color = BLOOD_COLOR_HEMOLYMPH

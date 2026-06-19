@@ -27,7 +27,7 @@
 		TRAIT_FOOD_ABSORPTION,
 	)
 
-	inherent_biotypes = MOB_SLIME|MOB_HUMANOID
+	inherent_biotypes = MOB_ORGANIC|MOB_SLIME|MOB_HUMANOID
 	meat = /obj/item/food/meat/slab/human/mutant/slime
 	exotic_bloodtype = BLOOD_TYPE_TOX
 	inert_mutation = /datum/mutation/acid_touch
