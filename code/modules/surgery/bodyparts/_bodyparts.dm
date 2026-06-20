@@ -382,7 +382,7 @@
 	var/list/overlays
 	if(brutestate)
 		// divided into two overlays: one that gets colored and one that doesn't.
-		var/image/brute_blood_overlay = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER, dir = SOUTH)
+		var/image/brute_blood_overlay = image('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0", -DAMAGE_LAYER)
 		brute_blood_overlay.color = get_color_from_blood_list(blood_dna_info)
 		var/mutable_appearance/brute_damage_overlay = mutable_appearance('icons/mob/effects/dam_mob.dmi', "[dmg_overlay_type]_[body_zone]_[brutestate]0_overlay", -DAMAGE_LAYER, appearance_flags = RESET_COLOR)
 		if(brute_damage_overlay)
