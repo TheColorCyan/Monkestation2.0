@@ -62,5 +62,6 @@
 
 /obj/effect/decal/cleanable/blood/splatter/oil/streak
 	icon_state = "streak1"
+	icon = 'icons/mob/silicon/robots.dmi'
 	random_icon_states = list("streak1", "streak2", "streak3", "streak4", "streak5")
 	beauty = -50
