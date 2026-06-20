@@ -259,8 +259,10 @@
 		return NONE
 
 	total_bloodiness = 0
-	update_icon()
-	return COMPONENT_CLEANED
+	var/obj/item/clothing/shoes/parent_shoes = parent
+	if(!istype(parent_shoes)) // if we are wearing shoes, wash() will already be calling update_worn_shoes() so we don't have to do it twice
+		update_icon()
+	return COMPONENT_CLEANED|COMPONENT_CLEANED_GAIN_XP
 
 /**
  * Like its parent but can be applied to carbon mobs instead of clothing items
@@ -324,7 +326,7 @@
 		return
 
 	// Find any leg of our human and add that to the footprint, instead of the default which is to just add the human type
-	for(var/obj/item/bodypart/leg/affecting in wielder.bodyparts)
+	for(var/obj/item/bodypart/leg/affecting in wielder.get_bodyparts())
 		if(!affecting.bodypart_disabled)
 			LAZYSET(footprint.species_types, affecting.limb_id, TRUE)
 
