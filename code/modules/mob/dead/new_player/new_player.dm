@@ -506,7 +506,7 @@
 		I.ui_interact(src)
 
 	// Add verb for re-opening the interview panel, fixing chat and re-init the verbs for the stat panel. See interface/interface.dm
-	add_verb(src, /mob/dead/new_player/proc/open_interview)
+	ASSIGN_GAME_VERB(src, /mob/dead/new_player, open_interview)
 	add_verb(src, GLOB.important_interface_verbs)
 
 

@@ -486,12 +486,10 @@
 
 //mob verbs are a lot faster than object verbs
 //for more info on why this is not atom/pull, see examinate() in mob.dm
-/mob/living/verb/pulled(atom/movable/AM as mob|obj in oview(1))
-	set name = "Pull"
-	set category = "Object"
+GAME_VERB(/mob/living, pulled, "Pull", "Object", atom/movable/thing_pulled as mob|obj in oview(1))
 
-	if(istype(AM) && Adjacent(AM))
-		start_pulling(AM)
+	if(istype(thing_pulled) && Adjacent(thing_pulled))
+		start_pulling(thing_pulled)
 	else if(!(istate & ISTATE_HARM)) //Don;'t cancel pulls if misclicking in combat mode.
 		stop_pulling()
 
@@ -522,8 +520,8 @@
 	log_message("points at [pointing_at]", LOG_EMOTE)
 	visible_message("<span class='infoplain'>[span_name("[src]")] points at [pointing_at].</span>", span_notice("You point at [pointing_at]."))
 
-/mob/living/verb/succumb(whispered as null)
-	set hidden = TRUE
+GAME_VERB_HIDDEN(/mob/living, succumb, "succumb", whispered as null)
+
 	if (!CAN_SUCCUMB(src))
 		if(HAS_TRAIT(src, TRAIT_SUCCUMB_OVERRIDE))
 			if(whispered)
@@ -596,9 +594,7 @@
 
 // MOB PROCS //END
 
-/mob/living/proc/mob_sleep()
-	set name = "Sleep"
-	set category = "IC"
+GAME_VERB(/mob/living, mob_sleep, "Sleep", "IC")
 
 	if(IsSleeping())
 		to_chat(src, span_warning("You are already sleeping!"))
