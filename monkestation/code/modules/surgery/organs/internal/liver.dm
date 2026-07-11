@@ -30,7 +30,7 @@
 	if(chem.type == /datum/reagent/toxin/plasma || chem.type == /datum/reagent/toxin/hot_ice)
 		if(!organ_owner.getBruteLoss() && !organ_owner.getFireLoss())
 			return
-		if(HAS_TRAIT(organ_owner, TRAIT_SLIME_HYDROPHOBIA) || organ_owner.get_skin_temperature() < organ_owner.bodytemp_cold_damage_limit)
+		if(organ_owner.get_skin_temperature() < organ_owner.bodytemp_cold_damage_limit)
 			to_chat(organ_owner, span_purple("Your membrane is too viscous to mend its wounds..."))
 			return
 		var/list/to_heal = rand(2) ? list(BRUTE, BURN) : list(BURN, BRUTE) // Randomize what is healed first
@@ -45,7 +45,7 @@
 			to_chat(organ_owner, span_purple("Your body's thirst for plasma is quenched, your inner and outer membrane using it to regenerate."))
 
 	else if(chem.type == /datum/reagent/water)
-		if(HAS_TRAIT(organ_owner, TRAIT_SLIME_HYDROPHOBIA) || HAS_TRAIT(organ_owner, TRAIT_GODMODE) || organ_owner.blood_volume <= 0)
+		if(HAS_TRAIT(organ_owner, TRAIT_GODMODE) || organ_owner.blood_volume <= 0)
 			return
 
 		var/datum/antagonist/bloodsucker/bloodsucker = IS_BLOODSUCKER(organ_owner)

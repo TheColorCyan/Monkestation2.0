@@ -351,7 +351,7 @@
 		if(welder.reagents.total_volume >= welder.reagents.maximum_volume)
 			to_chat(user, span_warning("Your [welder.name] is already full!"))
 			return ITEM_INTERACT_BLOCKING
-		reagents.trans_to(welder, welder.max_fuel, transfered_by = user)
+		reagents.trans_to(welder, welder.max_fuel, transferred_by = user)
 		user.visible_message(span_notice("[user] refills [user.p_their()] [welder.name]."), span_notice("You refill [welder]."))
 		playsound(src, 'sound/effects/refill.ogg', 50, TRUE)
 		welder.update_appearance()
@@ -365,7 +365,7 @@
 	. = ..()
 	if(!(user.istate & ISTATE_HARM))
 		return NONE
-		
+
 	if(cap_on)
 		to_chat(user, span_warning("\The [src] is capped!"))
 		return NONE
