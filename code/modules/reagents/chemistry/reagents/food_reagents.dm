@@ -654,7 +654,7 @@
 	var/obj/effect/decal/cleanable/food/flour/reagentdecal = new(exposed_turf)
 	reagentdecal = locate() in exposed_turf //Might have merged with flour already there.
 	if(reagentdecal)
-		reagentdecal.reagents.add_reagent(/datum/reagent/consumable/flour, reac_volume)
+		reagentdecal.init_reagents(/datum/reagent/consumable/flour, reac_volume)
 
 /datum/reagent/consumable/cherryjelly
 	name = "Cherry Jelly"
