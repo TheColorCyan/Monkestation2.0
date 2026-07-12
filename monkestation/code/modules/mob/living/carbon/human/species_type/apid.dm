@@ -42,7 +42,7 @@
 
 	mutanteyes = /obj/item/organ/internal/eyes/apid
 	mutanttongue =  /obj/item/organ/internal/tongue/apid
-	mutantliver = /obj/item/organ/internal/liver/apid
+	mutantliver = /obj/item/organ/internal/liver/insect
 
 	bodypart_overrides = list(
 		BODY_ZONE_HEAD = /obj/item/bodypart/head/apid,

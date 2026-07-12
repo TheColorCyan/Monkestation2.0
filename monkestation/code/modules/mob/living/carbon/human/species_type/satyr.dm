@@ -89,7 +89,6 @@
 	name = "satyr liver"
 	organ_traits = list(TRAIT_ALCOHOL_TOLERANCE)
 
-
 /obj/item/organ/internal/liver/satyr/Insert(mob/living/carbon/receiver, special, drop_if_replaced)
 	. = ..()
 	receiver.AddComponent(/datum/component/living_drunk)
@@ -98,3 +97,16 @@
 	. = ..()
 	var/datum/component/living_drunk/drunk = organ_owner.GetComponent(/datum/component/living_drunk)
 	qdel(drunk)
+
+/obj/item/organ/internal/liver/satyr/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
+	if((. & COMSIG_MOB_STOP_REAGENT_TICK)  || (organ_flags & ORGAN_FAILING))
+		return
+	if(chem.type == (/datum/reagent/iron))
+		organ_owner.adjustToxLoss(3 * REM * seconds_per_tick)
+		organ_owner.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
+		return COMSIG_MOB_STOP_REAGENT_TICK
+	if(chem.type == /datum/reagent/medicine/antihol) //Cures alchol, which they need, to live.
+		to_chat(organ_owner, span_danger("You feel your veins constrict as your heads spin"))
+		organ_owner.adjustOxyLoss(4 * REM * seconds_per_tick)
+		organ_owner.reagents.remove_reagent(chem.type, REAGENTS_METABOLISM * seconds_per_tick)
+		return COMSIG_MOB_STOP_REAGENT_TICK
