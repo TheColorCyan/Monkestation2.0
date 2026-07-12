@@ -330,7 +330,8 @@
 		return COMSIG_MOB_STOP_REAGENT_TICK
 
 /obj/item/organ/internal/liver/insect
-	name = "insect liver"
+	icon_state = "liver-bone"
+	color = "#34bbf0"
 
 /obj/item/organ/internal/liver/insect/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
 	. = ..()
