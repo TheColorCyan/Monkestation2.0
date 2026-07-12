@@ -274,7 +274,7 @@
 
 /obj/effect/decal/cleanable/blood/ethereal
 
-/obj/effect/decal/cleanable/blood/pre_dna/ethereal/get_default_blood_type()
+/obj/effect/decal/cleanable/blood/ethereal/get_default_blood_type()
 	return get_blood_type(BLOOD_TYPE_ETHEREAL)
 
 /obj/effect/decal/cleanable/confetti
