@@ -272,6 +272,11 @@
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 	color = BLOOD_COLOR_XENO
 
+/obj/effect/decal/cleanable/blood/ethereal
+
+/obj/effect/decal/cleanable/blood/pre_dna/ethereal/get_default_blood_type()
+	return get_blood_type(BLOOD_TYPE_ETHEREAL)
+
 /obj/effect/decal/cleanable/confetti
 	name = "confetti"
 	desc = "Tiny bits of colored paper thrown about for the janitor to enjoy!"

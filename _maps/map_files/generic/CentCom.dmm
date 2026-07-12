@@ -25313,7 +25313,7 @@
 /area/centcom/central_command_areas/adminroom)
 "khe" = (
 /obj/effect/spawner/random/structure/chair_flipped,
-///obj/effect/decal/cleanable/blood/pre_dna/ethereal,
+/obj/effect/decal/cleanable/blood/ethereal,
 /turf/open/floor/emissive_test/white,
 /area/centcom/central_command_areas/adminroom)
 "khW" = (
@@ -27288,7 +27288,7 @@
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/admin)
 "nOi" = (
-///obj/effect/decal/cleanable/blood/pre_dna/ethereal,
+/obj/effect/decal/cleanable/blood/ethereal,
 /turf/closed/indestructible/riveted,
 /area/centcom/central_command_areas/adminroom)
 "nPn" = (
