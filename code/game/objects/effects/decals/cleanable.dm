@@ -28,7 +28,15 @@
 				return INITIALIZE_HINT_QDEL
 
 	if (LAZYLEN(diseases))
-		add_diseases(diseases)
+		var/list/datum/disease/diseases_to_add = list()
+		for(var/datum/disease/infection in diseases)
+			if(infection.spread_flags & (DISEASE_SPREAD_CONTACT_FLUIDS))
+				diseases_to_add += infection
+		if(LAZYLEN(diseases_to_add))
+			AddComponent(/datum/component/infective, diseases_to_add)
+		for(var/datum/disease/infection in diseases)
+			if(infection.spread_flags & (DISEASE_SPREAD_BLOOD))
+				src.diseases |= infection
 
 	AddElement(/datum/element/beauty, beauty)
 
