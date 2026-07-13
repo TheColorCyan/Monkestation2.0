@@ -433,7 +433,7 @@
 			continue
 		if(istype(bits, /datum/reagent/consumable))
 			var/datum/reagent/consumable/goodbit = bits
-			. += goodbit.nutriment_factor * effective_volume / goodbit.metabolization_rate
+			. += goodbit.get_nutriment_factor(src) * goodbit.volume / goodbit.metabolization_rate
 			continue
 		if(!only_consumable)
 			continue

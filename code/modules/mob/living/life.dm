@@ -161,7 +161,7 @@
 	var/fullness = nutrition
 	// we add the nutrition value of what we're currently digesting
 	for(var/datum/reagent/consumable/bits in reagents.reagent_list)
-		fullness += bits.nutriment_factor * bits.volume / bits.metabolization_rate
+		fullness += bits.get_nutriment_factor(src) * bits.volume / bits.metabolization_rate
 	return fullness
 
 /**
