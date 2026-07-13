@@ -335,9 +335,9 @@
 		affected_mob.set_dizzy_if_lower(10 SECONDS)
 		if(SPT_PROB(25, seconds_per_tick)) //Congratulations, your committment to evil has now made holy water a deadly poison to you!
 			affected_mob.emote("scream")
-			need_mob_update += affected_mob.adjustFireLoss(3 * REM * seconds_per_tick, updating_health = FALSE)
+			affected_mob.adjustFireLoss(3 * REM * seconds_per_tick, updating_health = FALSE)
 	if(data["deciseconds_metabolized"] >= (1 MINUTES)) // 24 units
-		need_mob_update += affected_mob.adjustFireLoss(10 * REM * seconds_per_tick, updating_health = FALSE)
+		affected_mob.adjustFireLoss(10 * REM * seconds_per_tick, updating_health = FALSE)
 		affected_mob.remove_status_effect(/datum/status_effect/jitter)
 		affected_mob.remove_status_effect(/datum/status_effect/speech/stutter)
 		holder?.remove_reagent(type, volume) // maybe this is a little too perfect and a max() cap on the statuses would be better??

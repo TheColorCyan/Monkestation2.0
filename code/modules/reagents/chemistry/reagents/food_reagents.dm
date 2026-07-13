@@ -815,7 +815,7 @@
 
 /datum/reagent/consumable/nutriment/stabilized/on_mob_life(mob/living/carbon/M, seconds_per_tick, times_fired)
 	if(M.nutrition > NUTRITION_LEVEL_FULL - 25)
-		M.adjust_nutrition(-3 * REM * get_nutriment_factor(affected_mob) * seconds_per_tick)
+		M.adjust_nutrition(-3 * REM * get_nutriment_factor(M) * seconds_per_tick)
 	..()
 
 ////Lavaland Flora Reagents////
