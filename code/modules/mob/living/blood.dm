@@ -30,20 +30,11 @@
 
 	if(!(sigreturn & HANDLE_BLOOD_NO_NUTRITION_DRAIN))
 		if(blood_volume < BLOOD_VOLUME_NORMAL && !HAS_TRAIT(src, TRAIT_NOHUNGER))
-			var/nutrition_ratio = 0
-			switch(nutrition)
-				if(0 to NUTRITION_LEVEL_STARVING)
-					nutrition_ratio = 0.2
-				if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_HUNGRY)
-					nutrition_ratio = 0.4
-				if(NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FED)
-					nutrition_ratio = 0.6
-				if(NUTRITION_LEVEL_FED to NUTRITION_LEVEL_WELL_FED)
-					nutrition_ratio = 0.8
-				else
-					nutrition_ratio = 1
+			var/nutrition_ratio = round(nutrition / NUTRITION_LEVEL_WELL_FED, 0.2)
+
 			if(satiety > 80)
 				nutrition_ratio *= 1.25
+
 			adjust_nutrition(-nutrition_ratio * HUNGER_FACTOR * seconds_per_tick)
 			if(spleen_process) //monkestation addition for spleens
 				SEND_SIGNAL(src, COMSIG_SPLEEN_MULT_BLOODGEN, humantarget, blood_volume, nutrition_ratio, seconds_per_tick) //does blood generation process in spleen instead of below in else
