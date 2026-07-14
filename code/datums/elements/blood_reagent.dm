@@ -86,27 +86,27 @@
 	if (!(blood_type.blood_flags & BLOOD_TRANSFER_VIRAL_DATA))
 		return
 
-	for(var/datum/disease/strain as anything in source.data["viruses"])
+	for(var/datum/disease/acute/strain as anything in source.data["viruses"])
 		if ((strain.spread_flags & DISEASE_SPREAD_SPECIAL) || (strain.spread_flags & DISEASE_SPREAD_NON_CONTAGIOUS))
 			continue
 
 		if (methods & INGEST)
 			if (!strain.has_required_infectious_organ(exposed_mob, ORGAN_SLOT_STOMACH))
 				continue
-			exposed_mob.ForceContractDisease(strain)
+			exposed_mob.infect_disease(strain, TRUE, "(Exposure to infected blood through ingestion)")
 
 		else if (methods & (INJECT|PATCH))
 			if (!strain.has_required_infectious_organ(exposed_mob, ORGAN_SLOT_HEART))
 				continue
-			exposed_mob.ForceContractDisease(strain)
+			exposed_mob.infect_disease(strain, TRUE, "(Exposure to infected blood through injection)")
 
 		else if ((methods & VAPOR) && (strain.spread_flags & DISEASE_SPREAD_CONTACT_FLUIDS))
 			if (!strain.has_required_infectious_organ(exposed_mob, ORGAN_SLOT_LUNGS))
 				continue
-			exposed_mob.ContactContractDisease(strain)
+			exposed_mob.infect_disease(strain, FALSE, "(Exposure to infected blood through vapor)")
 
 		else if ((methods & TOUCH) && (strain.spread_flags & DISEASE_SPREAD_CONTACT_FLUIDS))
-			exposed_mob.ContactContractDisease(strain)
+			exposed_mob.infect_disease(strain, FALSE, "(Exposure to infected blood through touch)")
 
 	/// Have to inject, inhale or ingest it. No curefoam/cheap curesprays
 	if (source.data["resistances"] && (methods & (INGEST|INJECT)))
