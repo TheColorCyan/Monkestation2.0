@@ -53,7 +53,7 @@
 
 /// Gets just how much nutrition this reagent is worth for the passed mob
 /datum/reagent/consumable/proc/get_nutriment_factor(mob/living/carbon/eater)
-	return nutriment_factor * REAGENTS_METABOLISM * purity * 2
+	return nutriment_factor * REAGENTS_METABOLISM
 
 /datum/reagent/consumable/nutriment
 	name = "Nutriment"
