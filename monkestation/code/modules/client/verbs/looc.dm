@@ -2,7 +2,8 @@
 
 GLOBAL_VAR_INIT(looc_allowed, TRUE)
 
-GAME_VERB_DESC(/client, looc, "LOOC", "Local OOC, seen only by those in view.", "OOC", msg as text)
+GAME_VERB_DESC(/client, looc, "LOOC", "Local OOC, seen only by those in view.", "OOC")
+	VERB_ARG(msg, VERB_ARG_TYPE_TEXT, VERB_ARG_SOURCE_INPUT)
 
 	if(GLOB.say_disabled)    //This is here to try to identify lag problems
 		to_chat(usr, span_danger("Speech is currently admin-disabled."))
