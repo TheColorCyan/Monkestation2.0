@@ -88,6 +88,7 @@
 		if(client)
 			SEND_SIGNAL(client, COMSIG_TGUI_PANEL_READY)
 			SEND_SIGNAL(client?.mob, COMSIG_TGUI_PANEL_READY)
+		send_hotkey_mode()
 		return TRUE
 	if(type == "audio/setAdminMusicVolume")
 		client.admin_music_volume = payload["volume"]
@@ -234,3 +235,6 @@
 			"assets" = webroot_asset_urls,
 		)
 	window.send_message("metadata", metadata)
+
+/datum/tgui_panel/proc/send_hotkey_mode()
+	window.send_message("verbs/hotkey_mode", list("hotkeys" = client.hotkeys))
