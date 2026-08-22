@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/game/objects/effects/decals/cleanable.dm - MonkeStation 2.0</title></head><body><header><a href="index.html">MonkeStation 2.0</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/game/objects/effects/decals/cleanable.dm <a href="https://github.com/TheColorCyan/Monkestation2.0/blob/da563f4a3204e81c678aa22753171ea7b44519f4/code/game/objects/effects/decals/cleanable.dm"><img src="git.png" width="16" height="16" title="code/game/objects/effects/decals/cleanable.dm"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="obj/effect/decal/cleanable.html">/obj/effect/decal/cleanable</a></th><td>/datum/weather/nuclear_fallout
+name = &quot;nuclear fallout&quot;
+desc = &quot;Irradiated dust falls down everywhere.&quot;
+telegraph_duration = 50
+telegraph_message = &quot;<span class='boldwarning'>The air suddenly becomes dusty..</span>&quot;
+weather_message = &quot;<span class='userdanger'><i>You feel a wave of hot ash fall down on you.</i></span>&quot;
+weather_overlay = &quot;light_ash&quot;
+telegraph_overlay = &quot;light_snow&quot;
+weather_duration_lower = 600
+weather_duration_upper = 1500
+weather_color = &quot;green&quot;
+telegraph_sound = null
+weather_sound = 'sound/effects/rbmk/falloutwind.ogg'
+end_duration = 100
+area_type = /area
+protected_areas = list(/area/maintenance, /area/ai_monitored/turret_protected/ai_upload, /area/ai_monitored/turret_protected/ai_upload_foyer,
+/area/ai_monitored/turret_protected/ai, /area/storage/emergency/starboard, /area/storage/emergency/port, /area/shuttle)
+target_trait = ZTRAIT_STATION
+end_message = &quot;<span class='notice'>The ash stops falling.</span>&quot;
+immunity_type = &quot;rad&quot;</td></tr></table></main><footer>tgstation.dme <a href="https://github.com/TheColorCyan/Monkestation2.0/tree/da563f4a3204e81c678aa22753171ea7b44519f4">da563f4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.11.0</a></footer></body></html>
