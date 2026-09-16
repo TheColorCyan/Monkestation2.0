@@ -1623,7 +1623,7 @@ GAME_VERB_DESC(/mob, memory, "Memories", "View your character's memories.", "IC"
 	data["memories"] = memories
 	return data
 
-GAME_VERB(/mob, view_skills, "View Skills", "View Skills")
+GAME_VERB(/mob, view_skills, "View Skills", "IC")
 
 	mind?.print_levels(src)
 
