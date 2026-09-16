@@ -161,13 +161,6 @@ if $grep '\tset\s*(name|desc|category|hidden|popup_menu|instant)\s*=\s*(.*)\s' "
 	st=1
 fi;
 
-part "improperly pathed static lists"
-if $grep -i 'var/list/static/.*' "${code_files[@]}"; then
-	echo
-	echo -e "${RED}ERROR: Found incorrect static list definition 'var/list/static/', it should be 'var/static/list/' instead.${NC}"
-	st=1
-fi;
-
 part "can_perform_action argument check"
 if $grep 'can_perform_action\(\s*\)' "${code_files[@]}"; then
 	echo
