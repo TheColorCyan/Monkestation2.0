@@ -1189,9 +1189,7 @@ GAME_VERB_DESC(/mob/living/silicon/ai, deploy_to_shell, "Deploy to Shell", "Tran
 		if(past_os && (current_turf.z != new_turf.z))
 			past_os.remove_ai(src)
 
-/mob/living/silicon/ai/up()
-	set name = "Move Upwards"
-	set category = "IC"
+GAME_VERB(/mob/living/silicon/ai, up, "Move Upwards", "IC")
 
 	if(eyeobj.zMove(UP, z_move_flags = ZMOVE_FEEDBACK))
 		to_chat(src, span_notice("You move upwards."))
