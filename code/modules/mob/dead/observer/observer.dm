@@ -902,10 +902,7 @@ GAME_VERB_DESC(/mob/dead/observer, register_pai_candidate, "pAI Setup", "Upload 
 		to_chat(usr, span_warning("Can't become a pAI candidate while not dead!"))
 
 /*
-/mob/dead/observer/verb/mafia_game_signup()
-	set category = "Ghost"
-	set name = "Signup for Mafia"
-	set desc = "Sign up for a game of Mafia to pass the time while dead."
+GAME_VERB_DESC(/mob/dead/observer, mafia_game_signup, "Signup for Mafia", "Sign up for a game of Mafia to pass the time while dead.", "Ghost")
 
 	mafia_signup()
 
