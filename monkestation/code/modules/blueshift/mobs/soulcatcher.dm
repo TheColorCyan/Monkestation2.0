@@ -155,11 +155,9 @@ GAME_VERB(/mob/living/soulcatcher_soul, leave_soulcatcher, "Leave Soulcatcher", 
 
 
 /mob/living/soulcatcher_soul/whisper_verb()
-	set hidden = TRUE
 	return FALSE
 
 /mob/living/soulcatcher_soul/resist()
-	set hidden = TRUE
 	return FALSE
 
 /// Assuming we have a previous body a present mind on our soul, we are going to transfer the mind back to the old body.

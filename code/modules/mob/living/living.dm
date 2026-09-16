@@ -648,9 +648,7 @@ GAME_VERB(/mob/living, mob_sleep, "Sleep", "IC")
 		account = I.registered_account
 		return account
 
-/mob/living/proc/toggle_resting()
-	set name = "Rest"
-	set category = "IC"
+GAME_VERB_PROC(/mob/living, toggle_resting, "Rest", "IC")
 
 	set_resting(!resting, FALSE)
 
