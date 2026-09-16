@@ -499,9 +499,7 @@ GAME_VERB_HIDDEN_INSTANT(/client, toggle_walk_run, "toggle-walk-run")
 			selector.update_appearance()
 
 ///Moves a mob upwards in z level
-/mob/verb/up()
-	set name = "Move Upwards"
-	set category = "IC"
+GAME_VERB(/mob, up, "Move Upwards", "IC")
 
 	var/turf/current_turf = get_turf(src)
 
@@ -520,9 +518,7 @@ GAME_VERB_HIDDEN_INSTANT(/client, toggle_walk_run, "toggle-walk-run")
 		to_chat(src, span_notice("You move upwards."))
 
 ///Moves a mob down a z level
-/mob/verb/down()
-	set name = "Move Down"
-	set category = "IC"
+GAME_VERB(/mob, down, "Move Down", "IC")
 
 	var/turf/current_turf = get_turf(src)
 

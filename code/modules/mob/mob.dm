@@ -759,10 +759,7 @@ GAME_VERB(/mob, examinate, "Examine", "IC", atom/examinify as mob|obj|turf in vi
  *
  * Calls attack self on the item and updates the inventory hud for hands
  */
-/mob/verb/mode()
-	set name = "Activate Held Object"
-	set category = "Object"
-	set src = usr
+GAME_VERB_SRC(/mob, mode, usr, "Activate Held Object", "Object")
 
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(execute_mode)))
 
@@ -1447,9 +1444,7 @@ GAME_VERB_HIDDEN(/mob, DisDblClick, ".dblclick", argu = null as anything, sec = 
 	fully_replace_character_name(real_name, new_name)
 
 ///Show the language menu for this mob
-/mob/verb/open_language_menu_verb()
-	set name = "Open Language Menu"
-	set category = "IC"
+GAME_VERB(/mob, open_language_menu_verb, "Open Language Menu", "IC")
 
 	get_language_holder().open_language_menu(usr)
 
@@ -1576,10 +1571,7 @@ GAME_VERB_HIDDEN(/mob, DisDblClick, ".dblclick", argu = null as anything, sec = 
 	canon_client = null
 
 ///Shows a tgui window with memories
-/mob/verb/memory()
-	set name = "Memories"
-	set category = "IC"
-	set desc = "View your character's memories."
+GAME_VERB_DESC(/mob, memory, "Memories", "View your character's memories.", "IC")
 	if(!mind)
 		var/fail_message = "You have no mind!"
 		if(isobserver(src))
@@ -1631,9 +1623,7 @@ GAME_VERB_HIDDEN(/mob, DisDblClick, ".dblclick", argu = null as anything, sec = 
 	data["memories"] = memories
 	return data
 
-/mob/verb/view_skills()
-	set category = "IC"
-	set name = "View Skills"
+GAME_VERB(/mob, view_skills, "View Skills", "View Skills")
 
 	mind?.print_levels(src)
 

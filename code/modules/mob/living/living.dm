@@ -501,9 +501,8 @@ GAME_VERB(/mob/living, pulled, "Pull", "Object", atom/movable/thing_pulled as mo
 	update_pull_movespeed()
 	update_pull_hud_icon()
 
-/mob/living/verb/stop_pulling1()
-	set name = "Stop Pulling"
-	set category = "IC"
+GAME_VERB(/mob/living, stop_pulling1, "Stop Pulling", "IC")
+
 	stop_pulling()
 
 //same as above
@@ -1091,9 +1090,7 @@ GAME_VERB(/mob/living, mob_sleep, "Sleep", "IC")
 		return FALSE
 	return TRUE
 
-/mob/living/verb/resist()
-	set name = "Resist"
-	set category = "IC"
+GAME_VERB(/mob/living, resist, "Resist", "IC")
 
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(execute_resist)))
 

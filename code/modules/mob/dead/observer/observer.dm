@@ -630,9 +630,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 
 	visible_message(span_deadsay("<b>[src]</b> points to [pointed_at]."))
 
-/mob/dead/observer/verb/view_manifest()
-	set name = "View Crew Manifest"
-	set category = "Ghost"
+GAME_VERB(/mob/dead/observer, view_manifest, "View Crew Manifest", "Ghost")
 
 	if(!client)
 		return
@@ -700,10 +698,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		var/datum/atom_hud/data_hud = GLOB.huds[hudtype]
 		data_hud.hide_from(src)
 
-/mob/dead/observer/verb/toggle_data_huds()
-	set name = "Toggle Sec/Med/Diag HUD"
-	set desc = "Toggles whether you see medical/security/diagnostic HUDs"
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, toggle_data_huds, "Toggle Sec/Med/Diag HUD", "Toggles whether you see medical/security/diagnostic HUDs", "Ghost")
 
 	if(data_huds_on) //remove old huds
 		remove_data_huds()
@@ -714,11 +709,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		to_chat(src, span_notice("Data HUDs enabled."))
 		data_huds_on = 1
 
-// MONKESTATION ADDITION START
-/mob/dead/observer/verb/toggle_disease_view()
-	set name = "Toggle Disease View"
-	set desc = "Toggles whether you see disease infection vectors. (dormant, blood, contact and airborne)"
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, toggle_disease_view, "Toggle Disease View", "Toggles whether you see disease infection vectors. (dormant, blood, contact and airborne)", "Ghost")
 
 	if(disease_view)
 		RemoveElement(/datum/element/virus_viewer)
@@ -728,12 +719,8 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		to_chat(src, span_notice("Disease view enabled."))
 
 	disease_view = !disease_view
-// MONKESTATION ADDITION END
 
-/mob/dead/observer/verb/toggle_health_scan()
-	set name = "Toggle Health Scan"
-	set desc = "Toggles whether you health-scan living beings on click"
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, toggle_health_scan, "Toggle Health Scan", "Toggles whether you health-scan living beings on click", "Ghost")
 
 	if(health_scan) //remove old huds
 		to_chat(src, span_notice("Health scan disabled."))
@@ -742,10 +729,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		to_chat(src, span_notice("Health scan enabled."))
 		health_scan = TRUE
 
-/mob/dead/observer/verb/toggle_chem_scan()
-	set name = "Toggle Chem Scan"
-	set desc = "Toggles whether you scan living beings for chemicals and addictions on click"
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, toggle_chem_scan, "Toggle Chem Scan", "Toggles whether you scan living beings for chemicals and addictions on click", "Ghost")
 
 	if(chem_scan) //remove old huds
 		to_chat(src, span_notice("Chem scan disabled."))
@@ -754,10 +738,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		to_chat(src, span_notice("Chem scan enabled."))
 		chem_scan = TRUE
 
-/mob/dead/observer/verb/toggle_gas_scan()
-	set name = "Toggle Gas Scan"
-	set desc = "Toggles whether you analyze gas contents on click"
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, toggle_gas_scan, "Toggle Gas Scan", "Toggles whether you analyze gas contents on click", "Ghost")
 
 	if(gas_scan)
 		to_chat(src, span_notice("Gas scan disabled."))
@@ -766,11 +747,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		to_chat(src, span_notice("Gas scan enabled."))
 		gas_scan = TRUE
 
-/mob/dead/observer/verb/restore_ghost_appearance()
-	set name = "Restore Ghost Character"
-	set desc = "Sets your deadchat name and ghost appearance to your \
-		roundstart character."
-	set category = "Ghost"
+GAME_VERB_DESC(/mob/dead/observer, restore_ghost_appearance, "Restore Ghost Character", "Sets your deadchat name and ghost appearance to your roundstart character.", "Ghost")
 
 	set_ghost_appearance()
 	if(client?.prefs)
@@ -849,9 +826,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 		hide_other_mob_action_buttons(target)
 		LAZYREMOVE(target.observers, src)
 
-/mob/dead/observer/verb/observe()
-	set name = "Observe"
-	set category = "Ghost"
+GAME_VERB(/mob/dead/observer, observe, "Observe", "Ghost")
 
 	if(!isobserver(usr) || HAS_TRAIT(src, TRAIT_NO_OBSERVE)) //Make sure they're an observer!
 		return
@@ -916,10 +891,7 @@ GAME_VERB_DESC(/mob/dead/observer, possess, "Possess!", "Take over the body of a
 	else
 		set_sight(initial(sight))
 
-/mob/dead/observer/verb/register_pai_candidate()
-	set category = "Ghost"
-	set name = "pAI Setup"
-	set desc = "Upload a fragment of your personality to the global pAI databanks"
+GAME_VERB_DESC(/mob/dead/observer, register_pai_candidate, "pAI Setup", "Upload a fragment of your personality to the global pAI databanks", "Ghost")
 
 	register_pai()
 

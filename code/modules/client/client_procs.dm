@@ -1331,9 +1331,7 @@ GAME_VERB(/client, toggle_fullscreen, "Toggle Fullscreen", "OOC")
 	winset(src, "mainwindow", "menu=;is-fullscreen=[fullscreen ? "true" : "false"]")
 	attempt_auto_fit_viewport()
 
-/client/verb/toggle_status_bar()
-	set name = "Toggle Status Bar"
-	set category = "OOC"
+GAME_VERB(/client, toggle_status_bar, "Toggle Status Bar", "OOC")
 
 	show_status_bar = !show_status_bar
 

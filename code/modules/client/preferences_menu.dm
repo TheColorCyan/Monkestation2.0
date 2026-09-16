@@ -6,9 +6,6 @@ GAME_VERB_DESC(/client, open_game_preferences, "Open Game Preferences", "Open Ga
 
 	usr?.client?.prefs?.open_window(PREFERENCE_PAGE_SETTINGS)
 
-/datum/verbs/menu/Preferences/verb/open_volume_mixer()
-	set category = "OOC"
-	set name = "Volume Mixer"
-	set desc = "Open Volume Mixer"
+GAME_VERB_DESC(/client, open_volume_mixer, "Volume Mixer", "Open Volume Mixer", "OOC")
 
 	usr?.client?.prefs?.open_window(PREFERENCE_PAGE_PREFERENCES_VOLUME)

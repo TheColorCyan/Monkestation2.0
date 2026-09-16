@@ -1244,9 +1244,7 @@ GAME_VERB_DESC(/mob/living/silicon/ai, deploy_to_shell, "Deploy to Shell", "Tran
 		return ai_voicechanger.say_name
 	return
 
-/mob/living/silicon/ai/verb/jobtitles()
-	set category = "AI Commands"
-	set name = "Toggle Jobtitle Display"
+GAME_VERB(/mob/living/silicon/ai, jobtitles, "Toggle Jobtitle Display", "AI Commands")
 
 	if(incapacitated())
 		return
