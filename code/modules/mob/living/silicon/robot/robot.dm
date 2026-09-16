@@ -304,10 +304,6 @@
 		// to have to check if every camera is null or not before doing anything, to prevent runtime errors.
 		// I could change the network to null but I don't know what would happen, and it seems too hacky for me.
 
-GAME_VERB_SRC(/mob/living/silicon/robot, mode, usr, "Activate Held Object", "IC")
-
-	return ..()
-
 /mob/living/silicon/robot/execute_mode()
 	if(incapacitated())
 		return

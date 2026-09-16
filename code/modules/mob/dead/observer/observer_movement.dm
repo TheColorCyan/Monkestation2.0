@@ -1,5 +1,4 @@
-GAME_VERB(/mob/dead/observer, up, "Move Upwards", "IC")
-
+/mob/dead/observer/up()
 	if(zMove(UP, z_move_flags = ZMOVE_FEEDBACK))
 		to_chat(src, "<span class='notice'>You move upwards.</span>")
 

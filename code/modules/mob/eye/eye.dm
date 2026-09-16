@@ -26,15 +26,11 @@
 /mob/eye/canUseStorage()
 	return FALSE
 
-GAME_VERB(/mob/eye, up, "Move Upwards", "IC")
-
+/mob/eye/up()
 	if(zMove(UP, z_move_flags = ZMOVE_FEEDBACK))
 		to_chat(src, span_notice("You move upwards."))
 
 /mob/eye/down()
-	set name = "Move Down"
-	set category = "IC"
-
 	if(zMove(DOWN, z_move_flags = ZMOVE_FEEDBACK))
 		to_chat(src, span_notice("You move down."))
 
