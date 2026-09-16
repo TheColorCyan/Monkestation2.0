@@ -45,9 +45,7 @@
 
 	LAZYNULL(SScredits.ignored_clients)
 
-/client/proc/ClearCredits()
-	set name = "Hide Credits"
-	set category = "OOC"
+GAME_VERB_PROC(/client, ClearCredits, "Hide Credits", "OOC")
 	remove_verb(src, /client/proc/ClearCredits)
 
 	LAZYADDASSOC(SScredits.ignored_clients, src, TRUE)
