@@ -14,7 +14,7 @@
 		SScredits.generate_credits()
 
 	for(var/client/client in GLOB.clients)
-		add_verb(client, /client/proc/ClearCredits)
+		ASSIGN_GAME_VERB(client, /client, ClearCredits)
 
 	var/count = 0
 
@@ -41,7 +41,7 @@
 	sleep(CREDIT_ROLL_SPEED - CREDIT_SPAWN_SPEED)
 
 	for(var/client/client in GLOB.clients)
-		UNASSIGN_GAME_VERB(src, /client, ClearCredits)
+		UNASSIGN_GAME_VERB(client, /client, ClearCredits)
 
 	LAZYNULL(SScredits.ignored_clients)
 
