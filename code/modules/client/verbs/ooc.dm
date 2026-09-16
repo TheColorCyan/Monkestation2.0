@@ -431,7 +431,7 @@ GAME_VERB_DESC(/client, fit_viewport, "Fit Viewport", "Fit the width of the map 
 	if (!prefs.read_preference(/datum/preference/toggle/auto_fit_viewport))
 		return
 	if(fully_created)
-		fit_viewport()
+		INVOKE_ASYNC(src, VERB_REF(fit_viewport))
 	else //Delayed to avoid wingets from Login calls.
 		addtimer(CALLBACK(src, VERB_REF(fit_viewport), 1 SECONDS))
 
