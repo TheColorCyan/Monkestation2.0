@@ -1089,8 +1089,7 @@ GAME_VERB_PROC(/mob/living, toggle_resting, "Rest", "IC")
 		return FALSE
 	return TRUE
 
-GAME_VERB(/mob/living, resist, "Resist", "IC")
-
+/mob/living/proc/resist()
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(execute_resist)))
 
 ///proc extender of [/mob/living/verb/resist] meant to make the process queable if the server is overloaded when the verb is called
